@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>진주텃밭 — 진주우리먹거리협동조합</title>
+<meta name="description" content="지역을 살리는 소비의 힘. 진주우리먹거리협동조합 진주텃밭은 진주의 농민이 기른 먹거리를 이웃의 밥상으로 잇는 로컬푸드 협동조합입니다. 금산점·초전점·진양호점.">
+<meta property="og:title" content="진주텃밭 — 진주우리먹거리협동조합">
+<meta property="og:description" content="지역을 살리는 소비의 힘. 진주의 농민이 기른 먹거리를 이웃의 밥상으로.">
+<meta property="og:image" content="/img/hero.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── 토큰 ─────────────────────────────────────────── */
+:root{
+  /* 브랜드 = 로고 퍼즐 4색 (원본 PNG에서 추출) */
+  --red:#E83028;   --red-deep:#C0221B;
+  --orange:#F0A800; --orange-deep:#9A6B00;
+  --green:#A8B048; --green-deep:#61692A;
+  --teal:#00A8A8;  --teal-deep:#00706F;
+
+  --ink:#2B2721;        /* 따뜻한 먹색 */
+  --ink-soft:#5C544A;
+  --ink-dim:#746B5D;   /* WCAG AA 4.5:1 확보 (크림 배경 4.91 / 흰 배경 5.25) */
+  --bg:#FBF7EF;         /* 크림 */
+  --panel:#FFFFFF;
+  --line:rgba(43,39,33,.13);
+  --shadow-sm:0 1px 2px rgba(43,39,33,.06), 0 4px 14px rgba(43,39,33,.05);
+  --shadow-md:0 2px 6px rgba(43,39,33,.07), 0 16px 40px rgba(43,39,33,.09);
+
+  --maxw:1120px;
+  --serif:'Gowun Batang', 'Nanum Myeongjo', 'Apple SD Gothic Neo', serif;
+  --sans:'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+
+  --z-nav:100;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:17px; line-height:1.75;
+  font-weight:400; letter-spacing:-.01em;
+  -webkit-font-smoothing:antialiased;
+  /* 한국어는 어절 단위로 끊어야 읽힌다 — 낱자 중간 줄바꿈 방지 */
+  word-break:keep-all; overflow-wrap:break-word;
+}
+img{max-width:100%; height:auto; display:block}
+a{color:var(--teal-deep); text-underline-offset:3px}
+h1,h2,h3{font-family:var(--serif); font-weight:700; line-height:1.3; letter-spacing:-.02em; margin:0}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+@media (max-width:600px){ .wrap{padding:0 20px} }
+
+/* 접근성: 건너뛰기 + 포커스 */
+.skip{position:absolute; left:-9999px; top:0; z-index:1000;
+  background:var(--ink); color:#fff; padding:12px 20px; border-radius:0 0 8px 0}
+.skip:focus{left:0}
+a:focus-visible, button:focus-visible{
+  outline:3px solid var(--teal-deep); outline-offset:3px; border-radius:4px}
+
+/* ── 상단 바 ──────────────────────────────────────── */
+.nav{position:sticky; top:0; z-index:var(--z-nav);
+  background:rgba(251,247,239,.92); backdrop-filter:saturate(150%) blur(10px);
+  border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; gap:20px; height:68px}
+.nav__logo{display:flex; align-items:center; gap:10px; text-decoration:none; margin-right:auto}
+.nav__logo img{width:132px}
+.nav__links{display:flex; gap:4px; align-items:center}
+.nav__links a{
+  font-size:15px; font-weight:500; color:var(--ink-soft); text-decoration:none;
+  padding:10px 14px; border-radius:9px; min-height:44px; display:flex; align-items:center;
+  transition:background .2s ease, color .2s ease}
+.nav__links a:hover{background:rgba(0,168,168,.1); color:var(--teal-deep)}
+@media (max-width:760px){ .nav__links a{padding:10px 9px; font-size:14px} .nav__logo img{width:108px} }
+@media (max-width:430px){ .nav__links a:nth-child(2){display:none} }
+
+/* ── 히어로 ───────────────────────────────────────── */
+.hero{position:relative; overflow:hidden; border-bottom:1px solid var(--line)}
+.hero__media{position:absolute; inset:0}
+.hero__media img{width:100%; height:100%; object-fit:cover}
+.hero__media::after{content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(28,24,18,.82) 0%, rgba(28,24,18,.62) 45%, rgba(28,24,18,.86) 100%)}
+.hero__inner{position:relative; padding:104px 0 96px}
+.hero .eyebrow{
+  display:inline-flex; align-items:center; gap:9px; font-size:14px; font-weight:600;
+  letter-spacing:.02em; color:#FBF7EF; background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.26); padding:7px 15px; border-radius:999px}
+.hero .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--green); flex:none}
+.hero h1{margin:26px 0 0; color:#fff; font-size:clamp(38px, 6.4vw, 66px); letter-spacing:-.035em}
+.hero h1 .accent{color:var(--orange)}
+.hero__lead{margin:22px 0 0; max-width:33em; color:rgba(255,255,255,.9);
+  font-size:clamp(17px,2vw,20px); line-height:1.8}
+.hero__cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:38px}
+
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  min-height:52px; padding:0 26px; border-radius:11px; text-decoration:none;
+  font-family:var(--sans); font-size:16px; font-weight:600; cursor:pointer;
+  border:1.5px solid transparent; transition:transform .18s ease, background .2s ease, border-color .2s ease}
+.btn:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){ .btn:hover{transform:none} }
+.btn--primary{background:var(--teal-deep); color:#fff}
+.btn--primary:hover{background:#00605F}
+.btn--ghost{background:transparent; color:#fff; border-color:rgba(255,255,255,.5)}
+.btn--ghost:hover{background:rgba(255,255,255,.13); border-color:#fff}
+.btn--solid{background:var(--ink); color:#fff}
+.btn--solid:hover{background:#1B1813}
+
+/* ── 공통 섹션 ────────────────────────────────────── */
+.band{padding:92px 0; border-bottom:1px solid var(--line)}
+.band--panel{background:var(--panel)}
+@media (max-width:600px){ .band{padding:64px 0} }
+.band__head{max-width:60ch}
+.kicker{display:block; font-size:13px; font-weight:700; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--teal-deep); margin-bottom:14px}
+.band h2{font-size:clamp(27px,3.6vw,38px)}
+.band__head p{color:var(--ink-soft); margin:18px 0 0; font-size:18px}
+
+/* 퍼즐 탭 — 로고 모티프를 아주 옅게 */
+.tabs{display:flex; gap:5px; margin-bottom:22px}
+.tabs i{width:26px; height:7px; border-radius:3px; display:block}
+.tabs i:nth-child(1){background:var(--red)}
+.tabs i:nth-child(2){background:var(--orange)}
+.tabs i:nth-child(3){background:var(--green)}
+.tabs i:nth-child(4){background:var(--teal)}
+
+/* ── 우리는 ───────────────────────────────────────── */
+.about{display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:start}
+@media (max-width:900px){ .about{grid-template-columns:1fr; gap:38px} }
+.about__quote{font-family:var(--serif); font-size:clamp(21px,2.5vw,27px);
+  line-height:1.75; color:var(--ink); margin:0 0 26px; letter-spacing:-.02em}
+.about p{color:var(--ink-soft); margin:0 0 16px}
+.about__side{background:var(--bg); border:1px solid var(--line);
+  border-radius:16px; padding:30px; box-shadow:var(--shadow-sm)}
+.band--panel .about__side{background:var(--bg)}
+.about__side h3{font-size:19px; margin-bottom:16px}
+.types{list-style:none; margin:0; padding:0; display:grid; gap:13px}
+.types li{display:flex; gap:13px; align-items:flex-start; font-size:16px; color:var(--ink-soft)}
+.types b{color:var(--ink); font-weight:600}
+.types .mark{width:11px; height:11px; border-radius:3px; flex:none; margin-top:8px}
+
+/* ── 숫자 ─────────────────────────────────────────── */
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:44px}
+@media (max-width:860px){ .stats{grid-template-columns:repeat(2,1fr)} }
+.stat{background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  padding:28px 24px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden}
+.band--panel .stat{background:var(--bg)}
+.stat::before{content:''; position:absolute; left:0; top:0; bottom:0; width:5px}
+.stat:nth-child(1)::before{background:var(--red)}
+.stat:nth-child(2)::before{background:var(--orange)}
+.stat:nth-child(3)::before{background:var(--green)}
+.stat:nth-child(4)::before{background:var(--teal)}
+.stat dt{font-size:14px; font-weight:600; color:var(--ink-dim); margin-bottom:8px}
+.stat dd{margin:0; font-family:var(--serif); font-size:clamp(30px,4vw,40px);
+  font-weight:700; line-height:1.1; letter-spacing:-.03em; font-variant-numeric:tabular-nums}
+.stat dd span{font-size:.52em; font-family:var(--sans); font-weight:600; margin-left:3px}
+.stats__note{margin:20px 0 0; font-size:14px; color:var(--ink-dim)}
+
+/* ── 매장 ─────────────────────────────────────────── */
+.stores{display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:44px}
+@media (max-width:900px){ .stores{grid-template-columns:1fr; max-width:540px} }
+.store{background:var(--panel); border:1px solid var(--line); border-radius:18px;
+  overflow:hidden; box-shadow:var(--shadow-sm); display:flex; flex-direction:column;
+  transition:transform .22s ease, box-shadow .22s ease}
+.store:hover{transform:translateY(-4px); box-shadow:var(--shadow-md)}
+@media (prefers-reduced-motion:reduce){ .store:hover{transform:none} }
+.store__img{aspect-ratio:4/3; background:#EDE7DB}
+.store__img img{width:100%; height:100%; object-fit:cover}
+.store__body{padding:24px; display:flex; flex-direction:column; gap:10px; flex:1}
+.store h3{font-size:22px; display:flex; align-items:center; gap:10px}
+.store h3 .chip{width:13px; height:13px; border-radius:4px; flex:none}
+.store__addr{margin:0; color:var(--ink-soft); font-size:15.5px; line-height:1.65}
+.store__meta{margin:auto 0 0; padding-top:14px; border-top:1px dashed var(--line);
+  font-size:14px; color:var(--ink-dim)}
+
+/* ── 조합원 되기 ──────────────────────────────────── */
+.join{display:grid; grid-template-columns:.95fr 1.05fr; gap:56px; align-items:center}
+@media (max-width:900px){ .join{grid-template-columns:1fr; gap:38px} }
+.share{list-style:none; margin:0; padding:0; display:grid; gap:12px}
+.share li{background:var(--panel); border:1px solid var(--line); border-radius:13px;
+  padding:20px 22px; display:flex; justify-content:space-between; align-items:baseline; gap:18px}
+.band--panel .share li{background:var(--bg)}
+.share .who{font-weight:600; font-size:16px}
+.share .who small{display:block; font-weight:400; font-size:13.5px; color:var(--ink-dim); margin-top:3px}
+.share .amt{font-family:var(--serif); font-weight:700; font-size:22px; white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.join__note{margin:22px 0 0; font-size:14.5px; color:var(--ink-dim)}
+
+/* ── 갤러리 ───────────────────────────────────────── */
+.gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:44px}
+@media (max-width:760px){ .gallery{grid-template-columns:repeat(2,1fr)} }
+.gallery figure{margin:0; border-radius:14px; overflow:hidden; background:#EDE7DB;
+  aspect-ratio:16/10; box-shadow:var(--shadow-sm)}
+.gallery img{width:100%; height:100%; object-fit:cover;
+  transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+.gallery figure:hover img{transform:scale(1.05)}
+@media (prefers-reduced-motion:reduce){ .gallery figure:hover img{transform:none} }
+
+/* ── 푸터 ─────────────────────────────────────────── */
+.foot{background:var(--ink); color:#E8E2D6; padding:64px 0 40px}
+.foot__top{display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:40px}
+@media (max-width:820px){ .foot__top{grid-template-columns:1fr; gap:32px} }
+.foot img{width:150px; margin-bottom:18px; background:#fff; padding:9px 12px; border-radius:10px}
+.foot h4{font-family:var(--sans); font-size:13px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:#A79B87; margin:0 0 14px}
+.foot p, .foot li{margin:0 0 8px; font-size:15px; line-height:1.7; color:#CFC7B8}
+.foot ul{list-style:none; margin:0; padding:0}
+.foot a{color:#E8E2D6; text-decoration:none; border-bottom:1px solid rgba(232,226,214,.35)}
+.foot a:hover{color:#fff; border-bottom-color:#fff}
+.foot__bar{margin-top:48px; padding-top:24px; border-top:1px solid rgba(232,226,214,.18);
+  display:flex; flex-wrap:wrap; gap:12px 26px; justify-content:space-between;
+  font-size:13.5px; color:#9C917E}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav__logo" href="#top" aria-label="진주텃밭 홈">
+      <img src="img/logo.webp" alt="진주텃밭 로고" width="132" height="42">
+    </a>
+    <nav class="nav__links" aria-label="주요 메뉴">
+      <a href="#about">소개</a>
+      <a href="#stores">매장</a>
+      <a href="#join">조합원 되기</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- 히어로 -->
+<section class="hero" id="top">
+  <div class="hero__media">
+    <img src="img/hero.webp" alt="진주텃밭 직매장 내부. 지역 농민이 기른 채소와 과일이 진열대에 놓여 있다." width="1280" height="960" fetchpriority="high">
+  </div>
+  <div class="wrap hero__inner">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>진주우리먹거리협동조합</span>
+    <h1>지역을 살리는<br><span class="accent">소비의 힘</span></h1>
+    <p class="hero__lead">
+      진주의 농민이 기른 먹거리가 이웃의 밥상에 오릅니다.
+      진주텃밭은 생산자와 소비자가 함께 만든 로컬푸드 협동조합입니다.
+    </p>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="#stores">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        매장 찾기
+      </a>
+      <a class="btn btn--ghost" href="#join">조합원 되기</a>
+    </div>
+  </div>
+</section>
+
+<!-- 소개 -->
+<section class="band band--panel" id="about">
+  <div class="wrap">
+    <div class="tabs" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="about">
+      <div>
+        <span class="kicker">우리는</span>
+        <p class="about__quote">
+          건강한 먹거리를 나누고, 지역 농업을 지키고,
+          이웃과 함께 사는 마을을 만듭니다.
+        </p>
+        <p>
+          진주우리먹거리협동조합 진주텃밭은 협동조합기본법에 따라 세워진 협동조합입니다.
+          조합원과 지역 소비자에게 건강한 먹거리를 제공하고, 지역 농업의 발전과
+          지역먹거리운동의 확산, 건강한 지역공동체 실현을 목적으로 합니다.
+        </p>
+        <p>
+          또한 취약계층에게 지속적이고 안정적인 일자리를 제공하는 것을 조합의 목적으로 함께 두고 있습니다.
+        </p>
+      </div>
+      <aside class="about__side">
+        <h3>조합원은 세 갈래입니다</h3>
+        <ul class="types">
+          <li><span class="mark" style="background:var(--green)" aria-hidden="true"></span>
+            <span><b>생산자 조합원</b><br>조합의 생산 활동에 참여하는 농민</span></li>
+          <li><span class="mark" style="background:var(--teal)" aria-hidden="true"></span>
+            <span><b>소비자 조합원</b><br>조합의 재화와 서비스를 이용하는 이웃</span></li>
+          <li><span class="mark" style="background:var(--orange)" aria-hidden="true"></span>
+            <span><b>직원 조합원</b><br>조합에 고용되어 일하는 사람</span></li>
+        </ul>
+      </aside>
+    </div>
+
+    <dl class="stats">
+      <div class="stat"><dt>조합원</dt><dd>4,994<span>명</span></dd></div>
+      <div class="stat"><dt>생산자 조합원</dt><dd>346<span>명</span></dd></div>
+      <div class="stat"><dt>직매장</dt><dd>3<span>곳</span></dd></div>
+      <div class="stat"><dt>함께 일하는 사람</dt><dd>24<span>명</span></dd></div>
+    </dl>
+    <p class="stats__note">2025년 12월 31일 기준 · 제13차 대의원총회 자료집</p>
+  </div>
+</section>
+
+<!-- 매장 -->
+<section class="band" id="stores">
+  <div class="wrap">
+    <div class="band__head">
+      <span class="kicker">직매장</span>
+      <h2>진주에 세 곳이 있습니다</h2>
+      <p>아침에 농민이 내놓은 농산물이 그날 진열대에 오릅니다. 가까운 매장으로 오세요.</p>
+    </div>
+
+    <div class="stores">
+      <article class="store">
+        <div class="store__img">
+          <img src="img/store-geumsan.webp" alt="금산점 외관. 노란 목조 건물 입구에 색색의 풍선 아치가 세워져 있다." width="1200" height="675" loading="lazy">
+        </div>
+        <div class="store__body">
+          <h3><span class="chip" style="background:var(--red)" aria-hidden="true"></span>금산점</h3>
+          <p class="store__addr">경남 진주시 금산면 금산순환로 61</p>
+          <p class="store__meta">조합 사무소가 함께 있는 곳입니다</p>
+        </div>
+      </article>
+
+      <article class="store">
+        <div class="store__img">
+          <img src="img/store-city.webp" alt="진주텃밭 직매장 외관. 건물 위에 진주텃밭 간판이 걸려 있다." width="1200" height="900" loading="lazy">
+        </div>
+        <div class="store__body">
+          <h3><span class="chip" style="background:var(--orange)" aria-hidden="true"></span>초전점</h3>
+          <p class="store__addr">경남 진주시 초전북로61번길 9</p>
+          <p class="store__meta">초전동 주택가 가까이 있습니다</p>
+        </div>
+      </article>
+
+      <article class="store">
+        <div class="store__img">
+          <img src="img/inside-1.webp" alt="직매장 내부. 제철 과일과 채소가 나무 진열대에 놓여 있다." width="1000" height="750" loading="lazy">
+        </div>
+        <div class="store__body">
+          <h3><span class="chip" style="background:var(--teal)" aria-hidden="true"></span>진양호점</h3>
+          <p class="store__addr">경남 진주시 평거동 1109-2</p>
+          <p class="store__meta">평거동 진양호 방면에 있습니다</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 조합원 되기 -->
+<section class="band band--panel" id="join">
+  <div class="wrap">
+    <div class="join">
+      <div class="band__head">
+        <span class="kicker">함께하기</span>
+        <h2>조합원이 된다는 것</h2>
+        <p>
+          출자는 조합에 내는 회비가 아니라 <b>내 몫의 지분</b>입니다.
+          조합을 떠날 때 돌려받습니다. 출자 1좌는 1만 원입니다.
+        </p>
+        <div class="hero__cta" style="margin-top:28px">
+          <a class="btn btn--solid" href="tel:055-762-1242">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+            전화로 문의하기
+          </a>
+        </div>
+        <p class="join__note">가입 신청과 출자 안내는 가까운 매장이나 조합 사무소에서 받으실 수 있습니다.</p>
+      </div>
+
+      <ul class="share">
+        <li>
+          <span class="who">소비자 조합원<small>조합의 물품과 서비스를 이용합니다</small></span>
+          <span class="amt">5좌 이상</span>
+        </li>
+        <li>
+          <span class="who">생산자 조합원<small>조합에 농산물을 냅니다</small></span>
+          <span class="amt">30좌 이상</span>
+        </li>
+        <li>
+          <span class="who">차상위계층·기초생활수급자<small>누구도 문턱에서 돌아서지 않도록</small></span>
+          <span class="amt">1좌</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 갤러리 -->
+<section class="band">
+  <div class="wrap">
+    <div class="band__head">
+      <span class="kicker">진주텃밭의 하루</span>
+      <h2>사람이 오가는 자리</h2>
+    </div>
+    <div class="gallery">
+      <figure><img src="img/inside-2.webp" alt="직매장 매대에 놓인 지역 농산물." width="1000" height="562" loading="lazy"></figure>
+      <figure><img src="img/people-1.webp" alt="매장을 찾은 이웃들이 장을 보고 있다." width="1000" height="562" loading="lazy"></figure>
+      <figure><img src="img/inside-3.webp" alt="가공품과 반찬이 놓인 매장 진열대." width="1000" height="562" loading="lazy"></figure>
+      <figure><img src="img/people-2.webp" alt="매장 행사에서 조합원들이 시식하고 있다." width="1000" height="562" loading="lazy"></figure>
+      <figure><img src="img/people-3.webp" alt="계산대에서 직원과 조합원이 이야기를 나누고 있다." width="1000" height="562" loading="lazy"></figure>
+      <figure><img src="img/inside-4.webp" alt="매장 안쪽 진열대에 지역 농산물이 채워져 있다." width="1000" height="562" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <div>
+        <img src="img/logo.webp" alt="진주텃밭 로고" width="150" height="47" loading="lazy">
+        <p>진주우리먹거리협동조합 진주텃밭</p>
+        <p>지역을 살리는 소비의 힘</p>
+      </div>
+      <div>
+        <h4>찾아오는 길</h4>
+        <ul>
+          <li>경남 진주시 금산면 금산순환로 61</li>
+          <li><a href="tel:055-762-1242">055-762-1242</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>조합 정보</h4>
+        <ul>
+          <li>사업자등록번호 613-81-69745</li>
+          <li>농협 351-0649-2906-93</li>
+          <li>진주우리먹거리협동조합 진주텃밭</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bar">
+      <span>© 2026 진주우리먹거리협동조합 진주텃밭</span>
+      <span>협동조합기본법에 따라 설립된 협동조합</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
