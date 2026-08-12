@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>페이지를 찾을 수 없습니다 — 진주텃밭</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E83028; --orange:#F0A800; --green:#A8B048; --teal:#00A8A8; --teal-deep:#00706F;
+  --ink:#2B2721; --ink-soft:#5C544A; --bg:#FBF7EF;
+  --serif:'Gowun Batang','Nanum Myeongjo','Apple SD Gothic Neo',serif;
+  --sans:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100dvh; display:grid; place-items:center; padding:32px 24px;
+  background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:17px;
+  line-height:1.75; word-break:keep-all; -webkit-font-smoothing:antialiased;
+}
+.box{max-width:44ch; text-align:center}
+img.logo{width:170px; height:auto; margin:0 auto 34px; display:block}
+.tabs{display:flex; gap:5px; justify-content:center; margin-bottom:24px}
+.tabs i{width:26px; height:7px; border-radius:3px; display:block}
+.tabs i:nth-child(1){background:var(--red)}
+.tabs i:nth-child(2){background:var(--orange)}
+.tabs i:nth-child(3){background:var(--green)}
+.tabs i:nth-child(4){background:var(--teal)}
+h1{font-family:var(--serif); font-weight:700; font-size:clamp(26px,4.5vw,34px);
+  letter-spacing:-.025em; line-height:1.35; margin:0 0 16px}
+p{color:var(--ink-soft); margin:0 0 34px}
+a.btn{display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  min-height:52px; padding:0 28px; border-radius:11px; background:var(--teal-deep);
+  color:#fff; text-decoration:none; font-weight:600; font-size:16px;
+  transition:background .2s ease, transform .18s ease}
+a.btn:hover{background:#00605F; transform:translateY(-2px)}
+a.btn:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+@media (prefers-reduced-motion:reduce){ a.btn:hover{transform:none} }
+</style>
+</head>
+<body>
+  <main class="box">
+    <img class="logo" src="/img/logo.webp" alt="진주텃밭 로고" width="170" height="54">
+    <div class="tabs" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h1>찾으시는 페이지가 없습니다</h1>
+    <p>주소가 바뀌었거나 없어진 페이지입니다. 첫 화면에서 다시 찾아보세요.</p>
+    <a class="btn" href="/">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+      진주텃밭 첫 화면
+    </a>
+  </main>
+</body>
+</html>
