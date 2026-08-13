@@ -137,6 +137,10 @@
   /* ── 미리보기 ───────────────────────────────── */
   .sheet-info{display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px}
   .sheet-info .pages{font-size:15px; color:var(--ink-soft)}
+  .opt-line{display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; margin-bottom:16px}
+  .opt-line label{display:flex; align-items:center; gap:8px; font-size:15px; font-weight:600; cursor:pointer}
+  .opt-line input[type=checkbox]{width:20px; height:20px; accent-color:var(--teal-deep)}
+  .opt-note{font-size:14px; color:var(--ink-dim)}
   .sheet-hold{max-width:960px; margin:0 auto 48px; padding:0 20px}
   .sheet-view{overflow:hidden; background:#E4DED2; border-radius:12px}
   .sheet-scale{transform-origin:top left; width:210mm}
@@ -181,6 +185,18 @@
   .tag-bar{
     height:6mm; width:100%; flex-shrink:0; background:var(--tag-bar);
     -webkit-print-color-adjust:exact; print-color-adjust:exact}
+
+  /* QR을 빼고 인쇄할 때 — QR 자리를 상품명·가격이 넘겨받는다.
+     매장에서 멀리서 읽는 것은 상품명과 가격이므로 둘을 키운다. */
+  .tag.no-qr .tag-qr{display:none}
+  .tag.no-qr .tag-product{max-height:14mm}
+  .tag.no-qr .tag-price-area{
+    flex:1; display:flex; align-items:baseline; justify-content:space-between;
+    gap:2mm; text-align:left; min-width:0}
+  .tag.no-qr .tag-unit{
+    font-size:11pt; line-height:1.2; min-width:0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .tag.no-qr .tag-price{font-size:27pt; line-height:1.05; flex-shrink:0}
 
   /* ── QR 스캔 화면 (모바일) ──────────────────── */
   .info-view{max-width:460px; margin:0 auto; padding:28px 20px 48px}
@@ -292,6 +308,10 @@
     <section class="step" id="step-print" hidden>
       <div class="step-head"><span class="step-no">4</span><h2>미리보기 · 인쇄</h2></div>
       <p class="step-desc">아래 모양 그대로 인쇄됩니다. 인쇄 창에서 배율은 <b>100%</b>, 여백은 <b>없음</b>으로 두세요.</p>
+      <div class="opt-line">
+        <label for="opt-qr"><input type="checkbox" id="opt-qr"> QR코드 넣기</label>
+        <span class="opt-note">QR 주소가 정해지면 켭니다</span>
+      </div>
       <div class="sheet-info">
         <button class="btn btn--primary btn--big" id="btn-print">인쇄하기</button>
         <span class="pages" id="pages"></span>
@@ -587,6 +607,8 @@ $('btn-all').addEventListener('click', () => { visibleIndexes().forEach(i => pic
 $('btn-none').addEventListener('click', () => { picked.clear(); renderList(); queueSheet(); });
 
 /* ── 4단계: 가격표 그리기 ─────────────────────────────── */
+const useQR = () => $('opt-qr').checked;
+
 function tagHTML(p){
   const name = p.display_name;
   const qp = new URLSearchParams({ info:'1', name });
@@ -596,7 +618,7 @@ function tagHTML(p){
   if (p.barcode)     qp.set('barcode', p.barcode);
   const qrUrl = SITE_BASE + '/tags.html?' + qp.toString();
 
-  return `<div class="tag">
+  return `<div class="tag${useQR() ? '' : ' no-qr'}">
     <div class="tag-header">
       <span class="tag-farmer">${esc(p.farmer_name || '')}</span>
       <span class="tag-logo">진주텃밭</span>
@@ -622,20 +644,25 @@ function renderQRCodes(box){
   });
 }
 /* 상품명이 길면 칸에 맞을 때까지 글씨를 줄인다.
-   한 줄로 12pt까지 줄여도 넘치면 줄을 바꿔 10mm 칸 안에 앉힌다. */
+   한 줄로 줄여도 넘치면 줄을 바꿔 칸 안에 앉힌다.
+   QR을 뺀 태그는 자리가 넓으므로 더 큰 글씨에서 시작한다. */
 function autoFitProductNames(box){
   box.querySelectorAll('.tag-product').forEach(el => {
-    let size = 18;
+    const wide = el.parentElement.classList.contains('no-qr');
+    let size = wide ? 26 : 18;
+    const minOneLine = wide ? 16 : 12;
+    const minWrapped = wide ? 11 : 9;
+
     el.style.whiteSpace = 'nowrap';
     el.style.fontSize = size + 'pt';
-    while (el.scrollWidth > el.clientWidth && size > 12){
+    while (el.scrollWidth > el.clientWidth && size > minOneLine){
       size -= 0.5;
       el.style.fontSize = size + 'pt';
     }
     if (el.scrollWidth <= el.clientWidth) return;
 
     el.style.whiteSpace = 'normal';
-    while (el.scrollHeight > el.clientHeight && size > 9){
+    while (el.scrollHeight > el.clientHeight && size > minWrapped){
       size -= 0.5;
       el.style.fontSize = size + 'pt';
     }
@@ -652,7 +679,7 @@ function renderSheet(){
     html += '<div class="print-page">' + list.slice(i, i + PER_PAGE).map(tagHTML).join('') + '</div>';
   }
   sheet.innerHTML = html;
-  renderQRCodes(sheet);
+  if (useQR()) renderQRCodes(sheet);
   autoFitProductNames(sheet);
 
   const pages = Math.ceil(list.length / PER_PAGE);
@@ -670,6 +697,7 @@ function fitSheet(){
   view.style.height = ($('sheet').scrollHeight * s) + 'px';
 }
 window.addEventListener('resize', fitSheet);
+$('opt-qr').addEventListener('change', renderSheet);
 $('btn-print').addEventListener('click', () => window.print());
 
 /* ── QR 스캔 화면 ─────────────────────────────────────── */
