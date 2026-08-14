@@ -47,7 +47,8 @@ a.btn:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
 </head>
 <body>
   <main class="box">
-    <img class="logo" src="img/logo.webp" alt="진주텃밭 로고" width="170" height="54">
+    <!-- lazy: preload 스캐너가 base 보정 스크립트보다 먼저 도는 것을 막는다 (선행 /img/... 404 방지) -->
+    <img class="logo" src="img/logo.webp" alt="진주텃밭 로고" width="170" height="54" loading="lazy">
     <div class="tabs" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <h1>찾으시는 페이지가 없습니다</h1>
     <p>주소가 바뀌었거나 없어진 페이지입니다. 첫 화면에서 다시 찾아보세요.</p>
