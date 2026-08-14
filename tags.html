@@ -242,6 +242,71 @@
   .info-foot{text-align:center; margin-top:22px; font-size:14px; color:var(--ink-dim)}
   .info-foot a{color:var(--teal-deep)}
 
+  /* ── 매장 발주 (QR 화면 아래) ───────────────── */
+  .order-box{
+    background:var(--panel); border:1px solid var(--line); border-radius:18px;
+    padding:24px 22px; margin-top:16px; box-shadow:var(--shadow-sm)}
+  .order-box[hidden]{display:none}
+  .order-head{font-family:var(--serif); font-size:20px; font-weight:700; letter-spacing:-.02em}
+  .order-sub{font-size:14.5px; color:var(--ink-dim); margin:4px 0 20px}
+  .order-fld{margin-bottom:16px}
+  .order-fld[hidden]{display:none}
+  .order-fld > label, .order-lg{display:block; font-size:14px; font-weight:600; margin-bottom:8px}
+  .order-fld .req{color:var(--red); margin-left:3px}
+  .order-fld input{
+    width:100%; min-height:50px; padding:0 14px; border-radius:11px;
+    border:1.5px solid var(--line); background:#fff; font-size:16px}
+  .order-fld input:focus{border-color:var(--teal-deep); outline:none}
+  .stores{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+  .store-btn{
+    min-height:56px; border-radius:12px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink-soft); font-size:16px; font-weight:700; cursor:pointer;
+    transition:background .18s ease, border-color .18s ease, color .18s ease}
+  .store-btn:hover{border-color:var(--teal-deep)}
+  .store-btn[aria-checked="true"]{background:var(--teal-deep); border-color:var(--teal-deep); color:#fff}
+  .order-msg{margin-top:16px; padding:14px 16px; border-radius:12px; font-size:15px}
+  .order-msg[hidden]{display:none}
+  .order-msg.ok{background:rgba(0,168,168,.11); color:var(--teal-deep)}
+  .order-msg.bad{background:rgba(232,48,40,.08); color:#B3211B}
+  .order-msg a{color:inherit; font-weight:700}
+
+  /* ── 발주 현황 (매장 폰) ────────────────────── */
+  #orders-view[hidden]{display:none}
+  .ord-top{
+    background:var(--panel); border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:10}
+  .ord-bar{
+    max-width:560px; margin:0 auto; padding:14px 16px 0;
+    display:flex; align-items:center; gap:12px}
+  .ord-title{font-family:var(--serif); font-size:21px; font-weight:700; letter-spacing:-.02em}
+  .ord-bar .btn{margin-left:auto}
+  .ord-tabs{
+    max-width:560px; margin:0 auto; padding:12px 16px;
+    display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .ord-tabs .tab{flex:none; min-height:44px}
+  .ord-wrap{max-width:560px; margin:0 auto; padding:16px 16px 64px}
+  .ord-row{
+    display:flex; align-items:flex-start; gap:14px;
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow-sm)}
+  .ord-row.done{background:#F2EEE6; box-shadow:none; border-color:transparent}
+  .ord-body{flex:1; min-width:0}
+  .ord-name{font-size:17px; font-weight:700; line-height:1.35; word-break:keep-all}
+  .ord-row.done .ord-name{color:var(--ink-soft); font-weight:600}
+  .ord-qty{color:var(--teal-deep); margin-left:6px; white-space:nowrap}
+  .ord-row.done .ord-qty{color:var(--ink-soft)}
+  .ord-meta{font-size:13.5px; color:var(--ink-dim); margin-top:4px}
+  .ord-note{
+    font-size:14px; color:var(--ink-soft); margin-top:7px;
+    padding-left:10px; border-left:2px solid var(--line); word-break:keep-all}
+  .ord-act{flex:none; padding-top:2px}
+  .ord-act .btn{min-height:44px; padding:0 18px}
+  .ord-mark{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:14px; font-weight:600; color:var(--ink-soft); white-space:nowrap}
+  .ord-mark svg{width:17px; height:17px; flex:none}
+  .ord-empty{padding:52px 20px; text-align:center; color:var(--ink-dim)}
+
   /* ── 인쇄 ───────────────────────────────────── */
   @page{size:A4; margin:0}
   @media print{
@@ -363,8 +428,8 @@
       <div class="step-head"><span class="step-no">3</span><h2>미리보기 · 인쇄</h2></div>
       <p class="step-desc">아래 모양 그대로 인쇄됩니다. 인쇄 창에서 배율은 <b>100%</b>, 여백은 <b>없음</b>으로 두세요.</p>
       <div class="opt-line">
-        <label for="opt-qr"><input type="checkbox" id="opt-qr"> QR코드 넣기</label>
-        <span class="opt-note">QR 주소가 정해지면 켭니다</span>
+        <label for="opt-qr"><input type="checkbox" id="opt-qr" checked> QR코드 넣기</label>
+        <span class="opt-note">QR을 찍으면 상품 조회·발주가 됩니다</span>
       </div>
       <div class="sheet-info">
         <button class="btn btn--primary btn--big" id="btn-print">인쇄하기</button>
@@ -399,7 +464,52 @@
     </div>
     <div class="info-bar"></div>
   </div>
+
+  <!-- 현장 발주 -->
+  <section class="order-box" id="order-box" hidden>
+    <h2 class="order-head">매장 발주</h2>
+    <p class="order-sub">이 상품이 필요하면 매장으로 바로 알립니다.</p>
+
+    <div class="order-fld" id="o-name-fld" hidden>
+      <label for="o-name">상품명<span class="req">*</span></label>
+      <input id="o-name" type="text" autocomplete="off" placeholder="상품 이름을 적어 주세요">
+    </div>
+
+    <div class="order-fld">
+      <span class="order-lg" id="o-store-lg">어느 매장인가요?<span class="req">*</span></span>
+      <div class="stores" id="o-stores" role="radiogroup" aria-labelledby="o-store-lg"></div>
+    </div>
+
+    <div class="order-fld">
+      <label for="o-qty">수량<span class="req">*</span></label>
+      <input id="o-qty" type="text" autocomplete="off" placeholder="예: 2박스">
+    </div>
+
+    <div class="order-fld">
+      <label for="o-note">메모 (없어도 됩니다)</label>
+      <input id="o-note" type="text" autocomplete="off" placeholder="예: 금요일까지 부탁드립니다">
+    </div>
+
+    <button class="btn btn--primary btn--big" id="o-send" style="width:100%">발주 넣기</button>
+    <p class="order-msg" id="o-msg" role="status" hidden></p>
+  </section>
+
   <p class="info-foot">진주우리먹거리협동조합 진주텃밭 · <a href="index.html">조합 소개 보기</a></p>
+</div>
+
+<!-- ══ 발주 현황 (매장 폰) ════════════════════════════════ -->
+<div id="orders-view" hidden>
+  <header class="ord-top">
+    <div class="ord-bar">
+      <h1 class="ord-title">발주 현황</h1>
+      <button class="btn btn--ghost btn--sm" id="ord-refresh">새로고침</button>
+    </div>
+    <div class="ord-tabs" id="ord-tabs" role="tablist" aria-label="매장으로 걸러 보기"></div>
+  </header>
+  <main class="ord-wrap">
+    <p class="order-msg" id="ord-msg" role="status" hidden></p>
+    <div id="ord-list"></div>
+  </main>
 </div>
 
 <script>
@@ -931,33 +1041,222 @@ function showInfo(o){
   $('info-price').textContent = (o.price != null && o.price !== '' && !isNaN(Number(o.price)))
     ? Number(o.price).toLocaleString('ko-KR') + '원' : '—';
 }
-/* 바코드만 들고 온 QR — 구워둔 목록에서 찾아 보여준다 */
+/* 바코드만 들고 온 QR — 구워둔 목록에서 찾아 보여준다.
+   찾은 상품을 돌려준다(못 찾으면 null) — 발주 칸이 상품명을 이어받는다. */
 async function showInfoByBarcode(barcode){
   try {
     const res = await fetch('tags-data.json', { cache:'no-cache' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     const hit = (data.products || []).find(p => String(p.barcode) === String(barcode));
-    if (!hit) return showInfo({});
+    if (!hit){ showInfo({}); return null; }
     const item = makeItem('q:0', 'catalog', hit);   /* 태그와 같은 이름·단위를 쓴다 */
     showInfo({
       name: item.display_name, farmer: item.farmer_name,
       unit: item.unit, price: item.price
     });
-  } catch(e){ showInfo({}); }
+    return item;
+  } catch(e){ showInfo({}); return null; }
 }
 
-const params = new URLSearchParams(location.search);
-if (params.get('info')){
-  $('info-view').hidden = false;
-  showInfo({
-    name: params.get('name') || '', farmer: params.get('farmer') || '',
-    unit: params.get('unit') || '', price: params.get('price')
+/* ── 현장 발주 (진주 Supabase) ────────────────────────────
+   공개 화면이라 키는 publishable(anon). 권한은 DB 정책이 잡는다 —
+   INSERT는 발주 칸만, UPDATE는 status·done_at만, DELETE는 막혀 있다. */
+const SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+const SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+const SB_HEAD = { apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' };
+const STORES = [
+  { code:'geumsan',   label:'금산' },
+  { code:'chojeon',   label:'초전' },
+  { code:'jinyangho', label:'진양호' }
+];
+const storeLabel = c => (STORES.find(s => s.code === c) || {}).label || c;
+const STORE_KEY = 'jinju.order.store';
+const lsGet = k => { try { return localStorage.getItem(k); } catch(e){ return null; } };
+const lsSet = (k,v) => { try { localStorage.setItem(k,v); } catch(e){} };
+
+function say(el, text, bad){
+  el.hidden = false;
+  el.className = 'order-msg ' + (bad ? 'bad' : 'ok');
+  el.textContent = text;
+}
+
+/* ── 발주 넣기 (QR 화면) ──────────────────────────────── */
+let orderItem = null, orderStore = null;
+
+function setupOrder(item){
+  orderItem = item || {};
+  $('o-name-fld').hidden = !!orderItem.product_name;
+  $('o-stores').innerHTML = STORES.map(s =>
+    `<button type="button" class="store-btn" role="radio" aria-checked="false"
+       data-store="${s.code}">${esc(s.label)}</button>`).join('');
+  const last = lsGet(STORE_KEY);
+  if (STORES.some(s => s.code === last)) pickStore(last);
+  $('order-box').hidden = false;
+}
+function pickStore(code){
+  orderStore = code;
+  $('o-stores').querySelectorAll('.store-btn').forEach(b =>
+    b.setAttribute('aria-checked', String(b.dataset.store === code)));
+  lsSet(STORE_KEY, code);
+}
+$('o-stores').addEventListener('click', e => {
+  const b = e.target.closest('.store-btn');
+  if (b) pickStore(b.dataset.store);
+});
+
+async function sendOrder(){
+  const msg = $('o-msg');
+  const name = (orderItem.product_name || $('o-name').value).trim();
+  const qty = $('o-qty').value.trim();
+  if (!orderStore) return say(msg, '어느 매장인지 골라 주세요.', true);
+  if (!name)       return say(msg, '상품 이름을 적어 주세요.', true);
+  if (!qty)        return say(msg, '수량을 적어 주세요. (예: 2박스)', true);
+
+  const btn = $('o-send');
+  btn.disabled = true; btn.textContent = '보내는 중…';
+  try {
+    const res = await fetch(SB_URL + '/orders', {
+      method:'POST',
+      headers: Object.assign({ Prefer:'return=minimal' }, SB_HEAD),
+      body: JSON.stringify({
+        store: orderStore,
+        barcode: orderItem.barcode || null,
+        product_name: name,
+        farmer_name: orderItem.farmer_name || null,
+        qty,
+        note: $('o-note').value.trim() || null
+      })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    msg.hidden = false;
+    msg.className = 'order-msg ok';
+    msg.innerHTML = '발주가 등록되었습니다. <a href="tags.html?orders=1">발주현황 보기</a>';
+    $('o-qty').value = ''; $('o-note').value = '';
+  } catch(err){
+    /* 실패하면 적어 둔 것을 지우지 않는다 — 그대로 다시 누르면 된다 */
+    say(msg, '발주를 보내지 못했습니다 (' + err.message + '). 통신 상태를 확인하고 다시 눌러 주세요.', true);
+  } finally {
+    btn.disabled = false; btn.textContent = '발주 넣기';
+  }
+}
+$('o-send').addEventListener('click', sendOrder);
+
+/* ── 발주 현황 (매장 폰) ──────────────────────────────── */
+let ordRows = [], ordFilter = '';
+
+/* 오늘 것은 시각, 지난 것은 날짜 */
+function ordWhen(iso){
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const now = new Date();
+  return d.toDateString() === now.toDateString()
+    ? String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0')
+    : (d.getMonth() + 1) + '/' + d.getDate();
+}
+const CHECK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"'
+  + ' stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>';
+
+function renderOrders(){
+  const rows = ordRows
+    .filter(r => !ordFilter || r.store === ordFilter)
+    .sort((a,b) => (a.status === b.status)
+      ? new Date(b.created_at) - new Date(a.created_at)
+      : (a.status === 'open' ? -1 : 1));
+
+  $('ord-list').innerHTML = rows.length ? rows.map(r => {
+    const done = r.status === 'done';
+    return `<article class="ord-row${done ? ' done' : ''}">
+      <div class="ord-body">
+        <div class="ord-name">${esc(r.product_name)}<span class="ord-qty">${esc(r.qty)}</span></div>
+        <div class="ord-meta">${esc(storeLabel(r.store))} · ${esc(ordWhen(r.created_at))}${
+          r.farmer_name ? ' · ' + esc(r.farmer_name) : ''}</div>
+        ${r.note ? `<div class="ord-note">${esc(r.note)}</div>` : ''}
+      </div>
+      <div class="ord-act">${done
+        ? `<span class="ord-mark">${CHECK}처리함</span>`
+        : `<button class="btn btn--ghost btn--sm" data-done="${esc(r.id)}">완료</button>`}</div>
+    </article>`;
+  }).join('') : `<div class="ord-empty">${ordFilter
+      ? esc(storeLabel(ordFilter)) + ' 매장에 들어온 발주가 없습니다.'
+      : '아직 들어온 발주가 없습니다.'}</div>`;
+}
+
+async function loadOrders(){
+  const box = $('ord-list');
+  $('ord-msg').hidden = true;
+  box.innerHTML = '<div class="ord-empty">발주를 불러오는 중입니다…</div>';
+  try {
+    const res = await fetch(SB_URL + '/orders?select=*&order=created_at.desc&limit=300',
+      { headers: SB_HEAD, cache:'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    ordRows = await res.json();
+    renderOrders();
+  } catch(err){
+    ordRows = [];
+    box.innerHTML = '<div class="ord-empty">발주를 불러오지 못했습니다 (' + esc(err.message) + ').</div>';
+    say($('ord-msg'), '통신 상태를 확인하고 새로고침을 눌러 주세요.', true);
+  }
+}
+
+async function markDone(id, btn){
+  btn.disabled = true; btn.textContent = '처리 중…';
+  try {
+    const res = await fetch(SB_URL + '/orders?id=eq.' + encodeURIComponent(id), {
+      method:'PATCH',
+      headers: Object.assign({ Prefer:'return=minimal' }, SB_HEAD),
+      body: JSON.stringify({ status:'done', done_at: new Date().toISOString() })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const row = ordRows.find(r => String(r.id) === String(id));
+    if (row){ row.status = 'done'; row.done_at = new Date().toISOString(); }
+    $('ord-msg').hidden = true;
+    renderOrders();
+  } catch(err){
+    btn.disabled = false; btn.textContent = '완료';
+    say($('ord-msg'), '완료 처리를 못했습니다 (' + err.message + '). 다시 눌러 주세요.', true);
+  }
+}
+$('ord-list').addEventListener('click', e => {
+  const b = e.target.closest('button[data-done]');
+  if (b) markDone(b.dataset.done, b);
+});
+$('ord-refresh').addEventListener('click', loadOrders);
+
+function initOrders(){
+  document.title = '발주 현황 — 진주텃밭';
+  $('ord-tabs').innerHTML = [{ code:'', label:'전체' }].concat(STORES).map((s, i) =>
+    `<button class="tab" role="tab" aria-selected="${i === 0}" data-store="${s.code}">${esc(s.label)}</button>`
+  ).join('');
+  $('ord-tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (!t) return;
+    $('ord-tabs').querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', String(x === t)));
+    ordFilter = t.dataset.store;
+    renderOrders();
   });
+  $('orders-view').hidden = false;
+  loadOrders();
+}
+
+/* ── 어느 화면을 열까 ─────────────────────────────────── */
+const params = new URLSearchParams(location.search);
+if (params.get('orders')){
+  initOrders();
+} else if (params.get('info')){
+  $('info-view').hidden = false;
+  const name = params.get('name') || '', farmer = params.get('farmer') || '';
+  showInfo({ name, farmer, unit: params.get('unit') || '', price: params.get('price') });
+  setupOrder({ barcode:'', product_name:name, farmer_name:farmer });
 } else if (params.get('barcode')){
+  const barcode = params.get('barcode');
   $('info-view').hidden = false;
   $('info-product').textContent = '상품을 찾는 중입니다…';
-  showInfoByBarcode(params.get('barcode'));
+  showInfoByBarcode(barcode).then(item => setupOrder({
+    barcode,
+    product_name: item ? item.display_name : '',   /* 못 찾았으면 상품명을 손으로 적는다 */
+    farmer_name: item ? item.farmer_name : ''
+  }));
 } else {
   $('builder').hidden = false;
   $('btn-print').disabled = true;
