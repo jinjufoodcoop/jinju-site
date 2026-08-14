@@ -76,7 +76,7 @@ a:focus-visible, button:focus-visible{
   transition:background .2s ease, color .2s ease}
 .nav__links a:hover{background:rgba(0,168,168,.1); color:var(--teal-deep)}
 @media (max-width:760px){ .nav__links a{padding:10px 9px; font-size:14px} .nav__logo img{width:108px} }
-@media (max-width:430px){ .nav__links a:nth-child(2){display:none} }
+/* 소개가 펼침 메뉴로 바뀌어 자리가 남는다 — 좁은 화면에서도 셋 다 보여준다 */
 
 /* ── 히어로 ───────────────────────────────────────── */
 .hero{position:relative; overflow:hidden; border-bottom:1px solid var(--line)}
@@ -208,6 +208,91 @@ a:focus-visible, button:focus-visible{
 .gallery figure:hover img{transform:scale(1.05)}
 @media (prefers-reduced-motion:reduce){ .gallery figure:hover img{transform:none} }
 
+/* ── 소개 드롭다운 ────────────────────────────────── */
+.menu{position:relative}
+.menu__btn{display:flex; align-items:center; gap:6px; min-height:44px;
+  padding:10px 14px; border:0; background:transparent; border-radius:9px; cursor:pointer;
+  font-family:var(--sans); font-size:15px; font-weight:500; color:var(--ink-soft);
+  letter-spacing:-.01em; transition:background .2s ease, color .2s ease}
+.menu__btn:hover, .menu__btn[aria-expanded="true"]{background:rgba(0,168,168,.1); color:var(--teal-deep)}
+.menu__btn svg{transition:transform .2s ease}
+.menu__btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){ .menu__btn svg{transition:none} }
+.menu__panel{position:absolute; top:calc(100% + 6px); left:0; min-width:216px; display:none;
+  background:var(--panel); border:1px solid var(--line); border-radius:13px;
+  box-shadow:var(--shadow-md); padding:8px; z-index:var(--z-nav)}
+.menu__panel[data-open]{display:block}
+.menu__panel a{display:flex; align-items:center; min-height:44px; padding:9px 14px;
+  border-radius:9px; font-size:15px; font-weight:500; color:var(--ink-soft);
+  text-decoration:none; white-space:nowrap}
+.menu__panel a:hover{background:var(--bg); color:var(--teal-deep)}
+@media (max-width:760px){ .menu__btn{padding:10px 9px; font-size:14px} }
+@media (max-width:520px){ .menu__panel{left:auto; right:0} }
+
+/* ── 우리는 (정체성 세 줄) ─────────────────────────── */
+.ident{list-style:none; margin:0 0 28px; padding:0; display:grid; gap:18px}
+.ident li{font-size:clamp(15.5px,1.8vw,17px); line-height:1.7; color:var(--ink-soft)}
+.ident b{display:block; margin-top:3px; font-family:var(--serif); font-weight:700;
+  font-size:clamp(20px,2.4vw,25px); letter-spacing:-.02em}
+.ident li:nth-child(1) b{color:var(--red-deep)}
+.ident li:nth-child(2) b{color:var(--teal-deep)}
+.ident li:nth-child(3) b{color:var(--green-deep)}
+
+/* ── 설립목적 (정관 인용) ──────────────────────────── */
+.charter{margin-top:40px; max-width:56em; padding:34px 38px;
+  background:var(--panel); border:1px solid var(--line); border-left:5px solid var(--green);
+  border-radius:0 16px 16px 0; box-shadow:var(--shadow-sm)}
+.band--panel .charter{background:var(--bg)}
+.charter__no{display:block; margin-bottom:16px; font-size:13px; font-weight:700;
+  letter-spacing:.1em; color:var(--green-deep)}
+.charter p{margin:0 0 14px; font-family:var(--serif); line-height:1.85; color:var(--ink);
+  font-size:clamp(17px,2vw,21px)}
+.charter p:last-child{margin-bottom:0}
+@media (max-width:600px){ .charter{padding:26px 24px} }
+
+/* ── 사업과 활동 ──────────────────────────────────── */
+.work{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:40px}
+@media (max-width:900px){ .work{grid-template-columns:1fr; max-width:560px} }
+.work__card{padding:28px 26px; background:var(--panel); border:1px solid var(--line);
+  border-top:5px solid var(--line); border-radius:18px; box-shadow:var(--shadow-sm)}
+.band--panel .work__card{background:var(--bg)}
+.work__card h3{font-size:20px}
+.work__card .tag{display:block; margin:16px 0 14px; font-size:12.5px; font-weight:700;
+  letter-spacing:.08em; color:var(--ink-dim)}
+.work__card h3 + .tag{margin-top:8px}
+.work__card ul{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+.work__card li{position:relative; padding-left:15px; font-size:15px; line-height:1.65;
+  color:var(--ink-soft)}
+.work__card li::before{content:''; position:absolute; left:0; top:9px; width:6px; height:6px;
+  border-radius:50%; background:var(--ink-dim); opacity:.45}
+.work__card li b{color:var(--ink); font-weight:600}
+.pills{display:flex; flex-wrap:wrap; gap:7px; margin:14px 0 0; padding:0; list-style:none}
+.pills li{padding:5px 11px; border-radius:999px; font-size:12.5px; font-weight:600;
+  background:rgba(240,168,0,.15); color:var(--orange-deep)}
+.pills li::before{display:none}
+.work__sub{margin:60px 0 0; font-size:clamp(21px,2.6vw,26px)}
+.work__sub + .work{margin-top:26px}
+
+/* ── 연혁 · 수상내역 ──────────────────────────────── */
+.tl2{display:grid; grid-template-columns:1fr 1fr; gap:52px; margin-top:44px}
+@media (max-width:900px){ .tl2{grid-template-columns:1fr; gap:46px} }
+.tl2 h3{display:flex; align-items:center; gap:10px; margin-bottom:24px; font-size:20px}
+.tl2 h3 .chip{width:13px; height:13px; border-radius:4px; flex:none}
+.tl{position:relative; list-style:none; margin:0; padding:0 0 0 3px}
+.tl::before{content:''; position:absolute; left:0; top:7px; bottom:7px; width:2px; background:var(--line)}
+.tl li{position:relative; display:grid; grid-template-columns:auto 1fr; gap:2px 15px;
+  align-items:baseline; padding:0 0 19px 27px}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{content:''; position:absolute; left:-4px; top:8px; box-sizing:border-box;
+  width:10px; height:10px; border-radius:50%; background:var(--panel); border:2px solid var(--teal)}
+.band--panel .tl li::before{background:var(--bg)}
+.tl time{font-size:14.5px; font-weight:700; color:var(--teal-deep); white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.tl span{font-size:15.5px; line-height:1.6; color:var(--ink-soft)}
+.tl--award li::before{border-color:var(--red)}
+.tl--award time{color:var(--red-deep)}
+@media (max-width:520px){ .tl li{grid-template-columns:1fr; gap:3px} }
+
 /* ── 푸터 ─────────────────────────────────────────── */
 .foot{background:var(--ink); color:#E8E2D6; padding:64px 0 40px}
 .foot__top{display:grid; grid-template-columns:1fr 1.3fr 1fr; gap:40px}
@@ -240,7 +325,18 @@ a:focus-visible, button:focus-visible{
       <img src="img/logo.webp" alt="진주텃밭 로고" width="132" height="42">
     </a>
     <nav class="nav__links" aria-label="주요 메뉴">
-      <a href="#about">소개</a>
+      <div class="menu">
+        <button class="menu__btn" type="button" aria-expanded="false" aria-controls="menu-about">
+          소개
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="menu__panel" id="menu-about">
+          <a href="#about">소개글</a>
+          <a href="#purpose">설립목적</a>
+          <a href="#work">사업과 활동</a>
+          <a href="#history">주요연혁 &amp; 수상내역</a>
+        </div>
+      </div>
       <a href="#stores">매장</a>
       <a href="#join">조합원 되기</a>
     </nav>
@@ -278,17 +374,16 @@ a:focus-visible, button:focus-visible{
     <div class="about">
       <div>
         <span class="kicker">우리는</span>
+        <ul class="ident">
+          <li>안전한 먹거리와 지속가능한 농업을 고민하고 실천하는
+            <b>지역먹거리 협동조합</b></li>
+          <li>지역을 중심으로 환경적·사회적 가치를 실현하는
+            <b>사회적 기업</b></li>
+          <li>생활 쓰레기를 줄이기 위해 자원을 순환하고 무포장을 실천하는
+            <b>녹색실천매장</b></li>
+        </ul>
         <p class="about__quote">
-          건강한 먹거리를 나누고, 지역 농업을 지키고,
-          이웃과 함께 사는 마을을 만듭니다.
-        </p>
-        <p>
-          진주우리먹거리협동조합 진주텃밭은 협동조합기본법에 따라 세워진 협동조합입니다.
-          조합원과 지역 소비자에게 건강한 먹거리를 제공하고, 지역 농업의 발전과
-          지역먹거리운동의 확산, 건강한 지역공동체 실현을 목적으로 합니다.
-        </p>
-        <p>
-          또한 취약계층에게 지속적이고 안정적인 일자리를 제공하는 것을 조합의 목적으로 함께 두고 있습니다.
+          안녕하세요, 진주텃밭 협동조합입니다.
         </p>
       </div>
       <aside class="about__side">
@@ -321,6 +416,7 @@ a:focus-visible, button:focus-visible{
       <span class="kicker">직매장</span>
       <h2>진주에 세 곳이 있습니다</h2>
       <p>아침에 농민이 내놓은 농산물이 그날 진열대에 오릅니다. 가까운 매장으로 오세요.</p>
+      <p class="stats__note" style="margin-top:14px">1월 1일과 명절 당일·다음 날은 세 매장 모두 쉽니다.</p>
     </div>
 
     <div class="stores">
@@ -362,7 +458,7 @@ a:focus-visible, button:focus-visible{
         </div>
         <div class="store__body">
           <h3><span class="chip" style="background:var(--teal)" aria-hidden="true"></span>진양호점</h3>
-          <p class="store__addr">경남 진주시 진양호로44번길 6, 2층</p>
+          <p class="store__addr">경남 진주시 진양호로44번길 6, 1층</p>
           <dl class="store__info">
             <dt>영업</dt><dd>09:00 – 21:00</dd>
             <dt>휴무</dt><dd><span class="always">없음 · 365일 문 엽니다</span></dd>
@@ -375,8 +471,173 @@ a:focus-visible, button:focus-visible{
   </div>
 </section>
 
+<!-- 설립목적 -->
+<section class="band band--panel" id="purpose">
+  <div class="wrap">
+    <div class="band__head">
+      <span class="kicker">설립목적</span>
+      <h2>무엇을 위해 모였나</h2>
+      <p>조합의 목적은 정관 제2조에 적혀 있습니다. 아래는 그 조항을 그대로 옮긴 것입니다.</p>
+    </div>
+    <blockquote class="charter">
+      <span class="charter__no">진주텃밭 협동조합 정관 제2조 [목적]</span>
+      <p>
+        <b>자주적·자립적·자치적인 협동조합 활동</b>을 통해 조합원과 지역 소비자에게
+        <b>건강한 먹거리</b>를 제공하고, <b>지역 농업의 발전</b>, <b>지역 먹거리 운동의 확산</b>,
+        <b>건강한 지역 공동체 실현</b>을 목적으로 한다.
+      </p>
+      <p>
+        또한 취약계층에게 <b>지속적이고 안정적인 일자리</b>를 제공하는 데 목적을 둔다.
+      </p>
+    </blockquote>
+  </div>
+</section>
+
+<!-- 사업과 활동 -->
+<section class="band" id="work">
+  <div class="wrap">
+    <div class="band__head">
+      <span class="kicker">사업과 활동</span>
+      <h2>직매장 말고도 하는 일</h2>
+      <p>지역에서 기른 것을 지역에서 먹는 데 필요한 일을 조합이 직접 하거나, 이웃 업체와 함께 합니다.</p>
+    </div>
+
+    <div class="work">
+      <article class="work__card" style="border-top-color:var(--orange)">
+        <h3>우리콩 두부</h3>
+        <span class="tag">자체 브랜드 · 매일 만듭니다</span>
+        <ul>
+          <li><b>콩당콩당 손두부</b></li>
+          <li><b>콩당콩당 서리태두부</b></li>
+          <li>순두부 · 콩물도 함께 공급합니다</li>
+        </ul>
+        <ul class="pills">
+          <li>국산 콩 100%</li><li>NON-GMO</li><li>무첨가</li><li>무방부제</li>
+        </ul>
+      </article>
+
+      <article class="work__card" style="border-top-color:var(--green)">
+        <h3>지역산 절임배추</h3>
+        <span class="tag">2019년부터 이어온 사업</span>
+        <ul>
+          <li>가장 맛있는 종자 — <b>불암플러스 &amp; 황금배추</b></li>
+          <li><b>무제초제</b>, 수확 전 30일간 화학농약 방제 중단 등 안전성 기준을 지킵니다</li>
+          <li><b>국내산 천일염</b>만 씁니다</li>
+          <li>위생적인 절임배추 가공시설을 갖추고 있습니다</li>
+        </ul>
+      </article>
+
+      <article class="work__card" style="border-top-color:var(--teal)">
+        <h3>100% 우리밀 빵</h3>
+        <span class="tag">협력 사업 · 리얼그린팜</span>
+        <ul>
+          <li>우리밀로만 구운 빵을 이웃 업체 <b>리얼그린팜</b>과 함께 선보입니다</li>
+          <li>진양호점 <b>2층</b>에 자리하고 있습니다</li>
+        </ul>
+      </article>
+    </div>
+
+    <h2 class="work__sub">조합원과 함께하는 일</h2>
+    <div class="work">
+      <article class="work__card" style="border-top-color:var(--red)">
+        <h3>공동 구매</h3>
+        <span class="tag">조합원 혜택 1</span>
+        <ul>
+          <li>조합원 <b>특가</b>로 살 수 있습니다</li>
+          <li>조합원 밴드에서 진행합니다</li>
+        </ul>
+      </article>
+
+      <article class="work__card" style="border-top-color:var(--orange)">
+        <h3>교육과 체험</h3>
+        <span class="tag">조합원 혜택 2</span>
+        <ul>
+          <li>협동조합 · 안전한 생활재(먹거리) · 요리교실 · 환경 · 인문학 교육</li>
+          <li><b>생산자–소비자 교류</b> — 농가체험, 소풍처럼
+            우리 조합만의 따뜻한 활동을 상시 진행합니다</li>
+        </ul>
+      </article>
+
+      <article class="work__card" style="border-top-color:var(--green)">
+        <h3>예술과 문화</h3>
+        <span class="tag">조합원 혜택 3</span>
+        <ul>
+          <li>조합원 소모임과 문화강좌를 운영합니다</li>
+          <li>조합원 공동체 <b>영화상영</b>을 진행합니다</li>
+        </ul>
+      </article>
+
+      <article class="work__card" style="border-top-color:var(--teal)">
+        <h3>협동 기금</h3>
+        <span class="tag">이용액의 일부를 적립합니다</span>
+        <ul>
+          <li>지역사회 돌봄</li>
+          <li>협동조합 발전</li>
+          <li>협동조합 간 연대를 위한 여러 사업</li>
+        </ul>
+      </article>
+
+      <article class="work__card" style="border-top-color:var(--green)">
+        <h3>환경 기금</h3>
+        <span class="tag">이용액의 일부를 적립합니다</span>
+        <ul>
+          <li>환경인식 개선을 위한 교육과 연대사업</li>
+          <li>환경농업 활성화를 위한 사업</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 주요연혁 · 수상내역 -->
+<section class="band band--panel" id="history">
+  <div class="wrap">
+    <div class="band__head">
+      <span class="kicker">주요연혁 &amp; 수상내역</span>
+      <h2>2013년부터 걸어온 길</h2>
+      <p>진주의 농민들이 모여 창립총회를 연 것이 2013년 3월입니다.</p>
+    </div>
+
+    <div class="tl2">
+      <div>
+        <h3><span class="chip" style="background:var(--teal)" aria-hidden="true"></span>주요 연혁</h3>
+        <ol class="tl">
+          <li><time>2013.03</time><span>창립총회</span></li>
+          <li><time>2013.09</time><span>직거래매장 1호(금산점) 개점</span></li>
+          <li><time>2014.03</time><span>제1차 대의원총회</span></li>
+          <li><time>2014.10</time><span>(예비) 사회적기업 인증</span></li>
+          <li><time>2016.06</time><span>사회적기업 인증</span></li>
+          <li><time>2017.07</time><span>직거래매장 2호(초전점) 개점</span></li>
+          <li><time>2019.06</time><span>직매장 1호점 확장이전 (한국남동발전 지원)</span></li>
+          <li><time>2019.11</time><span>지역산 절임배추 공급 사업 시작</span></li>
+          <li><time>2020.01</time><span>LH본사 구내식당 지역농산물 공공급식 사업 시작</span></li>
+          <li><time>2020.08</time><span>전 매장 녹색실천매장으로 전환</span></li>
+          <li><time>2021.09</time><span>직거래매장 3호점(진양호점) 개점</span></li>
+          <li><time>2022.06</time><span>환경부 지정 녹색특화매장</span></li>
+          <li><time>2023.12</time><span>10주년 기념식</span></li>
+        </ol>
+      </div>
+
+      <div>
+        <h3><span class="chip" style="background:var(--red)" aria-hidden="true"></span>주요 수상내역</h3>
+        <ol class="tl tl--award">
+          <li><time>2014.12</time><span>(재)지역재단 전국지역리더상 — 조직부문 격려상</span></li>
+          <li><time>2015.07</time><span>기획재정부 장관 표창</span></li>
+          <li><time>2017.12</time><span>경남도지사 표창</span></li>
+          <li><time>2020.07</time><span>제7회 연대와 협력 — 우수사회적기업 어워드</span></li>
+          <li><time>2020.12</time><span>제2회 민관협치 우수사례 공유대회 — 장려상</span></li>
+          <li><time>2021.12</time><span>농림축산식품부 장관 표창</span></li>
+          <li><time>2022.07</time><span>2022 베스트 협동조합 어워드 — 농업농촌분야 우수상</span></li>
+          <li><time>2022.12</time><span>국무총리 표창</span></li>
+          <li><time>2022.12</time><span>일본군 위안부 피해자 할머니와 함께 하는 마창진 시민모임 감사장</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 조합원 되기 -->
-<section class="band band--panel" id="join">
+<section class="band" id="join">
   <div class="wrap">
     <div class="join">
       <div class="band__head">
@@ -414,7 +675,7 @@ a:focus-visible, button:focus-visible{
 </section>
 
 <!-- 갤러리 -->
-<section class="band">
+<section class="band band--panel">
   <div class="wrap">
     <div class="band__head">
       <span class="kicker">진주텃밭의 하루</span>
@@ -456,7 +717,7 @@ a:focus-visible, button:focus-visible{
           </li>
           <li>
             <b><span class="chip" style="background:var(--teal)" aria-hidden="true"></span>진양호점</b>
-            <span>경남 진주시 진양호로44번길 6, 2층</span>
+            <span>경남 진주시 진양호로44번길 6, 1층</span>
             <span><a href="tel:055-746-1240">055-746-1240</a> · 09:00–21:00 · 365일</span>
           </li>
         </ul>
@@ -464,7 +725,10 @@ a:focus-visible, button:focus-visible{
       <div>
         <h4>조합 정보</h4>
         <ul>
-          <li>사무국 <a href="tel:055-763-1243">055-763-1243</a></li>
+          <li>사무국 (금산점 안에 있습니다)</li>
+          <li>전화 <a href="tel:055-763-1243">055-763-1243</a> · 팩스 055-761-1241</li>
+          <li>평일 09:00 – 18:00</li>
+          <li><a href="mailto:jinjucoop@gmail.com">jinjucoop@gmail.com</a></li>
           <li>사업자등록번호 613-81-69745</li>
           <li>농협 351-0649-2906-93</li>
           <li>진주우리먹거리협동조합 진주텃밭</li>
@@ -477,6 +741,32 @@ a:focus-visible, button:focus-visible{
     </div>
   </div>
 </footer>
+
+<script>
+/* 상단 「소개」 펼침 메뉴 — 마우스는 올리면 열리고, 손가락은 누르면 열린다 */
+(function(){
+  var wrap = document.querySelector('.menu');
+  var btn = wrap && wrap.querySelector('.menu__btn');
+  var panel = document.getElementById('menu-about');
+  if (!wrap || !btn || !panel) return;
+
+  var canHover = window.matchMedia('(hover:hover)').matches;
+  function open(){ panel.setAttribute('data-open',''); btn.setAttribute('aria-expanded','true'); }
+  function shut(){ panel.removeAttribute('data-open'); btn.setAttribute('aria-expanded','false'); }
+
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    btn.getAttribute('aria-expanded') === 'true' ? shut() : open();
+  });
+  panel.addEventListener('click', function(e){ if (e.target.closest('a')) shut(); });
+  document.addEventListener('click', function(e){ if (!wrap.contains(e.target)) shut(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') shut(); });
+  if (canHover) {
+    wrap.addEventListener('mouseenter', open);
+    wrap.addEventListener('mouseleave', shut);
+  }
+})();
+</script>
 
 </body>
 </html>
