@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>페이지를 찾을 수 없습니다 — 진주텃밭</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="/img/logo.png">
+<!-- 404는 없는 경로 그 자리에서 렌더되므로, 사이트 루트를 base로 고정해야 상대경로가 어느 깊이에서든 맞는다 -->
+<base href="/">
+<script>if(location.hostname.endsWith('github.io'))document.querySelector('base').href='/jinju-site/'</script>
+<link rel="icon" href="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
@@ -44,11 +47,11 @@ a.btn:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
 </head>
 <body>
   <main class="box">
-    <img class="logo" src="/img/logo.webp" alt="진주텃밭 로고" width="170" height="54">
+    <img class="logo" src="img/logo.webp" alt="진주텃밭 로고" width="170" height="54">
     <div class="tabs" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <h1>찾으시는 페이지가 없습니다</h1>
     <p>주소가 바뀌었거나 없어진 페이지입니다. 첫 화면에서 다시 찾아보세요.</p>
-    <a class="btn" href="/">
+    <a class="btn" href="./">
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
       진주텃밭 첫 화면
     </a>
