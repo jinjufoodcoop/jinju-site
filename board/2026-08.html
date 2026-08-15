@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 대전환 6일 경과보고 — 진주우리먹거리협동조합 이사회</title>
+<meta name="description" content="2026년 8월 10일~15일 엿새간 진행한 AI 업무기반 구축 경과와 이사회 결정 안건.">
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{
+  --red:#E83028; --yellow:#F0A800; --green:#A8B048; --teal:#00A8A8;
+  --teal-deep:#00706F; --teal-dark:#005453;
+  --ink:#1A1D1C; --ink-2:#414744; --ink-3:#5F6763;
+  --line:#DFE4E1; --line-2:#EDF1EE;
+  --bg:#FFFFFF; --surface:#F7F9F8; --surface-2:#EFF4F2;
+  --sp-1:.5rem; --sp-2:1rem; --sp-3:1.5rem; --sp-4:2rem; --sp-5:3rem; --sp-6:4.5rem;
+  --maxw:52rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",
+              system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px; line-height:1.75; word-break:keep-all; overflow-wrap:break-word;
+}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--sp-2)}
+
+/* ── 표지 ── */
+.cover{
+  background:var(--teal-deep); color:#fff;
+  padding:var(--sp-6) 0 var(--sp-5);
+  border-bottom:6px solid var(--yellow);
+}
+.cover .kicker{
+  font-size:.9rem; letter-spacing:.16em; text-transform:uppercase;
+  color:#BFE3E2; margin:0 0 var(--sp-2)
+}
+.cover h1{
+  font-size:clamp(1.9rem,6vw,2.9rem); line-height:1.28; margin:0 0 var(--sp-3);
+  font-weight:700; letter-spacing:-.02em
+}
+.cover .meta{
+  display:flex; flex-wrap:wrap; gap:var(--sp-1) var(--sp-3);
+  font-size:.98rem; color:#D6ECEB; margin:0;
+  padding-top:var(--sp-3); border-top:1px solid rgba(255,255,255,.28)
+}
+.cover .meta b{color:#fff; font-weight:600}
+
+/* ── 섹션 ── */
+section{padding:var(--sp-5) 0; border-bottom:1px solid var(--line-2)}
+section:last-of-type{border-bottom:0}
+h2{
+  font-size:1.42rem; line-height:1.4; margin:0 0 var(--sp-3);
+  letter-spacing:-.015em; display:flex; align-items:baseline; gap:.7rem
+}
+h2 .num{
+  flex:none; font-size:.82rem; font-weight:700; letter-spacing:.06em;
+  color:var(--teal-deep); background:var(--surface-2);
+  border-radius:99px; padding:.22em .72em; transform:translateY(-.15em)
+}
+h3{font-size:1.06rem; margin:var(--sp-4) 0 var(--sp-2); letter-spacing:-.01em}
+p{margin:0 0 var(--sp-2); color:var(--ink-2)}
+strong{color:var(--ink); font-weight:600}
+.lead{font-size:1.15rem; line-height:1.7; color:var(--ink)}
+
+/* ── 요약 배너 ── */
+.summary{
+  background:var(--surface); border-left:5px solid var(--teal-deep);
+  border-radius:0 10px 10px 0; padding:var(--sp-3);
+}
+.summary p:last-child{margin-bottom:0}
+
+/* ── 지표 ── */
+.stats{
+  display:grid; gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));
+}
+.stat{background:var(--bg); padding:var(--sp-2) var(--sp-2) calc(var(--sp-2) + .1rem)}
+.stat .v{
+  display:block; font-size:1.65rem; font-weight:700; line-height:1.2;
+  color:var(--teal-deep); letter-spacing:-.02em; font-variant-numeric:tabular-nums
+}
+.stat .l{display:block; font-size:.88rem; color:var(--ink-3); margin-top:.3rem}
+
+/* ── 시스템 카드 ── */
+.cards{display:grid; gap:var(--sp-2); grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+.card{
+  border:1px solid var(--line); border-radius:10px; padding:var(--sp-2);
+  border-top:4px solid var(--c,var(--teal)); background:var(--bg)
+}
+.card h4{margin:0 0 .35rem; font-size:1.02rem; letter-spacing:-.01em}
+.card p{margin:0 0 .6rem; font-size:.93rem; color:var(--ink-3); line-height:1.6}
+.card a{
+  font-size:.9rem; color:var(--teal-deep); font-weight:600;
+  text-decoration:none; border-bottom:1px solid #A9D5D4; word-break:break-all
+}
+.card a:hover,.card a:focus-visible{border-bottom-color:var(--teal-deep)}
+.card .who{
+  display:inline-block; font-size:.8rem; color:var(--ink-3);
+  background:var(--surface-2); border-radius:4px; padding:.12em .5em; margin-top:.55rem
+}
+
+/* ── 표 ── */
+.tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 0 var(--sp-2)}
+table{border-collapse:collapse; width:100%; min-width:30rem; font-size:.95rem}
+caption{
+  text-align:left; font-size:.88rem; color:var(--ink-3);
+  padding-bottom:.5rem; caption-side:top
+}
+th,td{padding:.68rem .8rem; border-bottom:1px solid var(--line); text-align:left; vertical-align:top}
+thead th{
+  background:var(--surface-2); font-size:.86rem; font-weight:700;
+  color:var(--ink-2); border-bottom:2px solid var(--line); white-space:nowrap
+}
+td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+
+/* ── 안건 ── */
+.agenda{counter-reset:ag; list-style:none; padding:0; margin:0; display:grid; gap:var(--sp-2)}
+.agenda li{
+  counter-increment:ag; position:relative;
+  border:1px solid var(--line); border-radius:10px;
+  padding:var(--sp-2) var(--sp-2) var(--sp-2) 3.6rem; background:var(--bg)
+}
+.agenda li::before{
+  content:"안건 " counter(ag); position:absolute; left:0; top:0;
+  width:3.6rem; padding:var(--sp-2) 0 0; text-align:center;
+  font-size:.74rem; font-weight:700; letter-spacing:.02em;
+  color:var(--red)
+}
+.agenda h4{margin:0 0 .4rem; font-size:1.06rem; letter-spacing:-.01em}
+.agenda p{margin:0 0 .5rem; font-size:.95rem}
+.agenda p:last-child{margin-bottom:0}
+.ask{
+  display:block; margin-top:.7rem; padding-top:.7rem;
+  border-top:1px dashed var(--line); font-size:.95rem; color:var(--ink)
+}
+.ask b{color:var(--red)}
+
+/* ── 주의 박스 ── */
+.note{
+  background:#FFF9EC; border:1px solid #F2DFAE; border-left:5px solid var(--yellow);
+  border-radius:0 8px 8px 0; padding:var(--sp-2); margin:var(--sp-2) 0
+}
+.note p:last-child{margin-bottom:0}
+.note .t{font-weight:700; color:#7A5600; display:block; margin-bottom:.3rem; font-size:.95rem}
+
+/* ── 타임라인 ── */
+.tl{list-style:none; margin:0; padding:0; border-left:2px solid var(--line)}
+.tl li{position:relative; padding:0 0 var(--sp-3) var(--sp-3)}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{
+  content:""; position:absolute; left:-7px; top:.55rem;
+  width:12px; height:12px; border-radius:50%;
+  background:var(--bg); border:3px solid var(--teal)
+}
+.tl .when{
+  display:block; font-size:.82rem; font-weight:700; letter-spacing:.04em;
+  color:var(--teal-deep); margin-bottom:.15rem
+}
+.tl p{margin:0; font-size:.95rem}
+
+ul.plain{margin:0 0 var(--sp-2); padding-left:1.15rem}
+ul.plain li{margin-bottom:.42rem; color:var(--ink-2)}
+ul.plain li::marker{color:var(--teal)}
+
+footer{
+  padding:var(--sp-4) 0 var(--sp-5); color:var(--ink-3); font-size:.9rem;
+  border-top:3px solid var(--teal-deep)
+}
+footer p{color:var(--ink-3); margin-bottom:.4rem}
+
+/* ── 인쇄 (A4) ── */
+@media print{
+  @page{size:A4; margin:14mm 15mm}
+  body{font-size:10.5pt; line-height:1.6; color:#000; background:#fff}
+  .wrap{max-width:none; padding:0}
+  .cover{
+    background:#fff!important; color:#000!important;
+    padding:0 0 8mm; border-bottom:2.5pt solid #00706F
+  }
+  .cover .kicker{color:#00706F!important}
+  .cover .meta{color:#333!important; border-top-color:#BBB!important}
+  .cover .meta b{color:#000!important}
+  section{padding:6mm 0; border-bottom:.5pt solid #DDD; break-inside:auto}
+  h2{font-size:13pt; break-after:avoid}
+  h3,h4{break-after:avoid}
+  .card,.agenda li,.note,.summary,.stat{break-inside:avoid}
+  .cards,.stats{gap:3mm}
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .tablewrap{overflow:visible}
+  table{min-width:0; font-size:9.5pt}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  a{color:#000; border-bottom:none}
+  .card a::after{content:" (" attr(href) ")"; font-size:8.5pt; color:#555; word-break:break-all}
+  footer{break-before:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <p class="kicker">진주우리먹거리협동조합 · 이사회 보고</p>
+    <h1>AI 업무기반 구축<br>엿새 경과보고</h1>
+    <p class="meta">
+      <span><b>기간</b> 2026년 8월 10일 ~ 15일 (6일)</span>
+      <span><b>보고일</b> 2026년 8월 15일</span>
+      <span><b>협력</b> 대전 품앗이</span>
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section>
+  <h2><span class="num">요약</span>엿새 동안 무엇을 했나</h2>
+  <div class="summary">
+    <p class="lead">조합이 <strong>스스로 운영할 수 있는 디지털 업무기반 7종</strong>을 만들었습니다. 홈페이지·가격표 인쇄·업무 위키·출퇴근 기록·회계 연동 도구·데이터베이스, 그리고 실무자 7명이 각자 쓰는 AI입니다.</p>
+    <p>일주일 전 조합의 온라인 자산은 <strong>업체가 만들어준 안내 페이지 한 장</strong>이 전부였고, 고치려면 업체에 연락해야 했습니다. 지금은 <strong>실무자가 직접 고치면 1분 안에 반영</strong>됩니다.</p>
+    <p>만든 것은 <strong>전부 조합 명의</strong>입니다. 개인 이름으로 된 계정에 얹힌 것이 하나도 없습니다. 담당자가 바뀌어도 명의변경 절차 없이 계정만 넘기면 됩니다.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">01</span>무엇이 생겼나</h2>
+  <p>아래 주소는 <strong>지금 바로 열어보실 수 있습니다.</strong> 휴대폰에서도 됩니다.</p>
+
+  <div class="cards">
+    <article class="card" style="--c:var(--teal)">
+      <h4>홈페이지</h4>
+      <p>조합 소개, 직매장 세 곳의 주소·전화·영업시간, 조합원 가입 안내.</p>
+      <a href="https://jjcoop.co.kr">jjcoop.co.kr</a>
+      <span class="who">담당 · 전은미</span>
+    </article>
+
+    <article class="card" style="--c:var(--yellow)">
+      <h4>가격표 인쇄 도구</h4>
+      <p>매장 가격표를 A4 한 장에 18매씩 인쇄합니다. 상품 1,107개가 자동으로 뜹니다.</p>
+      <a href="https://jjcoop.co.kr/tags.html">jjcoop.co.kr/tags.html</a>
+      <span class="who">담당 · 제소영</span>
+    </article>
+
+    <article class="card" style="--c:var(--green)">
+      <h4>업무 위키</h4>
+      <p>조합의 기록 창고. 문서 약 350개. 실무자가 정리한 내용이 쌓입니다.</p>
+      <a href="https://wiki.jjcoop.co.kr">wiki.jjcoop.co.kr</a>
+      <span class="who">담당 · 소희주</span>
+    </article>
+
+    <article class="card" style="--c:var(--red)">
+      <h4>출퇴근 기록</h4>
+      <p>직원이 휴대폰으로 출퇴근을 찍으면 기록되고 급여 계산으로 이어집니다.</p>
+      <a href="https://qr.jjcoop.co.kr">qr.jjcoop.co.kr</a>
+      <span class="who">담당 · 권해인</span>
+    </article>
+
+    <article class="card" style="--c:var(--teal-deep)">
+      <h4>회계 연동 업무방</h4>
+      <p>생산자와 기간을 고르면 이카운트에 올릴 엑셀이 만들어집니다. 주소는 담당자에게 문의.</p>
+      <span class="who">담당 · 김남진</span>
+    </article>
+
+    <article class="card" style="--c:var(--green)">
+      <h4>데이터베이스</h4>
+      <p>조합원 명부·매출·상품·근태를 한곳에 모았습니다. 위 시스템 전부가 여기를 씁니다.</p>
+      <span class="who">담당 · 전은미 · 박보람</span>
+    </article>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">02</span>데이터로 본 결과</h2>
+  <p>흩어져 있던 자료를 조합이 조회·분석할 수 있는 형태로 모았습니다.</p>
+
+  <div class="stats">
+    <div class="stat"><span class="v">7,058</span><span class="l">조합원 명부 (명)</span></div>
+    <div class="stat"><span class="v">139,054</span><span class="l">매출 기록 (건)</span></div>
+    <div class="stat"><span class="v">10,081</span><span class="l">상품 정보 (건)</span></div>
+    <div class="stat"><span class="v">1,646</span><span class="l">품목코드 사전 (건)</span></div>
+    <div class="stat"><span class="v">25</span><span class="l">근태 등록 직원 (명)</span></div>
+    <div class="stat"><span class="v">350</span><span class="l">위키 문서 (개)</span></div>
+  </div>
+
+  <h3>숫자가 맞는지 검증했습니다</h3>
+  <p>데이터를 옮길 때 가장 위험한 것은 <strong>조용히 틀리는 것</strong>입니다. 그래서 서로 다른 세 경로에서 같은 달의 숫자를 뽑아 대조했습니다.</p>
+
+  <div class="tablewrap">
+    <table>
+      <caption>2026년 7월 판매금액 — 3중 대조</caption>
+      <thead>
+        <tr><th scope="col">확인 경로</th><th scope="col" class="num">금액 (원)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>메디앙 생산자 정산 엑셀 (원본)</td><td class="num">393,676,960</td></tr>
+        <tr><td>데이터베이스 · 일별 판매 집계</td><td class="num">393,676,960</td></tr>
+        <tr><td>데이터베이스 · 농가별 월 집계</td><td class="num">393,676,960</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>1원까지 일치했습니다.</strong> 옮기는 과정에서 누락된 금액이 없다는 뜻입니다.</p>
+</section>
+
+<section>
+  <h2><span class="num">03</span>사람 — 실무자 7명이 각자 AI를 쓴다</h2>
+  <p>이번 교육의 핵심은 프로그램을 설치한 것이 아니라 <strong>실무자 한 사람 한 사람이 자기 일에 AI를 쓰게 만든 것</strong>입니다. 각자 담당을 정하고, 그 담당에 맞는 안내문을 자기 AI에게 붙여넣는 방식으로 진행했습니다.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th scope="col">담당자</th><th scope="col">맡은 일</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>소희주 상임이사</td><td>총괄 · 위키 운영 · 데이터 조회</td></tr>
+        <tr><td>전은미</td><td>매출자료 정리 · 홈페이지 수정</td></tr>
+        <tr><td>권해인</td><td>출퇴근 · 급여 계산</td></tr>
+        <tr><td>제소영</td><td>가격표 · 현장 발주</td></tr>
+        <tr><td>박보람</td><td>조합원 명부 · 연락처</td></tr>
+        <tr><td>김남진</td><td>이카운트 회계 연동</td></tr>
+        <tr><td>김나영</td><td>계정 준비 완료 (담당 미배정)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>마지막 날인 <strong>6일차는 소희주 상임이사 개인 교육</strong>으로 진행했습니다. 조합의 기록을 위키에 직접 올리고, 데이터베이스를 조회하는 것까지 마쳤습니다.</p>
+
+  <h3>실무자들이 가장 쉽게 이해한 설명</h3>
+  <div class="summary">
+    <p class="lead">“일을 시켜 놓고 퇴근하면, 아침에 일이 끝나 있고 결과보고서까지 와 있다.”</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">04</span>비용</h2>
+  <p><strong>이번 구축에서 조합이 새로 지출한 돈은 없습니다.</strong></p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th scope="col">항목</th><th scope="col">비용</th><th scope="col">부담</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>구축·교육</td><td>무상</td><td>대전 품앗이 지원</td></tr>
+        <tr><td>AI 이용 (7명분)</td><td>월 175달러</td><td><strong>대전 품앗이가 지불</strong></td></tr>
+        <tr><td>도메인</td><td>추가 없음</td><td>조합이 이미 보유하던 것을 되찾아 씀</td></tr>
+        <tr><td>홈페이지·위키·출퇴근 서버</td><td>0원</td><td>무료 요금제</td></tr>
+        <tr><td>데이터베이스</td><td>0원</td><td>무료 요금제</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="t">알아두실 점</span>
+    <p>도메인은 새로 산 것이 아닙니다. 조합 명의로 <strong>이미 세 개를 가지고 있었는데 아무도 관리하지 않던 상태</strong>였습니다. 관리 계정을 찾아 되찾았고, 그중 하나를 새 홈페이지 주소로 쓰고 있습니다.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">05</span>이사회 결정 안건</h2>
+  <p>실무로 정할 수 없어 <strong>이사회 판단이 필요한 사항 네 가지</strong>입니다.</p>
+
+  <ol class="agenda">
+    <li>
+      <h4>AI 이용료를 조합이 이어받을 것인가</h4>
+      <p>실무자 7명이 각자 AI를 쓰는 비용이 <strong>월 175달러</strong>입니다. 지금은 대전 품앗이가 지불하고 있습니다. 교육을 위해 먼저 깔아둔 것이라, 조합이 계속 쓸지는 정해진 바가 없습니다.</p>
+      <p>지금 정하지 않으면 다음 결제일에 그대로 이어집니다.</p>
+      <span class="ask"><b>결정 필요:</b> 이어받을지 여부, 이어받는다면 몇 명분으로 할지</span>
+    </li>
+
+    <li>
+      <h4>조합원 명부를 누가 볼 수 있게 할 것인가</h4>
+      <p>데이터베이스를 <strong>무료 요금제</strong>로 쓰고 있는데, 무료 요금제는 사람별로 열람 범위를 나눌 수 없습니다. 지금 구조에서는 <strong>실무자 다섯 명이 조합원 7,058명의 이름·생년월일·연락처·주소를 모두 볼 수 있습니다.</strong> 급여 자료를 올리면 그것도 마찬가지입니다.</p>
+      <p>선택지는 세 가지입니다. ① 유료 요금제로 올려 권한을 나눈다 ② 화면 단에서 보이는 범위를 제한하도록 별도로 설계한다 ③ 현 상태를 그대로 두되 <strong>누가 무엇을 보는지 조합이 명시적으로 합의한다.</strong></p>
+      <span class="ask"><b>결정 필요:</b> 개인정보 열람 범위와 그 방식</span>
+    </li>
+
+    <li>
+      <h4>기존 홈페이지 업체와의 관계를 어떻게 할 것인가</h4>
+      <p>조합원 가입·출자 자료는 새 홈페이지가 아니라 <strong>기존 업체의 시스템에 들어 있고, 지금도 매일 그곳에 입력하고 있습니다.</strong> 계약은 2029년까지입니다.</p>
+      <p>이 사안은 기술 문제가 아닙니다. <strong>해당 업체의 대표가 우리 조합 생산자</strong>이기 때문입니다. 단순한 업체 교체로 접근할 사안이 아니라고 보아 실무 판단을 보류했습니다.</p>
+      <span class="ask"><b>결정 필요:</b> 관계를 어떻게 가져갈지에 대한 방향</span>
+    </li>
+
+    <li>
+      <h4>출퇴근 기록을 언제부터 실제로 쓸 것인가</h4>
+      <p>시스템은 완성됐고 직원 25명이 등록돼 있습니다. 시작하려면 <strong>직원들에게 개인 링크를 나눠주는 일</strong>과 <strong>급여 계산 규칙을 확정하는 일</strong>이 남았습니다.</p>
+      <p>급여 규칙은 조합이 정해야 합니다. 휴게시간을 어떻게 빼는지, 연장·야간·휴일 수당을 어떻게 계산하는지, 월급제인 직원은 어떻게 처리하는지가 정해져야 자동 계산을 붙일 수 있습니다.</p>
+      <span class="ask"><b>결정 필요:</b> 시행 시점과 급여 계산 규칙</span>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">06</span>앞으로</h2>
+
+  <ul class="tl">
+    <li>
+      <span class="when">지금 ~ 한 달</span>
+      <p><strong>수동으로 운영하며 필요한 것을 확정합니다.</strong> 매출 자료를 월 1회 직접 받아 올리는 방식을 유지합니다. 메디앙과 자동으로 연결하는 것도 가능하지만, <strong>무엇을 어떤 주기로 받아야 하는지는 한 달 돌려봐야 확정됩니다.</strong> 그 전에 연결하면 엉뚱한 항목을 열어놓고 다시 고치게 됩니다. 지금의 수동 작업은 임시방편이 아니라 요구사항을 알아내는 관찰 기간입니다.</p>
+    </li>
+    <li>
+      <span class="when">한 달 뒤</span>
+      <p>메디앙 자동 연결을 정식으로 요청합니다. 이카운트도 <strong>한 번에 전자동으로 가지 않고 네 단계로 나눠</strong> 진행합니다. 코드 조회 자동화 → 초안 자동 생성 → 승인한 것만 자동 전송 → 전체 자동. 각 단계마다 숫자가 맞는 것을 확인하고 넘어갑니다.</p>
+    </li>
+    <li>
+      <span class="when">이사회 결정 이후</span>
+      <p>출퇴근 실가동, 급여 자동 계산, 조합원 명부 열람 범위 정리를 진행합니다.</p>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">07</span>솔직하게 남겨두는 것</h2>
+  <p>잘된 것만 적으면 보고가 아닙니다. <strong>지금 상태에서 알고 계셔야 할 위험</strong>입니다.</p>
+
+  <ul class="plain">
+    <li><strong>데이터베이스에 자동 백업이 없습니다.</strong> 무료 요금제라 그렇습니다. 급여와 매출 원본이 들어 있으므로 <strong>월 1회 직접 내려받아 보관하는 절차</strong>를 마감 업무에 넣어야 합니다.</li>
+    <li><strong>일주일 이상 아무도 안 쓰면 자동으로 멈춥니다.</strong> 직원들이 매일 출퇴근을 찍기 시작하면 멈추지 않지만, <strong>지금처럼 아직 실가동 전인 기간이 가장 위험합니다.</strong></li>
+    <li><strong>실무자 한 분의 AI 계정이 아직 정상 작동하지 않습니다.</strong> 매출자료와 홈페이지를 함께 맡은 분이라 우선 해결이 필요합니다.</li>
+    <li><strong>권한 설정 한 곳을 정리해야 합니다.</strong> 현장 발주 기능을 본격적으로 켜기 전에 처리할 사항으로, 실무에서 조치합니다.</li>
+    <li><strong>기록이 최신이 아니었습니다.</strong> 이번 정리 과정에서 그동안의 작업 기록 자체가 낡아 있던 것을 발견해 바로잡았습니다. 앞으로는 기록을 그대로 믿지 않고 실제 상태를 확인하는 절차를 넣었습니다.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">08</span>맺으며</h2>
+  <p>엿새는 시스템을 완성하기에 충분한 기간이 아닙니다. 그래서 <strong>완성이 아니라 조합이 스스로 이어갈 수 있는 상태</strong>를 목표로 삼았습니다.</p>
+  <p>만든 것은 전부 조합 명의로 돼 있고, 어떻게 쓰는지는 문서로 남겼으며, 실무자들은 자기 담당에 맞는 AI 사용법을 익혔습니다. 무엇이 남았고 무엇이 위험한지도 숨기지 않고 적어두었습니다.</p>
+  <p>남은 판단은 조합의 몫입니다.</p>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <p><strong>진주우리먹거리협동조합</strong> · 경남 진주시 금산면 금산순환로 61 · 055-762-1242</p>
+  <p>작성: 대전 품앗이 · 2026년 8월 15일</p>
+  <p>실무자용 상세 안내: <a href="https://wiki.jjcoop.co.kr/진주텃밭/AI-업무-시스템-안내" style="color:var(--teal-deep)">wiki.jjcoop.co.kr</a></p>
+</footer>
+
+</body>
+</html>
