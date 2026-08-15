@@ -95,7 +95,7 @@ strong{color:var(--ink); font-weight:600}
   border:1px solid var(--line); border-radius:10px; padding:var(--sp-2);
   border-top:4px solid var(--c,var(--teal)); background:var(--bg)
 }
-.card h4{margin:0 0 .35rem; font-size:1.02rem; letter-spacing:-.01em}
+.card h3{margin:0 0 .35rem; font-size:1.02rem; letter-spacing:-.01em}
 .card p{margin:0 0 .6rem; font-size:.93rem; color:var(--ink-3); line-height:1.6}
 .card a{
   font-size:.9rem; color:var(--teal-deep); font-weight:600;
@@ -127,7 +127,7 @@ thead th{
   background:var(--surface-2); font-size:.86rem; font-weight:700;
   color:var(--ink-2); border-bottom:2px solid var(--line); white-space:nowrap
 }
-td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+th.num,td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
 tbody tr:last-child td{border-bottom:0}
 
 /* ── 안건 ── */
@@ -143,7 +143,7 @@ tbody tr:last-child td{border-bottom:0}
   font-size:.74rem; font-weight:700; letter-spacing:.02em;
   color:var(--red-ink)
 }
-.agenda h4{margin:0 0 .4rem; font-size:1.06rem; letter-spacing:-.01em}
+.agenda h3{margin:0 0 .4rem; font-size:1.06rem; letter-spacing:-.01em}
 .agenda p{margin:0 0 .5rem; font-size:.95rem}
 .agenda p:last-child{margin-bottom:0}
 .ask{
@@ -240,6 +240,7 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
     <p class="lead">조합이 <strong>스스로 운영할 수 있는 디지털 업무기반 7종</strong>을 만들었습니다. 홈페이지·가격표 인쇄·업무 위키·출퇴근 기록·회계 연동 도구·데이터베이스, 그리고 실무자 7명이 각자 쓰는 AI입니다.</p>
     <p>일주일 전 조합의 온라인 자산은 <strong>업체가 만들어준 안내 페이지 한 장</strong>이 전부였고, 고치려면 업체에 연락해야 했습니다. 지금은 <strong>실무자가 직접 고치면 1분 안에 반영</strong>됩니다.</p>
     <p>만든 것은 <strong>전부 조합 명의</strong>입니다. 개인 이름으로 된 계정에 얹힌 것이 하나도 없습니다. 담당자가 바뀌어도 명의변경 절차 없이 계정만 넘기면 됩니다.</p>
+    <p>그리고 이 일은 <strong>진주텃밭 한 곳의 업무 개선에서 끝나지 않습니다.</strong> 전국 로컬푸드협동조합이 공통으로 겪는 문제를 실제로 푼 첫 사례이고, 앞으로 <strong>연합회를 경영하는 데 필요한 기초작업</strong>에 해당합니다. 자세한 내용은 8장에 적었습니다.</p>
   </div>
 </section>
 
@@ -249,41 +250,41 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
 
   <div class="cards">
     <article class="card" style="--c:var(--teal)">
-      <h4>홈페이지</h4>
+      <h3>홈페이지</h3>
       <p>조합 소개, 직매장 세 곳의 주소·전화·영업시간, 조합원 가입 안내.</p>
       <a href="https://jjcoop.co.kr">jjcoop.co.kr</a>
       <span class="who">담당 · 전은미</span>
     </article>
 
     <article class="card" style="--c:var(--yellow)">
-      <h4>가격표 인쇄 도구</h4>
+      <h3>가격표 인쇄 도구</h3>
       <p>매장 가격표를 A4 한 장에 18매씩 인쇄합니다. 상품 1,107개가 자동으로 뜹니다.</p>
       <a href="https://jjcoop.co.kr/tags.html">jjcoop.co.kr/tags.html</a>
       <span class="who">담당 · 제소영</span>
     </article>
 
     <article class="card" style="--c:var(--green)">
-      <h4>업무 위키</h4>
+      <h3>업무 위키</h3>
       <p>조합의 기록 창고. 문서 약 350개. 실무자가 정리한 내용이 쌓입니다.</p>
       <a href="https://wiki.jjcoop.co.kr">wiki.jjcoop.co.kr</a>
       <span class="who">담당 · 소희주</span>
     </article>
 
     <article class="card" style="--c:var(--red)">
-      <h4>출퇴근 기록</h4>
+      <h3>출퇴근 기록</h3>
       <p>직원이 휴대폰으로 출퇴근을 찍으면 기록되고 급여 계산으로 이어집니다.</p>
       <a href="https://qr.jjcoop.co.kr">qr.jjcoop.co.kr</a>
       <span class="who">담당 · 권해인</span>
     </article>
 
     <article class="card" style="--c:var(--teal-deep)">
-      <h4>회계 연동 업무방</h4>
+      <h3>회계 연동 업무방</h3>
       <p>생산자와 기간을 고르면 이카운트에 올릴 엑셀이 만들어집니다. 주소는 담당자에게 문의.</p>
       <span class="who">담당 · 김남진</span>
     </article>
 
     <article class="card" style="--c:var(--green)">
-      <h4>데이터베이스</h4>
+      <h3>데이터베이스</h3>
       <p>조합원 명부·매출·상품·근태를 한곳에 모았습니다. 위 시스템 전부가 여기를 씁니다.</p>
       <span class="who">담당 · 전은미 · 박보람</span>
     </article>
@@ -364,7 +365,7 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
         <tr><td><strong>교육비</strong></td><td><strong>2,000,000원</strong></td><td><strong>조합</strong></td></tr>
         <tr><td><strong>교육 기간 숙식</strong></td><td><strong>현물 제공</strong></td><td><strong>조합</strong></td></tr>
         <tr><td>AI 이용 (7명분)</td><td>월 175달러</td><td>대전 품앗이</td></tr>
-        <tr><td>도메인</td><td>추가 지출 없음</td><td>조합이 이미 보유하던 것을 되찾아 씀</td></tr>
+        <tr><td>도메인</td><td>추가 지출 없음</td><td>조합 보유분 회수</td></tr>
         <tr><td>홈페이지·위키·출퇴근 서버</td><td>0원</td><td>무료 요금제</td></tr>
         <tr><td>데이터베이스</td><td>0원</td><td>무료 요금제</td></tr>
       </tbody>
@@ -387,7 +388,7 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
 
   <ol class="agenda">
     <li>
-      <h4>대전 품앗이와의 관계를 앞으로 어떻게 할 것인가</h4>
+      <h3>대전 품앗이와의 관계를 앞으로 어떻게 할 것인가</h3>
       <p>이번에 만든 것은 <strong>전부 조합 명의</strong>지만, 아직 <strong>실제 운영과 수정은 대전 품앗이가 하고 있습니다.</strong> 계정 비밀번호, 접근 권한, 2단계 인증 복구코드를 넘겨받는 일이 남아 있습니다. 이것을 언제 어떤 순서로 받을지 정해야 합니다.</p>
       <p>더 중요한 것은 <strong>그 뒤</strong>입니다. 엿새로 배운 것을 실무에서 굴리다 보면 반드시 막히는 데가 나옵니다. 후속 교육이나 멘토링을 <strong>어떤 형태로(정기·수시), 어떤 조건으로</strong> 이어갈지가 정해지지 않았습니다.</p>
       <p>지금은 “막히면 텔레그램방에 물어본다”는 상태입니다. 이것은 호의에 기대는 방식이라 <strong>오래 가지 못합니다.</strong> 서로 부담 없는 형태를 조합이 먼저 제안하는 편이 좋습니다.</p>
@@ -395,28 +396,28 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
     </li>
 
     <li>
-      <h4>AI 이용료를 조합이 이어받을 것인가</h4>
+      <h3>AI 이용료를 조합이 이어받을 것인가</h3>
       <p>실무자 7명이 각자 AI를 쓰는 비용이 <strong>월 175달러</strong>입니다. 지금은 대전 품앗이가 지불하고 있습니다. 교육을 위해 먼저 깔아둔 것이라, 조합이 계속 쓸지는 정해진 바가 없습니다.</p>
       <p>지금 정하지 않으면 다음 결제일에 그대로 이어집니다.</p>
       <span class="ask"><b>결정 필요:</b> 이어받을지 여부, 이어받는다면 몇 명분으로 할지</span>
     </li>
 
     <li>
-      <h4>조합원 명부를 누가 볼 수 있게 할 것인가</h4>
+      <h3>조합원 명부를 누가 볼 수 있게 할 것인가</h3>
       <p>데이터베이스를 <strong>무료 요금제</strong>로 쓰고 있는데, 무료 요금제는 사람별로 열람 범위를 나눌 수 없습니다. 지금 구조에서는 <strong>실무자 다섯 명이 조합원 7,058명의 이름·생년월일·연락처·주소를 모두 볼 수 있습니다.</strong> 급여 자료를 올리면 그것도 마찬가지입니다.</p>
       <p>선택지는 세 가지입니다. ① 유료 요금제로 올려 권한을 나눈다 ② 화면 단에서 보이는 범위를 제한하도록 별도로 설계한다 ③ 현 상태를 그대로 두되 <strong>누가 무엇을 보는지 조합이 명시적으로 합의한다.</strong></p>
       <span class="ask"><b>결정 필요:</b> 개인정보 열람 범위와 그 방식</span>
     </li>
 
     <li>
-      <h4>기존 홈페이지 업체와의 관계를 어떻게 할 것인가</h4>
+      <h3>기존 홈페이지 업체와의 관계를 어떻게 할 것인가</h3>
       <p>조합원 가입·출자 자료는 새 홈페이지가 아니라 <strong>기존 업체의 시스템에 들어 있고, 지금도 매일 그곳에 입력하고 있습니다.</strong> 계약은 2029년까지입니다.</p>
       <p>이 사안은 기술 문제가 아닙니다. <strong>해당 업체의 대표가 우리 조합 생산자</strong>이기 때문입니다. 단순한 업체 교체로 접근할 사안이 아니라고 보아 실무 판단을 보류했습니다.</p>
       <span class="ask"><b>결정 필요:</b> 관계를 어떻게 가져갈지에 대한 방향</span>
     </li>
 
     <li>
-      <h4>출퇴근 기록을 언제부터 실제로 쓸 것인가</h4>
+      <h3>출퇴근 기록을 언제부터 실제로 쓸 것인가</h3>
       <p>시스템은 완성됐고 직원 25명이 등록돼 있습니다. 시작하려면 <strong>직원들에게 개인 링크를 나눠주는 일</strong>과 <strong>급여 계산 규칙을 확정하는 일</strong>이 남았습니다.</p>
       <p>급여 규칙은 조합이 정해야 합니다. 휴게시간을 어떻게 빼는지, 연장·야간·휴일 수당을 어떻게 계산하는지, 월급제인 직원은 어떻게 처리하는지가 정해져야 자동 계산을 붙일 수 있습니다.</p>
       <span class="ask"><b>결정 필요:</b> 시행 시점과 급여 계산 규칙</span>
@@ -456,10 +457,41 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
 </section>
 
 <section>
-  <h2><span class="num">08</span>맺으며</h2>
+  <h2><span class="num">08</span>진주텃밭만의 일이 아닌 이유</h2>
+  <p>이번 엿새의 성과를 <strong>조합 내부의 업무 개선으로만 보면 절반만 본 것</strong>입니다. 나머지 절반은 연합회 차원에 있습니다.</p>
+
+  <h3>조합마다 프로그램은 달라도, 막히는 자리는 같다</h3>
+  <p>전국 로컬푸드협동조합이 공통으로 겪는 문제가 있습니다. 이번에 진주에서 그 문제들을 실제로 마주쳤고, 하나씩 답을 만들었습니다.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th scope="col">어느 조합이나 겪는 문제</th><th scope="col">진주에서 만든 답</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>매출자료가 <strong>농가별로 안 나뉜다</strong> — 상품명이 겹쳐서 이름으로 묶으면 금액이 부풀려진다</td><td>농가별 원자료를 별도 경로로 확보하고, 이름 기반 집계가 왜 틀리는지를 수치로 규명</td></tr>
+        <tr><td>POS 상품코드와 <strong>회계 프로그램 코드가 안 맞는다</strong></td><td>품목코드 대조 사전 1,646건 + 확실한 것만 자동 처리하고 애매한 것은 사람에게 넘기는 방식</td></tr>
+        <tr><td>조합원 명부가 <strong>업체 시스템에 갇혀 있다</strong></td><td>명부를 조합이 직접 조회·분석할 수 있는 형태로 확보</td></tr>
+        <tr><td>근태·급여가 <strong>수기</strong>다</td><td>휴대폰 출퇴근 기록 → 급여 계산으로 이어지는 경로</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>연합회에 왜 중요한가</h3>
+  <p><strong>조합마다 숫자를 다르게 뽑으면 비교도 공동 대응도 되지 않습니다.</strong> "어느 품목이 어느 지역에서 어떻게 움직이는가"를 물으려면 조합들이 <strong>같은 구조로 자료를 쌓아야</strong> 합니다. 지금은 그 질문에 답할 방법이 없습니다.</p>
+  <p>진주가 만든 것은 그 구조의 <strong>첫 사례</strong>입니다. 완성된 표준이라고 말하기는 이릅니다. 다만 <strong>한 조합에서 실제로 돌아가는 것을 확인한 한 벌</strong>이 생겼고, 이것이 있는 것과 없는 것은 다릅니다.</p>
+
+  <h3>다음 조합은 더 짧게 간다</h3>
+  <p>이번 엿새의 상당 부분은 <strong>무엇이 문제인지 알아내는 데</strong> 썼습니다. 도메인이 몇 개인지, 자료가 어디에 있는지, 왜 숫자가 안 맞는지를 하나씩 밝히는 과정이었습니다. 그 부분은 다른 조합에서 반복할 필요가 없습니다.</p>
+  <p>연합회 차원에서 이 경험을 어떻게 나눌지는 <strong>진주가 먼저 겪은 쪽으로서 제안할 수 있는 자리</strong>이기도 합니다.</p>
+</section>
+
+<section>
+  <h2><span class="num">09</span>맺으며</h2>
   <p>엿새는 시스템을 완성하기에 충분한 기간이 아닙니다. 그래서 <strong>완성이 아니라 조합이 스스로 이어갈 수 있는 상태</strong>를 목표로 삼았습니다.</p>
   <p>만든 것은 전부 조합 명의로 돼 있고, 어떻게 쓰는지는 문서로 남겼으며, 실무자들은 자기 담당에 맞는 AI 사용법을 익혔습니다. 무엇이 남았고 무엇이 위험한지도 숨기지 않고 적어두었습니다.</p>
   <p>다만 <strong>명의가 조합이라는 것과 조합이 실제로 운영한다는 것은 아직 다릅니다.</strong> 계정과 권한을 넘겨받고, 막혔을 때 물어볼 자리를 어떤 형태로 둘지 정해야 그 둘이 같아집니다. 안건 1이 그것입니다.</p>
+  <p>그리고 8장에 적었듯, 이 일은 <strong>진주텃밭의 업무 개선인 동시에 연합회 경영의 기초작업</strong>입니다. 우리가 먼저 겪었으니 먼저 말할 수 있습니다. 그 자리를 어떻게 쓸지도 조합이 정할 몫입니다.</p>
   <p>남은 판단은 조합의 몫입니다.</p>
 </section>
 
