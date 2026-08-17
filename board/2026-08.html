@@ -131,12 +131,12 @@ tbody tr:last-child td{border-bottom:0}
 
 /* ── 안건 ── */
 .agenda{counter-reset:ag; list-style:none; padding:0; margin:0; display:grid; gap:var(--sp-2)}
-.agenda li{
+.agenda > li{
   counter-increment:ag; position:relative;
   border:1px solid var(--line); border-radius:10px;
   padding:var(--sp-2) var(--sp-2) var(--sp-2) 3.6rem; background:var(--bg)
 }
-.agenda li::before{
+.agenda > li::before{
   content:"안건 " counter(ag); position:absolute; left:0; top:0;
   width:3.6rem; padding:var(--sp-2) 0 0; text-align:center;
   font-size:.74rem; font-weight:700; letter-spacing:.02em;
@@ -177,6 +177,8 @@ tbody tr:last-child td{border-bottom:0}
 ul.plain{margin:0 0 var(--sp-2); padding-left:1.15rem}
 ul.plain li{margin-bottom:.42rem; color:var(--ink-2)}
 ul.plain li::marker{color:var(--teal)}
+.agenda ul.plain{margin:.2rem 0 .6rem}
+.agenda ul.plain li{font-size:.95rem}
 
 footer{
   padding:var(--sp-4) 0 var(--sp-5); color:var(--ink-3); font-size:.9rem;
@@ -202,7 +204,7 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
   .card,.note,.summary,.stat{break-inside:avoid}
   /* 안건은 통째로 묶으면(break-inside:avoid) 카드가 다음 장으로 밀려
      A4 7장 중 1장이 여백이 된다. 쪼개되 고아·과부 줄만 막는다 */
-  .agenda li{break-inside:auto; orphans:3; widows:3}
+  .agenda > li{break-inside:auto; orphans:3; widows:3}
   .cards,.stats{gap:3mm}
   .stats{grid-template-columns:repeat(3,1fr)}
   .tablewrap{overflow:visible; break-inside:avoid}
@@ -501,7 +503,15 @@ footer p{color:var(--ink-3); margin-bottom:.4rem}
       <h3>AI 이용료를 조합이 이어받을 것인가</h3>
       <p>실무자 7명이 각자 AI를 쓰는 비용이 <strong>월 175달러</strong>입니다. 지금은 대전 품앗이가 지불하고 있습니다. 교육을 위해 먼저 깔아둔 것이라, 조합이 계속 쓸지는 정해진 바가 없습니다.</p>
       <p>지금 정하지 않으면 다음 결제일에 그대로 이어집니다.</p>
-      <span class="ask"><b>결정 필요:</b> 이어받을지 여부, 이어받는다면 몇 명분으로 할지</span>
+      <p>이어받는다면 <strong>7명 일괄이 아니라 사람별로 판단</strong>하는 방식을 제안합니다. 3장에서 본 대로 앱만 쓰는 실무자에게는 AI 계정이 필요 없습니다. 그래서 <strong>자기 업무에 AI를 쓰겠다는 사람이 신청하고, 실제로 써서 무엇이 달라졌는지를 보고 조합이 이용료를 지급</strong>하는 틀입니다.</p>
+      <ul class="plain">
+        <li><strong>신청제</strong> — 본인이 쓰겠다는 사람만. 나중에 쓰기로 마음이 바뀌면 그때 신청하면 됩니다</li>
+        <li><strong>지급 근거 = 두 주 기록</strong> — 지금 실무자들이 매일 “무슨 일에 썼나 · 걸린 시간 · 예전 같으면 걸렸을 시간”을 자기 AI에게 정리시켜 모으고 있습니다. 많이 썼는가가 아니라 <strong>일이 달라졌는가</strong>를 봅니다</li>
+        <li><strong>분기마다 다시 봅니다</strong> — 안 쓰게 된 사람은 빼고, 새로 쓰는 사람은 넣습니다</li>
+        <li><strong>앞장서는 두 분은 조건 없이</strong> — 조합의 시스템을 고치고 남을 돕는 일 자체가 조합 업무입니다</li>
+      </ul>
+      <p>참고로 4~5명이면 <strong>월 100~125달러</strong> 규모입니다.</p>
+      <span class="ask"><b>결정 필요:</b> 이어받을지 여부 · 사람별 판단 방식으로 갈지 · 첫 판단 시점(두 주 기록이 모인 뒤)</span>
     </li>
 
     <li>
