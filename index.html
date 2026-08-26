@@ -230,6 +230,47 @@ a:focus-visible, button:focus-visible{
 .video-card .video-cap h3{font-size:18px}
 .video-note{margin:22px 0 0; font-size:14px; color:var(--ink-dim)}
 
+/* ── 방명록 ───────────────────────────────────────── */
+.gb{display:grid; grid-template-columns:.85fr 1.15fr; gap:48px; align-items:start; margin-top:44px}
+@media (max-width:900px){ .gb{grid-template-columns:1fr; gap:36px} }
+
+.gb__form{position:relative; background:var(--panel); border:1px solid var(--line);
+  border-radius:16px; padding:28px; box-shadow:var(--shadow-sm); display:grid; gap:16px}
+.band--panel .gb__form{background:var(--bg)}
+.gb__form label{display:block; font-size:14px; font-weight:600;
+  color:var(--ink-dim); margin-bottom:7px}
+.gb__form input[type="text"], .gb__form textarea{
+  width:100%; font-family:var(--sans); font-size:16px; color:var(--ink);
+  background:var(--bg); border:1.5px solid var(--line); border-radius:10px;
+  padding:12px 14px; line-height:1.7; letter-spacing:-.01em}
+.band--panel .gb__form input[type="text"], .band--panel .gb__form textarea{background:var(--panel)}
+.gb__form textarea{min-height:128px; resize:vertical}
+.gb__form input[type="text"]:focus, .gb__form textarea:focus{
+  outline:3px solid var(--teal-deep); outline-offset:1px; border-color:transparent}
+.gb__count{margin:7px 0 0; font-size:13px; color:var(--ink-dim);
+  text-align:right; font-variant-numeric:tabular-nums}
+.gb__msg{margin:0; font-size:15px; border-radius:10px; padding:12px 15px; line-height:1.6}
+.gb__msg.ok{background:rgba(0,168,168,.13); color:var(--teal-deep)}
+.gb__msg.bad{background:rgba(232,48,40,.1); color:var(--red-deep)}
+.gb__hint{margin:0; font-size:13.5px; color:var(--ink-dim); line-height:1.65}
+/* 로봇 걸러내기 — 사람 화면에는 보이지 않는 칸 */
+.gb__pot{position:absolute; left:-9999px; top:0; width:1px; height:1px; overflow:hidden}
+
+.gb__list{list-style:none; margin:0; padding:0; display:grid; gap:14px}
+.gb__item{background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  padding:20px 22px; box-shadow:var(--shadow-sm)}
+.band--panel .gb__item{background:var(--bg)}
+.gb__item--new{border-color:var(--teal); box-shadow:0 0 0 3px rgba(0,168,168,.14)}
+.gb__head{display:flex; flex-wrap:wrap; gap:3px 12px; align-items:baseline; margin-bottom:8px}
+.gb__who{font-weight:600; font-size:16px; color:var(--ink)}
+.gb__when{font-size:13.5px; color:var(--ink-dim); font-variant-numeric:tabular-nums}
+.gb__text{margin:0; font-size:16px; line-height:1.75; color:var(--ink-soft); white-space:pre-wrap}
+.gb__state{margin:0; font-size:16px; color:var(--ink-dim)}
+.gb__more{margin-top:18px}
+.gb__more .btn{min-height:46px; background:transparent; color:var(--teal-deep);
+  border-color:rgba(0,112,111,.4)}
+.gb__more .btn:hover{background:rgba(0,168,168,.1); border-color:var(--teal-deep)}
+
 /* ── 소개 드롭다운 ────────────────────────────────── */
 .menu{position:relative}
 .menu__btn{display:flex; align-items:center; gap:6px; min-height:44px;
@@ -773,6 +814,52 @@ a:focus-visible, button:focus-visible{
   </div>
 </section>
 
+<!-- 방명록 -->
+<section class="band" id="guestbook">
+  <div class="wrap">
+    <div class="band__head">
+      <span class="kicker">방명록</span>
+      <h2>한마디 남겨주세요</h2>
+      <p>매장에 다녀가신 이야기도 좋고, 조합에 바라는 것도 좋습니다. 남겨주신 글은 모두 읽습니다.</p>
+    </div>
+
+    <div class="gb">
+      <form class="gb__form" id="gb-form" novalidate>
+        <div>
+          <label for="gb-name">이름 또는 별명</label>
+          <input id="gb-name" type="text" maxlength="20" autocomplete="nickname"
+                 placeholder="예) 초전동 이웃">
+        </div>
+        <div>
+          <label for="gb-text">남기실 말씀</label>
+          <textarea id="gb-text" maxlength="500" placeholder="어떤 말씀이든 좋습니다."></textarea>
+          <p class="gb__count"><span id="gb-count">0</span> / 500자</p>
+        </div>
+
+        <div class="gb__pot" aria-hidden="true">
+          <label for="gb-pot">이 칸은 비워 두세요</label>
+          <input id="gb-pot" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <p class="gb__msg" id="gb-msg" role="status" aria-live="polite" hidden></p>
+        <button class="btn btn--primary" type="submit" id="gb-send">남기기</button>
+        <p class="gb__hint">
+          남겨주신 글은 홈페이지에 바로 올라가 누구나 볼 수 있습니다.
+          전화번호·주소 같은 개인정보는 적지 말아 주세요.
+        </p>
+      </form>
+
+      <div>
+        <ul class="gb__list" id="gb-list" aria-busy="true"></ul>
+        <p class="gb__state" id="gb-state">방명록을 불러오는 중입니다…</p>
+        <div class="gb__more">
+          <button class="btn" type="button" id="gb-more" hidden>더 보기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer class="foot">
@@ -846,6 +933,146 @@ a:focus-visible, button:focus-visible{
     wrap.addEventListener('mouseenter', open);
     wrap.addEventListener('mouseleave', shut);
   }
+})();
+
+/* ── 방명록 (진주 Supabase) ────────────────────────────────
+   공개 화면이라 키는 publishable(anon). 권한은 DB 정책이 잡는다 —
+   INSERT는 nickname·message 두 칸만, UPDATE·DELETE는 막혀 있다.
+   숨김(hidden) 처리는 Supabase 화면에서만 할 수 있다. */
+(function(){
+  var form = document.getElementById('gb-form');
+  if (!form || !window.fetch) return;
+
+  var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+  var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+  var HEAD = { apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY };
+  var PAGE = 10;
+  var GAP  = 30000;               /* 같은 사람이 연달아 남기는 것 30초 간격 */
+  var LINK = /(https?:\/\/|www\.)/i;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var list = $('gb-list'), state = $('gb-state'), more = $('gb-more'), msg = $('gb-msg');
+  var nameEl = $('gb-name'), textEl = $('gb-text'), potEl = $('gb-pot');
+  var sendEl = $('gb-send'), countEl = $('gb-count');
+  var offset = 0, busy = false;
+
+  textEl.addEventListener('input', function(){ countEl.textContent = textEl.value.length; });
+
+  function say(text, bad){
+    msg.hidden = false;
+    msg.className = 'gb__msg ' + (bad ? 'bad' : 'ok');
+    msg.textContent = text;
+  }
+  function when(iso){
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+  }
+  /* 남기신 글은 textContent로만 넣는다 — 글자를 그대로만 보여주고 코드로 읽지 않는다 */
+  function row(r, isNew){
+    var li = document.createElement('li');
+    li.className = 'gb__item' + (isNew ? ' gb__item--new' : '');
+
+    var head = document.createElement('div');
+    head.className = 'gb__head';
+    var who = document.createElement('span');
+    who.className = 'gb__who';
+    who.textContent = r.nickname;
+    var t = document.createElement('time');
+    t.className = 'gb__when';
+    t.setAttribute('datetime', r.created_at);
+    t.textContent = when(r.created_at);
+    head.appendChild(who);
+    head.appendChild(t);
+
+    var p = document.createElement('p');
+    p.className = 'gb__text';
+    p.textContent = r.message;
+
+    li.appendChild(head);
+    li.appendChild(p);
+    return li;
+  }
+
+  function load(){
+    if (busy) return;
+    busy = true; more.disabled = true;
+    fetch(SB_URL + '/guestbook?select=nickname,message,created_at' +
+          '&order=created_at.desc&offset=' + offset + '&limit=' + PAGE, { headers:HEAD })
+      .then(function(res){
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(rows){
+        rows.forEach(function(r){ list.appendChild(row(r, false)); });
+        offset += rows.length;
+        more.hidden = rows.length < PAGE;
+        if (offset === 0) {
+          state.hidden = false;
+          state.textContent = '아직 남겨진 글이 없습니다. 첫 글을 남겨 주세요.';
+        } else {
+          state.hidden = true;
+        }
+      })
+      .catch(function(){
+        state.hidden = false;
+        state.textContent = '방명록을 불러오지 못했습니다. 잠시 뒤 새로고침 해 주세요.';
+        more.hidden = true;
+      })
+      .then(function(){
+        busy = false; more.disabled = false;
+        list.setAttribute('aria-busy', 'false');
+      });
+  }
+
+  more.addEventListener('click', load);
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var nick = nameEl.value.trim();
+    var text = textEl.value.trim();
+
+    /* 사람 눈에 안 보이는 칸이 채워져 있으면 로봇이다 — 조용히 넘긴다 */
+    if (potEl.value) { form.reset(); countEl.textContent = '0'; say('남겨주셔서 고맙습니다.'); return; }
+
+    if (!nick)            return say('이름이나 별명을 적어 주세요.', true);
+    if (text.length < 2)  return say('남기실 말씀을 적어 주세요.', true);
+    if (LINK.test(text))  return say('인터넷 주소는 넣을 수 없습니다. 주소를 빼고 남겨 주세요.', true);
+
+    var last = 0;
+    try { last = parseInt(localStorage.getItem('jinju.gb.last') || '0', 10) || 0; } catch(err){}
+    if (Date.now() - last < GAP) return say('조금 뒤에 다시 남겨 주세요.', true);
+
+    sendEl.disabled = true; sendEl.textContent = '남기는 중…';
+    fetch(SB_URL + '/guestbook', {
+      method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY,
+                'Content-Type':'application/json', Prefer:'return=representation' },
+      body: JSON.stringify({ nickname:nick, message:text })
+    })
+      .then(function(res){
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(rows){
+        try { localStorage.setItem('jinju.gb.last', String(Date.now())); } catch(err){}
+        say('남겨주셔서 고맙습니다. 아래에 올라갔습니다.');
+        form.reset(); countEl.textContent = '0';
+        state.hidden = true;
+        var fresh = rows && rows[0];
+        if (fresh) { list.insertBefore(row(fresh, true), list.firstChild); offset += 1; }
+        else { list.innerHTML = ''; offset = 0; load(); }
+      })
+      .catch(function(){
+        /* 실패해도 적으신 글은 지우지 않는다 — 그대로 다시 누르면 된다 */
+        say('글을 남기지 못했습니다. 통신 상태를 확인하고 다시 눌러 주세요.', true);
+      })
+      .then(function(){
+        sendEl.disabled = false; sendEl.textContent = '남기기';
+      });
+  });
+
+  load();
 })();
 </script>
 

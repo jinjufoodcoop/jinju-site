@@ -8,8 +8,42 @@
 
 ```
 index.html   전체 페이지 (CSS 인라인)
-img/         WebP 이미지 + 로고
+img/         WebP 이미지 + 로고 + 영상 포스터
+video/       소개 영상 3편 (720p mp4)
 ```
+
+## 영상
+
+원본은 1080p·10Mbps로 편당 214~308MB라 GitHub 100MB 제한을 넘는다.
+720p·CRF25로 재인코딩해 26~43MB로 줄여 넣었다 (합계 97MB).
+원본은 조합 외장 드라이브 `진주텃밭 영상` 폴더에 있다.
+
+| 파일 | 내용 | 길이 |
+|---|---|---|
+| `video/intro.mp4` | 진주텃밭 소개영상 (2021) | 4:06 |
+| `video/green-store.mp4` | 녹색특화매장 로드 (2022) | 3:04 |
+| `video/anniv10.mp4` | 10주년 기념식 (2023) | 2:52 |
+
+`preload="none"` + `poster`라 재생 단추를 눌러야 내려받는다 — 모바일 데이터 보호.
+
+## 방명록
+
+`#guestbook` — Supabase `public.guestbook` 표에 쌓는다. 프로젝트는 발주 기능과 같은
+`kshhijgecxnngzslpvwe`. 키는 publishable(anon)이고 권한은 전부 DB가 잡는다.
+
+- **읽기** 누구나. 단 `hidden = true`인 글은 빼고.
+- **쓰기** 누구나. 단 컬럼 권한이 `nickname`·`message` 두 칸뿐이라
+  `id`·`created_at`·`hidden`은 손댈 수 없다.
+- **고치기·지우기** anon에게 권한 없음. Supabase 화면(service_role)에서만 된다.
+
+광고글은 네 겹으로 막는다 — DB 체크 제약(링크 금지·길이 제한), 트리거(1분 10건),
+허니팟 입력칸, localStorage 30초 간격. 앞의 둘은 서버가 강제하므로 API를 직접
+때려도 뚫리지 않는다.
+
+남긴 글은 전부 `textContent`로만 그린다 (`innerHTML` 금지) — 스크립트 주입 차단.
+
+표를 만든 SQL은 작업 폴더의 `방명록_만들기.sql`. 나쁜 글을 내리려면
+Table Editor에서 해당 줄 `hidden`을 `true`로 바꾼다.
 
 ## 자료 출처
 
