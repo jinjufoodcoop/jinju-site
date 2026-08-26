@@ -208,6 +208,28 @@ a:focus-visible, button:focus-visible{
 .gallery figure:hover img{transform:scale(1.05)}
 @media (prefers-reduced-motion:reduce){ .gallery figure:hover img{transform:none} }
 
+/* ── 영상 ─────────────────────────────────────────── */
+.video-main{margin:44px 0 0; border:1px solid var(--line); border-radius:18px;
+  overflow:hidden; background:var(--panel); box-shadow:var(--shadow-md)}
+.band--panel .video-main{background:var(--bg)}
+.video-main video{width:100%; display:block; aspect-ratio:16/9; background:#1C1812}
+.video-cap{padding:22px 26px; display:flex; flex-wrap:wrap; gap:6px 18px;
+  align-items:baseline; justify-content:space-between}
+.video-cap h3{font-size:21px}
+.video-cap .meta{font-size:14px; color:var(--ink-dim); font-variant-numeric:tabular-nums;
+  white-space:nowrap}
+.video-cap p{margin:6px 0 0; flex:1 1 100%; font-size:15.5px; color:var(--ink-soft)}
+
+.video-more{display:grid; grid-template-columns:repeat(2,1fr); gap:24px; margin-top:24px}
+@media (max-width:760px){ .video-more{grid-template-columns:1fr; max-width:540px} }
+.video-card{margin:0; border:1px solid var(--line); border-radius:18px; overflow:hidden;
+  background:var(--panel); box-shadow:var(--shadow-sm); display:flex; flex-direction:column}
+.band--panel .video-card{background:var(--bg)}
+.video-card video{width:100%; display:block; aspect-ratio:16/9; background:#1C1812}
+.video-card .video-cap{padding:20px 22px}
+.video-card .video-cap h3{font-size:18px}
+.video-note{margin:22px 0 0; font-size:14px; color:var(--ink-dim)}
+
 /* ── 소개 드롭다운 ────────────────────────────────── */
 .menu{position:relative}
 .menu__btn{display:flex; align-items:center; gap:6px; min-height:44px;
@@ -331,6 +353,7 @@ a:focus-visible, button:focus-visible{
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         </button>
         <div class="menu__panel" id="menu-about">
+          <a href="#video">소개 영상</a>
           <a href="#about">소개글</a>
           <a href="#purpose">설립목적</a>
           <a href="#work">사업과 활동</a>
@@ -364,6 +387,64 @@ a:focus-visible, button:focus-visible{
       </a>
       <a class="btn btn--ghost" href="#join">조합원 되기</a>
     </div>
+  </div>
+</section>
+
+<!-- 영상 -->
+<section class="band" id="video">
+  <div class="wrap">
+    <div class="band__head">
+      <span class="kicker">영상으로 보기</span>
+      <h2>진주텃밭을 소개합니다</h2>
+      <p>글보다 먼저, 우리가 어떤 곳인지 영상으로 만나보세요.</p>
+    </div>
+
+    <figure class="video-main">
+      <video controls preload="none" playsinline
+             poster="img/video-intro.webp"
+             aria-label="진주텃밭 소개영상">
+        <source src="video/intro.mp4" type="video/mp4">
+        이 브라우저에서는 영상을 재생할 수 없습니다.
+        <a href="video/intro.mp4">영상 내려받기</a>
+      </video>
+      <figcaption class="video-cap">
+        <h3>진주텃밭 소개영상</h3>
+        <span class="meta">4분 6초</span>
+        <p>진주텃밭이 어떤 곳인지, 무엇을 하는 곳인지 담았습니다.</p>
+      </figcaption>
+    </figure>
+
+    <div class="video-more">
+      <figure class="video-card">
+        <video controls preload="none" playsinline
+               poster="img/video-green-store.webp"
+               aria-label="녹색특화매장 로드">
+          <source src="video/green-store.mp4" type="video/mp4">
+          이 브라우저에서는 영상을 재생할 수 없습니다.
+          <a href="video/green-store.mp4">영상 내려받기</a>
+        </video>
+        <figcaption class="video-cap">
+          <h3>녹색특화매장 로드</h3>
+          <span class="meta">3분 4초 · 2022</span>
+        </figcaption>
+      </figure>
+
+      <figure class="video-card">
+        <video controls preload="none" playsinline
+               poster="img/video-anniv10.webp"
+               aria-label="진주텃밭 10주년 기념식 영상">
+          <source src="video/anniv10.mp4" type="video/mp4">
+          이 브라우저에서는 영상을 재생할 수 없습니다.
+          <a href="video/anniv10.mp4">영상 내려받기</a>
+        </video>
+        <figcaption class="video-cap">
+          <h3>10주년 기념식</h3>
+          <span class="meta">2분 52초 · 2023</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <p class="video-note">재생 단추를 눌러야 영상이 시작됩니다. 이동통신 데이터로 보실 때는 사용량에 유의해 주세요.</p>
   </div>
 </section>
 
