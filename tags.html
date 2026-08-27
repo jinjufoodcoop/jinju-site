@@ -1400,7 +1400,7 @@ async function loadOrders(){
   $('ord-msg').hidden = true;
   box.innerHTML = '<div class="ord-empty">발주를 불러오는 중입니다…</div>';
   try {
-    const res = await fetch(SB_URL + '/orders?select=*&order=created_at.desc&limit=300',
+    const res = await fetch(SB_URL + '/orders?select=*&order=created_at.desc&limit=1000',
       { headers: SB_HEAD, cache:'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     ordRows = await res.json();
@@ -1796,7 +1796,7 @@ async function loadDesk(){
   box.innerHTML = '<div class="dk-empty">발주를 불러오는 중입니다…</div>';
   try {
     await loadVendors();
-    const res = await fetch(SB_URL + '/orders?select=*&order=created_at.desc&limit=500',
+    const res = await fetch(SB_URL + '/orders?select=*&order=created_at.desc&limit=1500',
       { headers: SB_HEAD, cache:'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     dkRows = await res.json();
