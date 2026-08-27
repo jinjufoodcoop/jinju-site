@@ -421,6 +421,26 @@
     flex:none; font-size:12px; font-weight:600; padding:2px 8px; border-radius:7px;
     background:rgba(43,39,33,.06); color:var(--ink-soft); align-self:center}
 
+  /* 발주 지우기 · 되살리기 */
+  .vd-line.gone{opacity:.5}
+  .vd-line.gone .vd-pname{text-decoration:line-through}
+  .vd-from{display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px}
+  .vd-part{display:inline-flex; align-items:center; gap:3px; white-space:nowrap}
+  .x-btn{
+    flex:none; width:24px; height:24px; padding:0; border-radius:50%;
+    border:1px solid var(--line); background:#fff; color:var(--ink-dim);
+    font-size:14px; line-height:1; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center}
+  .x-btn:hover{border-color:var(--red); color:var(--red); background:rgba(232,48,40,.06)}
+  .x-btn[data-armed]{
+    width:auto; padding:0 9px; border-radius:9px; font-size:13px; font-weight:700;
+    border-color:var(--red); color:#fff; background:var(--red)}
+  .x-btn:disabled{opacity:.5; cursor:default}
+  .back-btn{
+    flex:none; padding:1px 9px; border-radius:9px; font-size:13px; font-weight:600;
+    border:1px solid var(--teal-deep); background:#fff; color:var(--teal-deep); cursor:pointer}
+  .gone-tag{font-size:12.5px; font-weight:700; color:var(--red)}
+
   /* ── 인쇄 ───────────────────────────────────── */
   @page{size:A4; margin:0}
   @media print{
@@ -647,6 +667,7 @@
     <div class="dk-tabs" id="dk-tabs" role="tablist" aria-label="담당으로 갈라 보기"></div>
     <div class="dk-sub">
       <label><input type="checkbox" id="dk-showdone"> 발주 끝난 것도 보기</label>
+      <label><input type="checkbox" id="dk-showgone"> 지운 것도 보기</label>
       <span id="dk-count"></span>
     </div>
   </header>
@@ -1350,6 +1371,7 @@ const CHECK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke
 
 function renderOrders(){
   const rows = ordRows
+    .filter(r => r.status !== 'cancelled')          /* 취합 화면에서 지운 발주 */
     .filter(r => !ordFilter || r.store === ordFilter)
     .sort((a,b) => (a.status === b.status)
       ? new Date(b.created_at) - new Date(a.created_at)
@@ -1572,7 +1594,7 @@ const DESK_KEY = 'jinju.desk.tab';
 const deskLabel = c => (DESKS.find(d => d.code === c) || {}).label || c;
 
 let vendorList = [], vendorIdx = new Map();
-let dkRows = [], dkTab = 'jinyangho', dkShowDone = false;
+let dkRows = [], dkTab = 'jinyangho', dkShowDone = false, dkShowGone = false;
 
 /* 이름 맞추기 — 괄호·법인표기·기호·공백을 떼고 견준다 */
 const vkey = s => String(s || '')
@@ -1627,7 +1649,9 @@ function linkify(s){
 
 /* 한 탭에 들어갈 것을 업체별로 묶는다 */
 function groupForDesk(tab){
-  const rows = dkRows.filter(r => deskOf(r) === tab && (dkShowDone || r.status !== 'done'));
+  const rows = dkRows.filter(r => deskOf(r) === tab
+    && (dkShowGone || r.status !== 'cancelled')
+    && (dkShowDone || r.status === 'cancelled' || r.status !== 'done'));
   const groups = new Map();
   for (const r of rows){
     const v = vendorOf(r.farmer_name);
@@ -1642,11 +1666,12 @@ function groupForDesk(tab){
       if (!items.has(n)) items.set(n, { name:n, barcode:r.barcode || '', parts:[], notes:[] });
       const it = items.get(n);
       if (!it.barcode && r.barcode) it.barcode = r.barcode;
-      it.parts.push({ store:r.store, qty:r.qty });
+      it.parts.push({ id:r.id, store:r.store, qty:r.qty, status:r.status });
       if (r.note) it.notes.push(storeLabel(r.store) + ': ' + r.note);
     }
     g.items = [...items.values()];
-    g.open = g.rows.filter(r => r.status !== 'done').length;
+    for (const it of g.items) it.live = it.parts.filter(p => p.status !== 'cancelled');
+    g.open = g.rows.filter(r => r.status !== 'done' && r.status !== 'cancelled').length;
     g.allDone = g.open === 0;
     g.newest = g.rows.reduce((m, r) => Math.max(m, +new Date(r.created_at) || 0), 0);
   }
@@ -1691,10 +1716,10 @@ function boxNote(totalStr, v, item){
 function orderText(g){
   const t = new Date();
   const head = g.key + ' 발주 — 진주텃밭 (' + (t.getMonth() + 1) + '/' + t.getDate() + ')';
-  const lines = g.items.map(it => {
-    const s = sumQty(it.parts.map(p => p.qty));
+  const lines = g.items.filter(it => it.live.length).map(it => {
+    const s = sumQty(it.live.map(p => p.qty));
     const b = boxNote(s, g.vendor, it);
-    const detail = it.parts.map(p => storeLabel(p.store) + ' ' + p.qty).join(', ');
+    const detail = it.live.map(p => storeLabel(p.store) + ' ' + p.qty).join(', ');
     return '· ' + it.name + '  ' + (s ? s + (b ? ' (' + b + ')' : '') + '  [' + detail + ']' : detail);
   });
   const notes = g.items.reduce((a, it) => a.concat(it.notes), []).map(n => '※ ' + n);
@@ -1729,10 +1754,17 @@ function renderDesk(){
       : '이 업체는 발주처 명부에 없습니다. 명부에 넣어 주세요.';
 
     const lines = g.items.map(it => {
-      const s = sumQty(it.parts.map(p => p.qty));
+      const s = sumQty(it.live.map(p => p.qty));
       const b = boxNote(s, v, it);
-      const detail = it.parts.map(p => esc(storeLabel(p.store)) + ' ' + esc(p.qty)).join(' · ');
-      return '<div class="vd-line">'
+      const detail = it.parts.map(p => p.status === 'cancelled'
+        ? '<span class="vd-part"><s>' + esc(storeLabel(p.store)) + ' ' + esc(p.qty) + '</s>'
+          + '<span class="gone-tag">지움</span>'
+          + '<button type="button" class="back-btn" data-back="' + esc(p.id) + '">되살리기</button></span>'
+        : '<span class="vd-part">' + esc(storeLabel(p.store)) + ' ' + esc(p.qty)
+          + '<button type="button" class="x-btn" data-x="' + esc(p.id) + '"'
+          + ' title="이 발주를 지웁니다" aria-label="' + esc(storeLabel(p.store)) + ' 발주 지우기">✕</button></span>'
+      ).join('');
+      return '<div class="vd-line' + (it.live.length ? '' : ' gone') + '">'
         + '<div class="vd-l1"><span class="vd-pname">' + esc(it.name) + '</span>'
         + (s ? '<span class="vd-sum">' + esc(s) + '</span>' : '') + '</div>'
         + (b ? '<div><span class="vd-box">' + esc(b) + '</span></div>' : '')
@@ -1779,7 +1811,7 @@ async function loadDesk(){
 async function markVendorSent(key, btn){
   const g = groupForDesk(dkTab).find(x => x.key === key);
   if (!g) return;
-  const ids = g.rows.filter(r => r.status !== 'done').map(r => r.id);
+  const ids = g.rows.filter(r => r.status !== 'done' && r.status !== 'cancelled').map(r => r.id);
   if (!ids.length) return;
   btn.disabled = true; btn.textContent = '표시하는 중…';
   const now = new Date().toISOString();
@@ -1796,6 +1828,36 @@ async function markVendorSent(key, btn){
   } catch(err){
     btn.disabled = false; btn.textContent = '발주함으로 표시';
     say($('dk-msg'), key + ' — 표시하지 못했습니다 (' + err.message + '). 다시 눌러 주세요.', true);
+  }
+}
+
+/* 발주 하나를 지운다(취소로 표시). 창고에서 완전히 없애지는 않는다 —
+   실수로 지웠을 때 되살릴 수 있어야 하고, 창고 정책이 완전삭제를 막아 두었다. */
+async function setOrderStatus(id, status, btn, working){
+  const old = btn.textContent;
+  btn.disabled = true; btn.textContent = working;
+  try {
+    const body = (status === 'cancelled')
+      ? { status:'cancelled', done_at:null }
+      : { status:'open', done_at:null };
+    const res = await fetch(SB_URL + '/orders?id=eq.' + encodeURIComponent(id), {
+      method:'PATCH',
+      headers: Object.assign({ Prefer:'return=minimal' }, SB_HEAD),
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const row = dkRows.find(r => String(r.id) === String(id));
+    if (row){ row.status = body.status; row.done_at = null; }
+    $('dk-msg').hidden = true;
+    renderDesk();
+  } catch(err){
+    btn.disabled = false; btn.textContent = old;
+    delete btn.dataset.armed;
+    btn.textContent = (status === 'cancelled') ? '✕' : '되살리기';
+    /* 창고 정책이 cancelled 를 아직 허용하지 않으면 401이 온다 — 무엇을 해야 하는지 알려 준다 */
+    say($('dk-msg'), /401|403/.test(err.message)
+      ? '아직 지우기가 열려 있지 않습니다. 작업방의 「발주취소_열기.sql」을 Supabase에서 실행해 주세요.'
+      : '처리하지 못했습니다 (' + err.message + '). 다시 눌러 주세요.', true);
   }
 }
 
@@ -1825,9 +1887,29 @@ $('dk-list').addEventListener('click', e => {
   if (c) return copyOrderText(c.dataset.copy, c);
   const s = e.target.closest('button[data-sent]');
   if (s) return markVendorSent(s.dataset.sent, s);
+
+  /* 지우기 — 잘못 눌러 지워지지 않도록 두 번 누르게 한다 */
+  const x = e.target.closest('button[data-x]');
+  if (x){
+    if (!x.dataset.armed){
+      $('dk-list').querySelectorAll('.x-btn[data-armed]').forEach(b => {
+        delete b.dataset.armed; b.textContent = '✕';
+      });
+      x.dataset.armed = '1';
+      x.textContent = '지울까요?';
+      setTimeout(() => {
+        if (x.dataset.armed){ delete x.dataset.armed; x.textContent = '✕'; }
+      }, 4000);
+      return;
+    }
+    return setOrderStatus(x.dataset.x, 'cancelled', x, '지우는 중…');
+  }
+  const back = e.target.closest('button[data-back]');
+  if (back) return setOrderStatus(back.dataset.back, 'open', back, '되살리는 중…');
 });
 $('dk-refresh').addEventListener('click', loadDesk);
 $('dk-showdone').addEventListener('change', e => { dkShowDone = e.target.checked; renderDesk(); });
+$('dk-showgone').addEventListener('change', e => { dkShowGone = e.target.checked; renderDesk(); });
 
 function initDesk(){
   document.title = '발주 취합 — 진주텃밭';
