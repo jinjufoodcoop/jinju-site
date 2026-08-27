@@ -307,6 +307,120 @@
   .ord-mark svg{width:17px; height:17px; flex:none}
   .ord-empty{padding:52px 20px; text-align:center; color:var(--ink-dim)}
 
+  /* ── 발주 취합 (담당자 화면) ─────────────────── */
+  #desk-view[hidden]{display:none}
+  .dk-top{
+    background:var(--panel); border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:10}
+  .dk-bar{
+    max-width:720px; margin:0 auto; padding:14px 16px 0;
+    display:flex; align-items:center; gap:12px}
+  .dk-title{font-family:var(--serif); font-size:21px; font-weight:700; letter-spacing:-.02em}
+  .dk-bar .btn{margin-left:auto}
+  .dk-tabs{
+    max-width:720px; margin:0 auto; padding:12px 16px 0;
+    display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .dk-tabs .tab{flex:none; min-height:44px}
+  .dk-tabs .tab .cnt{
+    display:inline-block; margin-left:6px; min-width:20px; padding:0 6px;
+    border-radius:10px; background:var(--red); color:#fff;
+    font-size:12.5px; font-weight:700; line-height:20px; text-align:center}
+  .dk-tabs .tab .cnt[hidden]{display:none}
+  .dk-tabs .tab[aria-selected="true"] .cnt{background:var(--teal-deep)}
+  .dk-sub{
+    max-width:720px; margin:0 auto; padding:10px 16px 14px;
+    display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink-dim)}
+  .dk-sub label{display:flex; align-items:center; gap:6px; cursor:pointer}
+  .dk-wrap{max-width:720px; margin:0 auto; padding:16px 16px 80px}
+
+  .vd{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:18px 18px 14px; margin-bottom:14px; box-shadow:var(--shadow-sm)}
+  .vd.done{background:#F2EEE6; box-shadow:none; border-color:transparent}
+  .vd-head{display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap}
+  .vd-name{font-family:var(--serif); font-size:20px; font-weight:700; letter-spacing:-.02em;
+    word-break:keep-all; flex:1; min-width:0}
+  .vd-badge{
+    flex:none; font-size:12px; font-weight:700; padding:2px 8px; border-radius:7px;
+    background:rgba(0,168,168,.14); color:var(--teal-deep); align-self:center}
+  .vd-badge.each{background:rgba(240,168,0,.18); color:#8A6000}
+  .vd-badge.unknown{background:rgba(232,48,40,.12); color:var(--red)}
+  .vd-how{
+    margin-top:8px; font-size:14.5px; color:var(--ink-soft); word-break:keep-all}
+  .vd-how b{color:var(--ink); font-weight:600}
+  .vd-how a{color:var(--teal-deep)}
+  .vd-memo{
+    margin-top:8px; font-size:14px; color:var(--ink-soft); word-break:keep-all;
+    padding:8px 11px; border-radius:9px; background:rgba(240,168,0,.10)}
+  .vd-lines{margin-top:14px; border-top:1px solid var(--line); padding-top:12px}
+  .vd-line{padding:8px 0; border-bottom:1px dashed var(--line)}
+  .vd-line:last-child{border-bottom:none}
+  .vd-l1{display:flex; align-items:baseline; gap:10px}
+  .vd-pname{font-size:16.5px; font-weight:700; line-height:1.35; word-break:keep-all; flex:1}
+  .vd-sum{color:var(--teal-deep); font-weight:700; white-space:nowrap}
+  .vd-from{font-size:13.5px; color:var(--ink-dim); margin-top:3px}
+  .vd-note{
+    font-size:13.5px; color:var(--ink-soft); margin-top:5px;
+    padding-left:9px; border-left:2px solid var(--line); word-break:keep-all}
+  .vd-act{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap}
+  .vd-act .btn{min-height:44px}
+  .vd-mark{
+    display:inline-flex; align-items:center; gap:5px; margin-top:12px;
+    font-size:14px; font-weight:600; color:var(--ink-soft)}
+  .vd-mark svg{width:17px; height:17px; flex:none}
+  .dk-empty{padding:56px 20px; text-align:center; color:var(--ink-dim)}
+
+  /* ── 매장 로그인 ────────────────────────────── */
+  #gate-view[hidden]{display:none}
+  .gate-wrap{
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:24px 20px 64px}
+  .gate-card{
+    width:100%; max-width:400px;
+    background:var(--panel); border:1px solid var(--line); border-radius:18px;
+    padding:30px 26px 26px; box-shadow:var(--shadow-sm)}
+  .gate-card--inline{
+    max-width:none; background:none; border:none; border-radius:0;
+    padding:0; box-shadow:none}
+  .gate-card--inline .gate-head, .gate-card--inline .gate-sub{display:none}
+  .gate-head{font-family:var(--serif); font-size:22px; font-weight:700; letter-spacing:-.02em}
+  .gate-sub{font-size:14.5px; color:var(--ink-dim); margin:6px 0 22px}
+  .gate-fld{margin-bottom:15px}
+  .gate-fld label{display:block; font-size:14px; font-weight:600; margin-bottom:8px}
+  .gate-fld input{
+    width:100%; min-height:50px; padding:0 14px; border-radius:11px;
+    border:1.5px solid var(--line); background:#fff; font-size:16px}
+  .gate-fld input:focus{border-color:var(--teal-deep); outline:none}
+  .gate-card .btn{width:100%; margin-top:6px}
+  .gate-foot{
+    margin-top:18px; padding-top:15px; border-top:1px solid var(--line);
+    font-size:13.5px; color:var(--ink-dim); word-break:keep-all}
+
+  /* 로그인한 매장 표시 */
+  .o-who{
+    display:flex; align-items:center; gap:10px;
+    font-size:17px; font-weight:700; color:var(--teal-deep)}
+  .link-btn{
+    margin-left:auto; background:none; border:none; padding:4px 2px; cursor:pointer;
+    font-size:14px; font-weight:600; color:var(--ink-dim); text-decoration:underline}
+  .link-btn:hover{color:var(--red)}
+
+  /* 로그인한 매장 알림줄 */
+  .who-foot{margin-top:26px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:13.5px; color:var(--ink-dim); display:flex; align-items:center; gap:8px}
+  .who-foot .link-btn{margin-left:0}
+
+  /* 낱개 수량 안내 · 박스 환산 */
+  .qty-hint{margin-top:7px; font-size:13.5px; color:var(--ink-dim); word-break:keep-all}
+  .qty-hint:empty{display:none}
+  .vd-box{
+    display:inline-block; margin-top:4px; padding:2px 9px; border-radius:8px;
+    background:rgba(0,168,168,.10); color:var(--teal-deep);
+    font-size:13.5px; font-weight:700}
+  .vd-per{
+    flex:none; font-size:12px; font-weight:600; padding:2px 8px; border-radius:7px;
+    background:rgba(43,39,33,.06); color:var(--ink-soft); align-self:center}
+
   /* ── 인쇄 ───────────────────────────────────── */
   @page{size:A4; margin:0}
   @media print{
@@ -481,8 +595,10 @@
     </div>
 
     <div class="order-fld">
-      <label for="o-qty">수량<span class="req">*</span></label>
-      <input id="o-qty" type="text" autocomplete="off" placeholder="예: 2박스">
+      <label for="o-qty">수량 <span style="font-weight:400;color:var(--ink-dim)">(낱개)</span><span class="req">*</span></label>
+      <input id="o-qty" type="number" inputmode="numeric" min="1" step="1"
+             autocomplete="off" placeholder="예: 24">
+      <p class="qty-hint" id="o-hint"></p>
     </div>
 
     <div class="order-fld">
@@ -494,6 +610,13 @@
     <p class="order-msg" id="o-msg" role="status" hidden></p>
   </section>
 
+  <!-- 로그인 안 했을 때 발주 칸 자리 -->
+  <section class="order-box" id="order-locked" hidden>
+    <h2 class="order-head">매장 발주</h2>
+    <p class="order-sub">발주는 매장 직원만 넣을 수 있습니다. 매장 전화번호로 로그인해 주세요.</p>
+    <div id="lock-slot"></div>
+  </section>
+
   <p class="info-foot">진주우리먹거리협동조합 진주텃밭 · <a href="index.html">조합 소개 보기</a></p>
 </div>
 
@@ -502,14 +625,60 @@
   <header class="ord-top">
     <div class="ord-bar">
       <h1 class="ord-title">발주 현황</h1>
-      <button class="btn btn--ghost btn--sm" id="ord-refresh">새로고침</button>
+      <a class="btn btn--ghost btn--sm" href="tags.html?desk=1" style="display:inline-flex;align-items:center;text-decoration:none">발주 취합</a>
+      <button class="btn btn--ghost btn--sm" id="ord-refresh" style="margin-left:0">새로고침</button>
     </div>
     <div class="ord-tabs" id="ord-tabs" role="tablist" aria-label="매장으로 걸러 보기"></div>
   </header>
   <main class="ord-wrap">
     <p class="order-msg" id="ord-msg" role="status" hidden></p>
     <div id="ord-list"></div>
+    <p class="who-foot"><span class="who-store"></span><button type="button" class="link-btn" data-logout>로그아웃</button></p>
   </main>
+</div>
+
+<!-- ══ 발주 취합 (담당자) ═════════════════════════════════ -->
+<div id="desk-view" hidden>
+  <header class="dk-top">
+    <div class="dk-bar">
+      <h1 class="dk-title">발주 취합</h1>
+      <button class="btn btn--ghost btn--sm" id="dk-refresh">새로고침</button>
+    </div>
+    <div class="dk-tabs" id="dk-tabs" role="tablist" aria-label="담당으로 갈라 보기"></div>
+    <div class="dk-sub">
+      <label><input type="checkbox" id="dk-showdone"> 발주 끝난 것도 보기</label>
+      <span id="dk-count"></span>
+    </div>
+  </header>
+  <main class="dk-wrap">
+    <p class="order-msg" id="dk-msg" role="status" hidden></p>
+    <div id="dk-list"></div>
+    <p class="who-foot"><span class="who-store"></span><button type="button" class="link-btn" data-logout>로그아웃</button></p>
+  </main>
+</div>
+
+<!-- ══ 매장 로그인 ════════════════════════════════════════ -->
+<div id="gate-view" hidden>
+  <div class="gate-wrap">
+    <div class="gate-card" id="gate-card">
+      <h1 class="gate-head">매장 직원 로그인</h1>
+      <p class="gate-sub">발주는 매장에서만 넣을 수 있습니다.</p>
+
+      <div class="gate-fld">
+        <label for="g-id">매장 전화번호</label>
+        <input id="g-id" type="tel" inputmode="tel" autocomplete="username"
+               placeholder="055-000-0000">
+      </div>
+      <div class="gate-fld">
+        <label for="g-pw">비밀번호</label>
+        <input id="g-pw" type="password" autocomplete="current-password">
+      </div>
+
+      <button class="btn btn--primary btn--big" id="g-go">들어가기</button>
+      <p class="order-msg" id="g-msg" role="status" hidden></p>
+      <p class="gate-foot">소비자 여러분은 로그인 없이 상품 이름과 가격을 보실 수 있습니다.</p>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1085,13 +1254,34 @@ let orderItem = null, orderStore = null;
 
 function setupOrder(item){
   orderItem = item || {};
+
+  /* 로그인 안 했으면 발주 칸 대신 로그인 칸을 보여준다 — 소비자는 여기서 멈춘다 */
+  const me = authGet();
+  if (!me){
+    $('order-locked').hidden = false;
+    openGate($('lock-slot'), () => { $('order-locked').hidden = true; setupOrder(item); });
+    return;
+  }
+
   $('o-name-fld').hidden = !!orderItem.product_name;
-  $('o-stores').innerHTML = STORES.map(s =>
-    `<button type="button" class="store-btn" role="radio" aria-checked="false"
-       data-store="${s.code}">${esc(s.label)}</button>`).join('');
-  const last = lsGet(STORE_KEY);
-  if (STORES.some(s => s.code === last)) pickStore(last);
+  /* 매장은 로그인한 곳으로 고정한다 — 잘못 고를 일이 없다 */
+  orderStore = me.store;
+  $('o-store-lg').textContent = '발주 매장';
+  $('o-stores').innerHTML =
+    '<div class="o-who">' + esc(storeLabel(me.store))
+    + '<button type="button" class="link-btn" data-logout>로그아웃</button></div>';
   $('order-box').hidden = false;
+
+  /* 몇 개들이 한 박스인지 알면 알려 준다 — 박스를 맞추기 쉽게 */
+  $('o-hint').textContent = '';
+  if (orderItem.farmer_name){
+    loadVendors().then(() => {
+      const v = vendorOf(orderItem.farmer_name);
+      const per = perBox(v, { barcode: orderItem.barcode, name: orderItem.product_name });
+      if (per)
+        $('o-hint').textContent = '이 상품은 1박스에 ' + per + '개입니다. (' + v.이름 + ')';
+    }).catch(() => {});
+  }
 }
 function pickStore(code){
   orderStore = code;
@@ -1107,10 +1297,12 @@ $('o-stores').addEventListener('click', e => {
 async function sendOrder(){
   const msg = $('o-msg');
   const name = (orderItem.product_name || $('o-name').value).trim();
-  const qty = $('o-qty').value.trim();
-  if (!orderStore) return say(msg, '어느 매장인지 골라 주세요.', true);
+  const qtyN = parseInt($('o-qty').value, 10);
+  /* 낱개 수로만 받는다 — 금산·초전이 낱개로 넣어야 두 매장을 묶어 한 박스를 채울 수 있다 */
+  const qty = (qtyN > 0) ? (qtyN + '개') : '';
+  if (!orderStore) return say(msg, '로그인이 풀렸습니다. 새로고침하고 다시 들어와 주세요.', true);
   if (!name)       return say(msg, '상품 이름을 적어 주세요.', true);
-  if (!qty)        return say(msg, '수량을 적어 주세요. (예: 2박스)', true);
+  if (!qty)        return say(msg, '수량을 낱개 숫자로 적어 주세요. (예: 24)', true);
 
   const btn = $('o-send');
   btn.disabled = true; btn.textContent = '보내는 중…';
@@ -1234,14 +1426,435 @@ function initOrders(){
     ordFilter = t.dataset.store;
     renderOrders();
   });
+  paintWho();
   $('orders-view').hidden = false;
   loadOrders();
 }
 
+
+/* ══ 매장 로그인 ═══════════════════════════════════════════
+   QR은 소비자도 찍는다. 상품 이름·가격은 누구나 보되,
+   「발주 넣기·발주 현황·발주 취합」은 매장 직원만 들어오게 한다.
+
+   ⚠ 이 사이트는 파일을 그대로 올려두는 방식이라, 비밀번호를 이 파일 안에 넣을 수밖에 없다.
+      그래서 비밀번호 자체가 아니라 「섞은 값(SHA-256)」만 적어 둔다.
+      그래도 파일 속을 뒤질 줄 아는 사람은 뚫을 수 있다 — 완벽한 자물쇠가 아니라
+      「소비자가 재미로 발주 넣는 것을 막는 걸쇠」다.
+      제대로 잠그려면 Supabase 회원가입(Auth)으로 바꿔야 한다.                         */
+
+const ACCOUNTS = {
+  '0557621242': { store:'geumsan',   hash:'3eda18a6f7badb7829519632709824b508cf7e9b9e0a817b755f84e8baf379b1' },
+  '0557555888': { store:'chojeon',   hash:'88f3bb55a44ba6d25c8e781db53b2c411e81a045c77c7dd6ec2af5a86a06e187' },
+  '0557461240': { store:'jinyangho', hash:'ff87796ad59c7feb347cd289dc516b1522bc08f5158369d4851f9f656475cc3d' }
+};
+const AUTH_KEY = 'jinju.auth';
+const AUTH_DAYS = 30;                       /* 한 번 들어오면 30일은 다시 안 묻는다 */
+
+function authGet(){
+  try {
+    const o = JSON.parse(lsGet(AUTH_KEY) || 'null');
+    if (o && o.store && o.until > Date.now()) return o;
+  } catch(e){}
+  return null;
+}
+function authSet(store){
+  lsSet(AUTH_KEY, JSON.stringify({ store:store, until: Date.now() + AUTH_DAYS * 86400000 }));
+}
+function authClear(){
+  try { localStorage.removeItem(AUTH_KEY); } catch(e){}
+}
+
+async function sha256hex(s){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/* 맞으면 매장코드, 틀리면 null */
+async function checkLogin(id, pw){
+  const key = String(id).replace(/[^0-9]/g, '');
+  const acc = ACCOUNTS[key];
+  if (!acc || !pw) return null;
+  if (!(window.crypto && crypto.subtle))
+    throw new Error('이 브라우저에서는 로그인이 안 됩니다. 크롬이나 사파리로 열어 주세요');
+  const h = await sha256hex('jinju-order:' + key + ':' + pw);
+  return h === acc.hash ? acc.store : null;
+}
+
+/* 로그인 칸을 어디에 놓을지 정하고 띄운다.
+   slot 이 없으면 화면 전체를, 있으면 그 자리에 끼워 넣는다. */
+let gateThen = null;
+function openGate(slot, then){
+  gateThen = then;
+  const card = $('gate-card');
+  if (slot){
+    card.classList.add('gate-card--inline');
+    slot.appendChild(card);
+  } else {
+    card.classList.remove('gate-card--inline');
+    $('gate-view').hidden = false;
+    document.title = '매장 로그인 — 진주텃밭';
+  }
+  $('g-msg').hidden = true;
+  $('g-id').value = '';
+  $('g-pw').value = '';
+}
+
+async function doLogin(){
+  const msg = $('g-msg'), btn = $('g-go');
+  const id = $('g-id').value.trim(), pw = $('g-pw').value;
+  if (!id) return say(msg, '매장 전화번호를 적어 주세요.', true);
+  if (!pw) return say(msg, '비밀번호를 적어 주세요.', true);
+  btn.disabled = true; btn.textContent = '확인하는 중…';
+  try {
+    const store = await checkLogin(id, pw);
+    if (!store){
+      say(msg, '전화번호나 비밀번호가 맞지 않습니다.', true);
+      $('g-pw').value = '';
+      return;
+    }
+    authSet(store);
+    $('gate-view').hidden = true;
+    const card = $('gate-card');
+    if (card.parentElement && card.parentElement.id !== 'gate-view')
+      $('gate-view').querySelector('.gate-wrap').appendChild(card);
+    const then = gateThen; gateThen = null;
+    if (then) then(store);
+  } catch(err){
+    say(msg, err.message, true);
+  } finally {
+    btn.disabled = false; btn.textContent = '들어가기';
+  }
+}
+$('g-go').addEventListener('click', doLogin);
+$('g-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+$('g-id').addEventListener('keydown', e => { if (e.key === 'Enter') $('g-pw').focus(); });
+
+/* 로그인해야만 들어갈 수 있는 화면 */
+function needLogin(run){
+  if (authGet()) run();
+  else openGate(null, run);
+}
+
+/* 어느 매장으로 들어와 있는지 화면 밑에 적어 준다 */
+function paintWho(){
+  const me = authGet();
+  document.querySelectorAll('.who-store').forEach(el => {
+    el.textContent = me ? storeLabel(me.store) + '으로 로그인함 · ' : '';
+  });
+}
+
+/* 어느 화면에서든 로그아웃 */
+function logout(){
+  authClear();
+  location.reload();
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-logout]')) { e.preventDefault(); logout(); }
+});
+
+/* ══ 발주 취합 (담당자 화면) ═══════════════════════════════
+   매장이 넣은 발주를 「업체」로 묶어, 그 업체를 맡은 담당에게 모아 준다.
+   업체 이름은 상품자료(tags-data.json)의 거래처 이름이 기준이고,
+   담당·연락처·발주방법은 vendors-data.json(엑셀에서 옮긴 명부)에서 가져온다.
+
+   어느 담당에게 가나 ─ 규칙은 하나다.
+     · 업체 담당이 진양호/초전/금산/공급팀장/국장  → 그 담당에게 (어느 매장이 넣었든 합쳐서)
+     · 업체 담당이 「개별발주」이거나 명부에 없는 업체 → 발주를 넣은 그 매장에게        */
+
+const DESKS = [
+  { code:'jinyangho', label:'진양호점' },
+  { code:'chojeon',   label:'초전점' },
+  { code:'geumsan',   label:'금산점' },
+  { code:'supply',    label:'공급팀장' },
+  { code:'director',  label:'국장' }
+];
+const DESK_KEY = 'jinju.desk.tab';
+const deskLabel = c => (DESKS.find(d => d.code === c) || {}).label || c;
+
+let vendorList = [], vendorIdx = new Map();
+let dkRows = [], dkTab = 'jinyangho', dkShowDone = false;
+
+/* 이름 맞추기 — 괄호·법인표기·기호·공백을 떼고 견준다 */
+const vkey = s => String(s || '')
+  .replace(/\(.*?\)/g, '')
+  .replace(/㈜|\(주\)|주식회사|영농조합법인|농업회사법인|영어조합법인|유한회사|\(유\)/g, '')
+  .replace(/[^가-힣A-Za-z0-9]/g, '').toLowerCase();
+
+async function loadVendors(){
+  if (vendorList.length) return;
+  const res = await fetch('vendors-data.json', { cache:'no-cache' });
+  if (!res.ok) throw new Error('발주처 명부를 못 읽었습니다 (HTTP ' + res.status + ')');
+  vendorList = (await res.json()).업체 || [];
+  vendorIdx = new Map();
+  for (const v of vendorList){
+    vendorIdx.set(v.이름, v);
+    const k = vkey(v.이름);
+    if (k && !vendorIdx.has(k)) vendorIdx.set(k, v);
+  }
+}
+const vendorOf = name =>
+  vendorIdx.get(String(name || '')) || vendorIdx.get(vkey(name)) || null;
+
+/* 이 발주는 누구 앞으로 가나 */
+function deskOf(row){
+  const v = vendorOf(row.farmer_name);
+  if (v && v.담당코드 && v.담당코드 !== 'each') return v.담당코드;
+  return row.store;                    /* 개별발주 · 명부에 없는 업체 */
+}
+
+/* 수량 더하기 — "2박스"처럼 숫자+단위 모양이 모두 같을 때만 합친다.
+   모양이 섞이면 억지로 더하지 않고 그대로 늘어놓는다. */
+function sumQty(qtys){
+  let total = 0, unit = null;
+  for (const q of qtys){
+    const m = String(q).trim().match(/^([0-9]+(?:\.[0-9]+)?)\s*(.*)$/);
+    if (!m) return null;
+    const u = m[2].trim();
+    if (unit === null) unit = u;
+    else if (unit !== u) return null;
+    total += parseFloat(m[1]);
+  }
+  if (unit === null) return null;
+  return (Math.round(total * 100) / 100) + (unit ? ' ' + unit : '');
+}
+
+/* 발주방법 안에 주소가 있으면 눌러 갈 수 있게 */
+function linkify(s){
+  return esc(s).replace(/((?:https?:\/\/|www\.)[^\s]+)/g, m =>
+    '<a href="' + (m.indexOf('http') === 0 ? m : 'https://' + m)
+    + '" target="_blank" rel="noopener">' + m + '</a>');
+}
+
+/* 한 탭에 들어갈 것을 업체별로 묶는다 */
+function groupForDesk(tab){
+  const rows = dkRows.filter(r => deskOf(r) === tab && (dkShowDone || r.status !== 'done'));
+  const groups = new Map();
+  for (const r of rows){
+    const v = vendorOf(r.farmer_name);
+    const key = v ? v.이름 : (String(r.farmer_name || '').trim() || '(거래처를 모르는 발주)');
+    if (!groups.has(key)) groups.set(key, { key:key, vendor:v, rows:[] });
+    groups.get(key).rows.push(r);
+  }
+  for (const g of groups.values()){
+    const items = new Map();                       /* 같은 상품끼리 다시 묶기 */
+    for (const r of g.rows){
+      const n = r.product_name || '(이름 없음)';
+      if (!items.has(n)) items.set(n, { name:n, barcode:r.barcode || '', parts:[], notes:[] });
+      const it = items.get(n);
+      if (!it.barcode && r.barcode) it.barcode = r.barcode;
+      it.parts.push({ store:r.store, qty:r.qty });
+      if (r.note) it.notes.push(storeLabel(r.store) + ': ' + r.note);
+    }
+    g.items = [...items.values()];
+    g.open = g.rows.filter(r => r.status !== 'done').length;
+    g.allDone = g.open === 0;
+    g.newest = g.rows.reduce((m, r) => Math.max(m, +new Date(r.created_at) || 0), 0);
+  }
+  return [...groups.values()].sort((a, b) =>
+    (a.allDone === b.allDone) ? b.newest - a.newest : (a.allDone ? 1 : -1));
+}
+
+/* 이 상품 1박스가 몇 개인지 — 바코드로 찾고, 없으면 이름으로, 그래도 없으면 업체 기본값 */
+function perBox(v, item){
+  if (!v) return null;
+  const list = v.품목입수 || [];
+  if (item && item.barcode){
+    const hit = list.find(x => x.바코드 && String(x.바코드) === String(item.barcode));
+    if (hit) return hit.입수;
+  }
+  if (item && item.name){
+    const bare = x => String(x).replace(/[^가-힣A-Za-z0-9]/g, '');
+    const n = bare(item.name);
+    const hit = list.find(x => {
+      const q = bare(x.품명);
+      return q.length >= 2 && (n.indexOf(q) === 0 || q.indexOf(n) === 0);
+    });
+    if (hit) return hit.입수;
+  }
+  return v.박스입수 || null;
+}
+
+/* 낱개 합계를 박스로 바꿔 말해 준다 — "48 개" + 1박스 20개 → "2박스 + 8개" */
+function boxNote(totalStr, v, item){
+  const per0 = perBox(v, item);
+  if (!per0) return '';
+  const m = String(totalStr || '').match(/^([0-9]+(?:\.[0-9]+)?)\s*개$/);
+  if (!m) return '';
+  const n = parseFloat(m[1]), per = per0;
+  const box = Math.floor(n / per);
+  const rest = Math.round((n - box * per) * 100) / 100;
+  if (!box) return '1박스(' + per + '개)에 ' + Math.round((per - rest) * 100) / 100 + '개 모자람';
+  return box + '박스' + (rest ? ' + ' + rest + '개' : ' 딱 맞음');
+}
+
+/* 업체에 보낼 발주서 글 */
+function orderText(g){
+  const t = new Date();
+  const head = g.key + ' 발주 — 진주텃밭 (' + (t.getMonth() + 1) + '/' + t.getDate() + ')';
+  const lines = g.items.map(it => {
+    const s = sumQty(it.parts.map(p => p.qty));
+    const b = boxNote(s, g.vendor, it);
+    const detail = it.parts.map(p => storeLabel(p.store) + ' ' + p.qty).join(', ');
+    return '· ' + it.name + '  ' + (s ? s + (b ? ' (' + b + ')' : '') + '  [' + detail + ']' : detail);
+  });
+  const notes = g.items.reduce((a, it) => a.concat(it.notes), []).map(n => '※ ' + n);
+  return [head, ''].concat(lines, notes.length ? [''].concat(notes) : []).join('\n');
+}
+
+function renderDesk(){
+  const groups = groupForDesk(dkTab);
+
+  /* 탭마다 아직 안 보낸 건수 */
+  $('dk-tabs').querySelectorAll('.tab').forEach(t => {
+    const n = dkRows.filter(r => deskOf(r) === t.dataset.desk && r.status !== 'done').length;
+    const c = t.querySelector('.cnt');
+    if (c){ c.textContent = n; c.hidden = !n; }
+  });
+  const openN = groups.reduce((s, g) => s + g.open, 0);
+  $('dk-count').textContent = openN
+    ? '발주할 것 ' + openN + '건 · 업체 ' + groups.filter(g => !g.allDone).length + '곳'
+    : '';
+
+  $('dk-list').innerHTML = groups.length ? groups.map(g => {
+    const v = g.vendor;
+    const badge = !v
+      ? '<span class="vd-badge unknown">명부에 없음</span>'
+      : v.담당코드 === 'each'
+        ? '<span class="vd-badge each">개별발주</span>'
+        : '<span class="vd-badge">' + esc(deskLabel(v.담당코드)) + ' 통합</span>';
+
+    const how = v
+      ? [ v.연락처 ? '<b>☎ ' + esc(v.연락처) + '</b>' : '',
+          v.발주방법 ? linkify(v.발주방법) : '' ].filter(Boolean).join(' · ')
+      : '이 업체는 발주처 명부에 없습니다. 명부에 넣어 주세요.';
+
+    const lines = g.items.map(it => {
+      const s = sumQty(it.parts.map(p => p.qty));
+      const b = boxNote(s, v, it);
+      const detail = it.parts.map(p => esc(storeLabel(p.store)) + ' ' + esc(p.qty)).join(' · ');
+      return '<div class="vd-line">'
+        + '<div class="vd-l1"><span class="vd-pname">' + esc(it.name) + '</span>'
+        + (s ? '<span class="vd-sum">' + esc(s) + '</span>' : '') + '</div>'
+        + (b ? '<div><span class="vd-box">' + esc(b) + '</span></div>' : '')
+        + '<div class="vd-from">' + detail + '</div>'
+        + it.notes.map(n => '<div class="vd-note">' + esc(n) + '</div>').join('')
+        + '</div>';
+    }).join('');
+
+    return '<article class="vd' + (g.allDone ? ' done' : '') + '">'
+      + '<div class="vd-head"><h2 class="vd-name">' + esc(g.key) + '</h2>'
+      + (v && v.박스입수 ? '<span class="vd-per">보통 1박스 ' + v.박스입수 + '개</span>' : '')
+      + badge + '</div>'
+      + '<div class="vd-how">' + how + '</div>'
+      + (v && v.비고 ? '<div class="vd-memo">' + esc(v.비고) + '</div>' : '')
+      + '<div class="vd-lines">' + lines + '</div>'
+      + (g.allDone
+          ? '<div class="vd-mark">' + CHECK + '발주함</div>'
+          : '<div class="vd-act">'
+            + '<button class="btn btn--ghost btn--sm" data-copy="' + esc(g.key) + '">발주서 복사</button>'
+            + '<button class="btn btn--primary btn--sm" data-sent="' + esc(g.key) + '">발주함으로 표시</button>'
+            + '</div>')
+      + '</article>';
+  }).join('') : '<div class="dk-empty">' + esc(deskLabel(dkTab)) + ' 앞으로 들어온 발주가 없습니다.</div>';
+}
+
+async function loadDesk(){
+  const box = $('dk-list');
+  $('dk-msg').hidden = true;
+  box.innerHTML = '<div class="dk-empty">발주를 불러오는 중입니다…</div>';
+  try {
+    await loadVendors();
+    const res = await fetch(SB_URL + '/orders?select=*&order=created_at.desc&limit=500',
+      { headers: SB_HEAD, cache:'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    dkRows = await res.json();
+    renderDesk();
+  } catch(err){
+    dkRows = [];
+    box.innerHTML = '<div class="dk-empty">발주를 불러오지 못했습니다 (' + esc(err.message) + ').</div>';
+    say($('dk-msg'), '통신 상태를 확인하고 새로고침을 눌러 주세요.', true);
+  }
+}
+
+async function markVendorSent(key, btn){
+  const g = groupForDesk(dkTab).find(x => x.key === key);
+  if (!g) return;
+  const ids = g.rows.filter(r => r.status !== 'done').map(r => r.id);
+  if (!ids.length) return;
+  btn.disabled = true; btn.textContent = '표시하는 중…';
+  const now = new Date().toISOString();
+  try {
+    const res = await fetch(SB_URL + '/orders?id=in.(' + ids.map(encodeURIComponent).join(',') + ')', {
+      method:'PATCH',
+      headers: Object.assign({ Prefer:'return=minimal' }, SB_HEAD),
+      body: JSON.stringify({ status:'done', done_at: now })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    for (const r of dkRows) if (ids.indexOf(r.id) !== -1){ r.status = 'done'; r.done_at = now; }
+    $('dk-msg').hidden = true;
+    renderDesk();
+  } catch(err){
+    btn.disabled = false; btn.textContent = '발주함으로 표시';
+    say($('dk-msg'), key + ' — 표시하지 못했습니다 (' + err.message + '). 다시 눌러 주세요.', true);
+  }
+}
+
+function copyOrderText(key, btn){
+  const g = groupForDesk(dkTab).find(x => x.key === key);
+  if (!g) return;
+  const text = orderText(g);
+  const done = () => {
+    btn.textContent = '복사했습니다';
+    setTimeout(() => { btn.textContent = '발주서 복사'; }, 1600);
+  };
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); }
+    catch(e){ say($('dk-msg'), '복사가 안 됩니다. 글을 길게 눌러 직접 복사해 주세요.', true); }
+    document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, fallback);
+  } else fallback();
+}
+
+$('dk-list').addEventListener('click', e => {
+  const c = e.target.closest('button[data-copy]');
+  if (c) return copyOrderText(c.dataset.copy, c);
+  const s = e.target.closest('button[data-sent]');
+  if (s) return markVendorSent(s.dataset.sent, s);
+});
+$('dk-refresh').addEventListener('click', loadDesk);
+$('dk-showdone').addEventListener('change', e => { dkShowDone = e.target.checked; renderDesk(); });
+
+function initDesk(){
+  document.title = '발주 취합 — 진주텃밭';
+  const last = lsGet(DESK_KEY);
+  if (DESKS.some(d => d.code === last)) dkTab = last;
+  $('dk-tabs').innerHTML = DESKS.map(d =>
+    '<button class="tab" role="tab" aria-selected="' + (d.code === dkTab) + '" data-desk="'
+    + d.code + '">' + esc(d.label) + '<span class="cnt" hidden>0</span></button>').join('');
+  $('dk-tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (!t) return;
+    $('dk-tabs').querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', String(x === t)));
+    dkTab = t.dataset.desk;
+    lsSet(DESK_KEY, dkTab);
+    renderDesk();
+  });
+  paintWho();
+  $('desk-view').hidden = false;
+  loadDesk();
+}
+
 /* ── 어느 화면을 열까 ─────────────────────────────────── */
 const params = new URLSearchParams(location.search);
-if (params.get('orders')){
-  initOrders();
+if (params.get('desk')){
+  needLogin(initDesk);
+} else if (params.get('orders')){
+  needLogin(initOrders);
 } else if (params.get('info')){
   $('info-view').hidden = false;
   const name = params.get('name') || '', farmer = params.get('farmer') || '';
