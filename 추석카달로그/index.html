@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2026 진주텃밭협동조합 추석 카달로그</title>
-<meta name="description" content="진주텃밭협동조합 2026 추석 대표 생활재 27가지. 과일 선물세트, 직영 육류, 전통 기름, 쌀·곡물, 건강 선물, 전통 간식. 택배 발송 마감 9월 21일(월). 단체 주문 문의 055-763-1243.">
+<meta name="description" content="진주텃밭협동조합 2026 추석 대표 생활재 27가지. 과일 선물세트, 직영 육류, 전통 기름, 쌀·곡물, 건강 선물, 전통 간식. 매장 구매 시 조합원 5% 할인, 온라인 진주드림몰 구매 시 20% 할인 + 5% 적립으로 총 25% 혜택. 택배 발송 마감 9월 21일(월). 단체 주문 문의 055-763-1243.">
 <link rel="canonical" href="https://jjcoop.co.kr/추석카달로그/">
 <meta property="og:site_name" content="진주텃밭협동조합">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="2026 진주텃밭협동조합 추석 카달로그">
-<meta property="og:description" content="대표 생활재 27가지 · 과일 · 육류 · 기름 · 곡물 · 건강 · 간식 | 택배 발송 마감 9월 21일(월)">
+<meta property="og:description" content="대표 생활재 27가지 · 과일 · 육류 · 기름 · 곡물 · 건강 · 간식 | 온라인 진주드림몰 구매 시 20% 할인 + 5% 적립 = 25% 혜택 | 택배 발송 마감 9월 21일(월)">
 <meta property="og:url" content="https://jjcoop.co.kr/추석카달로그/">
 <meta property="og:image" content="https://jjcoop.co.kr/img/og-chuseok-2026.png">
 <meta property="og:image:width" content="1200">
@@ -18,7 +18,7 @@
 <meta property="og:image:alt" content="2026 진주텃밭협동조합 추석 카달로그">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="2026 진주텃밭협동조합 추석 카달로그">
-<meta name="twitter:description" content="대표 생활재 27가지 · 택배 발송 마감 9월 21일(월)">
+<meta name="twitter:description" content="대표 생활재 27가지 · 진주드림몰 25% 혜택 · 택배 발송 마감 9월 21일(월)">
 <meta name="twitter:image" content="https://jjcoop.co.kr/img/og-chuseok-2026.png">
 <meta name="theme-color" content="#E3ECE6">
 <link rel="icon" href="/img/logo.png">
@@ -277,6 +277,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 }
 .gift p{margin:0; font-size:1rem; line-height:1.75}
 .gift b{font-weight:600}
+.gift.dream-gift{border-left-color:var(--sage)}
+.gift.dream-gift .tag{color:var(--sage)}
 .start{
   display:inline-flex; align-items:center; gap:.6rem;
   background:var(--ink); color:var(--ground);
@@ -423,6 +425,52 @@ button{font:inherit;color:inherit;cursor:pointer}
 .pr .pv s{font-size:.8rem; font-weight:400; color:var(--ink-faint); margin-right:.35rem}
 .pnote{font-size:.8rem; color:var(--ink-faint); line-height:1.6; margin:.25rem 0 0}
 
+/* 진주드림몰 온라인 혜택 */
+.dm{
+  margin-top:.6rem; padding:.72rem .85rem .78rem;
+  background:color-mix(in srgb, var(--sage) 11%, var(--surface));
+  border:1px solid color-mix(in srgb, var(--sage) 34%, var(--line-soft));
+  border-radius:10px; display:grid; gap:.34rem;
+  font-variant-numeric:tabular-nums;
+}
+.dm-h{
+  font-size:.73rem; font-weight:700; letter-spacing:.1em;
+  color:var(--sage); display:flex; align-items:center; gap:.4rem;
+}
+.dm-h b{
+  font-size:.68rem; font-weight:700; letter-spacing:.06em;
+  background:var(--sage); color:#fff; border-radius:999px; padding:.08rem .45rem;
+}
+.dm-line{
+  margin:0; font-size:.94rem; font-weight:600; line-height:1.6; color:var(--ink-soft);
+}
+.dm-line em{
+  display:block; font-style:normal; font-size:1.06rem; font-weight:700; color:var(--price);
+}
+.dm-note{margin:.1rem 0 0; font-size:.73rem; color:var(--ink-faint); line-height:1.55}
+.dm-go{
+  display:flex; align-items:center; justify-content:center; gap:.4rem;
+  margin-top:.2rem; padding:.52rem .8rem;
+  background:var(--sage); color:#fff; text-decoration:none;
+  border-radius:8px; font-size:.86rem; font-weight:600; letter-spacing:.01em;
+}
+.dm-go:hover{filter:brightness(1.08)}
+.dm-go:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+.dm-go.cover-go{margin:.2rem 0 0; align-self:center; white-space:nowrap; padding:.55rem 1.1rem}
+
+.dm-links{display:grid; gap:.4rem; margin-top:1rem}
+.dm-links-h{font-size:.76rem; font-weight:700; letter-spacing:.12em; color:var(--sage)}
+.dm-links a{
+  display:block; padding:.55rem .8rem;
+  background:color-mix(in srgb, var(--sage) 12%, var(--surface));
+  border:1px solid color-mix(in srgb, var(--sage) 34%, var(--line-soft));
+  border-radius:8px; text-decoration:none; color:var(--ink);
+  font-size:.9rem; font-weight:500; line-height:1.5;
+}
+.dm-links a:hover{background:color-mix(in srgb, var(--sage) 22%, var(--surface))}
+.dm-links a:focus-visible{outline:2px solid var(--sage); outline-offset:2px}
+.dm-links a.all{background:var(--sage); color:#fff; border-color:var(--sage); font-weight:600; text-align:center; margin-top:.2rem}
+
 .section-note{
   display:flex; gap:.7rem; align-items:baseline;
   background:var(--surface-2); border:1px dashed var(--line);
@@ -445,6 +493,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .info dd.num{font-variant-numeric:tabular-nums}
 .info dd em{font-style:normal; color:var(--accent); font-weight:600}
 .info .fine{font-size:.82rem; color:var(--ink-faint); line-height:1.6; margin:.8rem 0 0}
+.info .fine b{color:var(--ink-soft); font-weight:600}
+.info.dream-info{
+  border-color:color-mix(in srgb, var(--sage) 42%, var(--line-soft));
+  background:color-mix(in srgb, var(--sage) 8%, var(--surface));
+}
 .deadline{
   grid-column:1/-1;
   display:flex; flex-wrap:wrap; align-items:center; gap:.8rem 2rem;
@@ -589,20 +642,23 @@ const ITEMS = [
    p:[{l:"13과, 14과", now:"79,000원"},{l:"15과, 16과", now:"74,000원"},{l:"17과", now:"69,000원"}]},
 
   {c:"fruit", n:"배", who:"정충효 / 진주시 문산읍", img:2,
-   badge:"조합원 5% 할인",
+   badge:"진주드림몰 25% 혜택",
    d:"제초제, 성장촉진제를 사용하지 않았습니다. 농산물우수관리 인증(GAP)과 생산 과정에서 온실가스의 배출을 줄여 저탄소인증을 받았습니다.",
    spec:"7.5kg",
-   p:[{l:"9·10과 (대)", was:"50,400원", now:"47,900원"},{l:"11·12과 (중)", was:"48,300원", now:"45,900원"}]},
+   p:[{l:"9·10과 (대)", was:"50,400원", now:"47,900원"},{l:"11·12과 (중)", was:"48,300원", now:"45,900원"}],
+   dmurl:"https://www.jinjudream.com/goods/view?no=654"},
 
   {c:"fruit", n:"사과 · 배 혼합", who:"김상택 / 정충효", img:3,
-   badge:"조합원 5% 할인",
+   badge:"진주드림몰 25% 혜택",
    d:"거창 고지대에서 재배한 당도 높은 사과와 진주 문산의 맛있는 배를 함께 담았습니다. 사과는 친환경 약재로 재배해 껍질 째 드셔도 안전하며, 배 역시 제초제와 성장촉진제를 사용하지 않고 건강하게 재배했습니다.",
-   p:[{l:"12과 (사과 6 / 배 6)", was:"71,400원", now:"67,900원"}]},
+   p:[{l:"12과 (사과 6 / 배 6)", was:"71,400원", now:"67,900원"}],
+   dmurl:"https://www.jinjudream.com/goods/view?no=740"},
 
   {c:"fruit", n:"사과 · 배 · 청포도 혼합", who:"김상택 / 정충효 / 박윤순", img:4,
-   badge:"조합원 5% 할인",
+   badge:"진주드림몰 25% 혜택",
    d:"최고 품질의 사과, 신고 배, 청포도를 함께 담은 프리미엄 혼합세트 입니다. 친환경 재배 방식으로 정성껏 키워 안전하고 맛있게 드실 수 있습니다.",
-   p:[{l:"8과 (사과 3 / 배 3 / 청포도 2)", was:"59,900원", now:"57,000원"}]},
+   p:[{l:"8과 (사과 3 / 배 3 / 청포도 2)", was:"59,900원", now:"57,000원"}],
+   dmurl:"https://www.jinjudream.com/goods/view?no=660"},
 
   {c:"fruit", n:"유기농 메론", who:"최현보 / 경남 창원", img:8,
    d:"무경운, 무투입유기재배, 친환경유기농법으로 재배하여 자연의 힘으로 자란 건강한 메론입니다.",
@@ -631,9 +687,10 @@ const ITEMS = [
    p:[{l:"참기름 300ml", was:"30,000원", now:"28,000원"},{l:"참기름 300ml + 볶음참깨 250g", was:"49,000원", now:"45,000원"}]},
 
   {c:"oil", n:"참 / 들기름 세트", who:"진주시 일대", img:13,
-   badge:"조합원 5% 할인",
+   badge:"진주드림몰 25% 혜택",
    d:"국산 참깨와 들깨를 저온에서 천천히 볶은 후 짜내 맛과 향이 더욱 고소합니다.",
    p:[{l:"참기름 + 들기름 (각 300ml)", was:"66,200원", now:"62,900원"},{l:"참기름 + 참기름 (각 300ml)", was:"75,600원", now:"71,900원"}],
+   dmurl:"https://www.jinjudream.com/goods/view?no=736",
    pnote:"선물박스 디자인은 변경될 수 있습니다."},
 
   {c:"oil", n:"생 참기름 & 생 들기름 세트", who:"산엔들", img:14,
@@ -653,9 +710,10 @@ const ITEMS = [
    p:[{l:"4kg", now:"21,000원"},{l:"10kg", now:"43,000원"}]},
 
   {c:"grain", n:"잡곡세트", who:"진주텃밭 / 진주 일대", img:17,
-   badge:"조합원 5% 할인",
+   badge:"진주드림몰 25% 혜택",
    d:"진주시 일대에서 재배한 건강한 잡곡입니다.",
    p:[{l:"4종 세트", was:"27,300원", now:"26,000원"}],
+   dmurl:"https://www.jinjudream.com/goods/view?no=735",
    pnote:"귀리, 찰수수, 유기농 찹쌀, 기장"},
 
   {c:"grain", n:"진주마 선물세트", who:"성영애 / 진주시 금산면", img:18,
@@ -774,6 +832,13 @@ function cardHTML(it){
     const was = p.was ? `<s>${esc(p.was)}</s>` : "";
     return `<div class="pr"><span class="pl">${esc(p.l)}</span><span class="pv${p.was ? " cut" : ""}">${was}${esc(p.now)}</span></div>`;
   }).join("");
+  const dm = it.dmurl
+    ? `<div class="dm">
+        <span class="dm-h"><b>온라인</b> 진주드림몰에서 사면</span>
+        <p class="dm-line">20% 할인쿠폰 + 결제 후 5% 적립 <em>모두 합쳐 25% 혜택</em></p>
+        <p class="dm-note">할인쿠폰은 진주드림몰에서 받아 적용해 주세요 (1만원 이상 구매)</p>
+        <a class="dm-go" href="${it.dmurl}" target="_blank" rel="noopener">진주드림몰에서 주문하기 →</a>
+      </div>` : "";
   const src = IMG[it.img];
   const shot = src
     ? `<div class="shot">${badge}<img src="${src}" alt="${esc(it.n)}" loading="lazy"></div>`
@@ -786,6 +851,7 @@ function cardHTML(it){
       ${it.spec ? `<span class="spec">${esc(it.spec)}</span>` : ""}
       <p class="desc">${esc(it.d)}</p>
       <div class="prices">${prices}</div>
+      ${dm}
       ${it.pnote ? `<p class="pnote">${esc(it.pnote)}</p>` : ""}
     </div>
   </article>`;
@@ -832,6 +898,12 @@ function coverHTML(){
       <div class="gift">
         <span class="tag">GIFT</span>
         <p>명절 전단의 생활재를 <b>100만원 이상 구매하신 조합원께</b><br>생들기름 &amp; 생참기름 세트(250ml × 2)를 드립니다.</p>
+      </div>
+      <div class="gift dream-gift">
+        <span class="tag">ONLINE</span>
+        <p>온라인 <b>진주드림몰</b>에서는 <b>20% 할인 + 5% 적립</b>으로<br>
+          모두 합쳐 <b>25% 혜택</b>을 받으실 수 있습니다. (9월 1일 ~ 9월 21일)</p>
+        <a class="dm-go cover-go" href="https://www.jinjudream.com/goods/search?osearchtext=%EC%A7%84%EC%A3%BC%ED%85%83%EB%B0%AD&per=40" target="_blank" rel="noopener">진주드림몰 바로가기 →</a>
       </div>
       <button class="start" id="startBtn">첫 장 넘기기 →</button>
     </div>
@@ -902,6 +974,32 @@ function orderHTML(ch){
       <div class="deadline">
         <div class="item"><span class="lab">택배 발송 마감</span><span class="val">9월 21일 (월)</span></div>
         <div class="item"><span class="lab">축산 사전예약 할인</span><span class="val">9월 1일 – 12일 · 10%</span></div>
+        <div class="item"><span class="lab">진주드림몰 행사</span><span class="val">9월 1일 – 21일 · 25%</span></div>
+      </div>
+
+      <div class="info dream-info">
+        <h3>어디서 사면 얼마나 싼가</h3>
+        <dl>
+          <div class="row"><dt>직매장에서 살 때</dt><dd>조합원 <em>5% 할인</em></dd></div>
+          <div class="row"><dt>온라인 진주드림몰에서 살 때</dt><dd><em>20% 할인 + 5% 적립</em> — 모두 합쳐 25% 혜택</dd></div>
+        </dl>
+        <p class="fine">
+          <b>진주드림몰 행사 기간</b> 2026년 9월 1일(월) ~ 9월 21일(월)<br>
+          20% 할인쿠폰을 받아 적용해 주세요 (1만원 이상 구매)<br>
+          결제 후 5% 적립금이 지급되며, 다음 구매에 쓸 수 있습니다<br>
+          <b>해당 품목</b> 배 · 사과·배 혼합 · 사과·배·청포도 혼합 · 참·들기름 세트 · 잡곡세트<br>
+          * 행사 예산이 다 쓰이면 일찍 끝날 수 있습니다
+        </p>
+
+        <div class="dm-links">
+          <span class="dm-links-h">눌러서 바로 주문하기</span>
+          <a href="https://www.jinjudream.com/goods/view?no=654" target="_blank" rel="noopener">배 선물세트 (대 · 중) 7.5kg →</a>
+          <a href="https://www.jinjudream.com/goods/view?no=740" target="_blank" rel="noopener">사과 · 배 혼합 1호 선물세트 →</a>
+          <a href="https://www.jinjudream.com/goods/view?no=660" target="_blank" rel="noopener">사과 · 배 · 청포도 혼합 선물세트 →</a>
+          <a href="https://www.jinjudream.com/goods/view?no=736" target="_blank" rel="noopener">저온압착 참기름 · 들기름 300ml 세트 →</a>
+          <a href="https://www.jinjudream.com/goods/view?no=735" target="_blank" rel="noopener">잡곡선물세트 4종 →</a>
+          <a class="all" href="https://www.jinjudream.com/goods/search?osearchtext=%EC%A7%84%EC%A3%BC%ED%85%83%EB%B0%AD&per=40" target="_blank" rel="noopener">진주드림몰에서 진주텃밭 상품 모두 보기 →</a>
+        </div>
       </div>
 
       <div class="info">
