@@ -226,7 +226,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
         </div>
         <div class="field">
           <label class="l" for="memo" id="memoL">배송 요청사항</label>
-          <textarea id="memo" maxlength="300" placeholder="예) 문 앞에 두어 주세요"></textarea>
+          <textarea id="memo" maxlength="250" placeholder="예) 문 앞에 두어 주세요"></textarea>
         </div>
       </div>
     </section>
@@ -248,6 +248,22 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
     </section>
 
     <section>
+      <h2>현금영수증</h2>
+      <div class="card">
+        <div class="ways" role="radiogroup" aria-label="현금영수증">
+          <label class="way"><input type="radio" name="rc" value="none" checked> <span><b>신청 안 함</b></span></label>
+          <label class="way"><input type="radio" name="rc" value="개인"> <span><b>개인</b><small>소득공제용</small></span></label>
+          <label class="way"><input type="radio" name="rc" value="사업자"> <span><b>사업자</b><small>지출증빙용</small></span></label>
+        </div>
+        <div class="field" id="rcBox" hidden style="margin-top:14px">
+          <label class="l" for="rcNo" id="rcL">휴대폰 번호 <i>*</i></label>
+          <input type="text" id="rcNo" inputmode="numeric" maxlength="20">
+          <div class="hint" id="rcHint"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
       <div class="group">
         <b>단체주문(30상자 이상)</b>은 이 주문서가 아니라<br>사무국으로 따로 문의해 주세요. &nbsp;☎ <b>055-763-1243</b>
       </div>
@@ -256,8 +272,8 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
     <section>
       <h2>개인정보 동의</h2>
       <div class="card">
-        <div class="terms">모으는 것: 주문자·받는 분 이름, 휴대폰 번호, 주소<br>
-        쓰는 곳: 주문 확인, 입금 안내 문자, 택배 발송 또는 매장 수령 확인<br>
+        <div class="terms">모으는 것: 주문자·받는 분 이름, 휴대폰 번호, 주소, 현금영수증 번호(신청하신 경우)<br>
+        쓰는 곳: 주문 확인, 입금 안내 문자, 택배 발송 또는 매장 수령 확인, 현금영수증 발급<br>
         보관 기간: 발송 및 정산을 마친 뒤 지체 없이 파기</div>
         <label class="check"><input type="checkbox" id="agree"> 위 내용에 동의합니다 <span style="color:var(--red)">*</span></label>
       </div>
@@ -407,6 +423,37 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
     render(); say('');
   }
   document.querySelectorAll('input[name=way]').forEach(function(r){ r.addEventListener('change', applyWay); });
+  /* ── 현금영수증: 개인 / 사업자 ──
+     서버 표는 그대로 두고, 요청사항 맨 앞에 「[현금영수증·개인 01012345678]」 처럼 붙여 보낸다.
+     담당자 화면(desk.html)은 이 글자를 떼어 따로 보여준다. */
+  function rc(){ var r = document.querySelector('input[name=rc]:checked'); return r ? r.value : 'none'; }
+  function fmtBiz(v){ var d = v.replace(/\D/g,'').slice(0,10); return d.replace(/^(\d{0,3})(\d{0,2})(\d{0,5}).*/, function(_,a,b,c){ return [a,b,c].filter(Boolean).join('-'); }); }
+  function applyRc(){
+    var t = rc();
+    $('rcBox').hidden = t === 'none';
+    $('rcNo').classList.remove('need'); say('');
+    if (t === '개인') {
+      $('rcL').innerHTML = '휴대폰 번호 <i>*</i>';
+      $('rcNo').placeholder = '010-0000-0000';
+      $('rcHint').textContent = '휴대폰 번호 또는 현금영수증 카드 번호를 적어 주세요.';
+      if (!$('rcNo').value || /^\d{3}-\d{2}-\d{1,5}$/.test($('rcNo').value)) $('rcNo').value = $('oPhone').value;
+    } else if (t === '사업자') {
+      $('rcL').innerHTML = '사업자등록번호 <i>*</i>';
+      $('rcNo').placeholder = '000-00-00000';
+      $('rcHint').textContent = '사업자등록번호 10자리를 적어 주세요.';
+      $('rcNo').value = fmtBiz($('rcNo').value.replace(/\D/g,'').length === 10 ? $('rcNo').value : '');
+    }
+  }
+  document.querySelectorAll('input[name=rc]').forEach(function(r){ r.addEventListener('change', applyRc); });
+  $('rcNo').addEventListener('input', function(){
+    var d = this.value.replace(/\D/g,'');
+    this.value = rc() === '사업자' ? fmtBiz(d) : d.length > 11 ? d.slice(0,18) : fmtPhone(d);   // 12자리 넘으면 현금영수증 카드 번호
+  });
+  function rcOk(){
+    var d = $('rcNo').value.replace(/\D/g,'');
+    return rc() === '사업자' ? d.length === 10 : /^\d{10,18}$/.test(d);
+  }
+
   document.querySelectorAll('input[name=store]').forEach(function(r){ r.addEventListener('change', function(){ $('stores').classList.remove('need'); say(''); }); });
 
   /* ── 전화번호 자동 줄표 ── */
@@ -458,6 +505,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
     if (way() === 'store') {
       if (!store()) return need($('stores'), '받으실 매장을 골라 주세요.');
     } else if ($('addr').value.trim().length < 5) return need($('addr'), '받는 주소를 적어 주세요.');
+    if (rc() !== 'none' && !rcOk()) return need($('rcNo'), rc() === '사업자' ? '사업자등록번호 10자리를 확인해 주세요.' : '현금영수증 받을 휴대폰 번호를 확인해 주세요.');
     if (!$('agree').checked) return need($('agree'), '개인정보 동의에 체크해 주세요.');
     return true;
   }
@@ -481,7 +529,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
       p_qty_baechu: qty.baechu, p_date_baechu: $('d-baechu').value || null,
       p_qty_sok: qty.sok,       p_date_sok: $('d-sok').value || null,
       p_qty_kit: qty.kit,       p_date_kit: $('d-kit').value || null,
-      p_memo: $('memo').value.trim()
+      p_memo: (rc() === 'none' ? '' : '[현금영수증·' + rc() + ' ' + $('rcNo').value.trim() + '] ') + $('memo').value.trim()
     };
 
     sending = true; $('go').disabled = true; $('go').textContent = '보내는 중…';
@@ -516,7 +564,9 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
       addRow(it.name + ' ' + qty[it.key] + '상자', d ? d[1] + ' 발송' : '');
     });
     addRow('받는 곳', /^매장수령/.test(b.p_address) ? b.p_address.replace('매장수령 · ', '') + ' 직접 수령' : '택배');
-    addRow('입금하실 금액' + (/^매장수령/.test(b.p_address) ? '' : ' (택배비 무료)'), won(r.total));
+    var rcm = /^\[현금영수증·(\S+) ([^\]]+)\]/.exec(b.p_memo);
+    addRow('현금영수증', rcm ? rcm[1] + ' ' + rcm[2] : '신청 안 함');
+    addRow('입금하실 금액' +(/^매장수령/.test(b.p_address) ? '' : ' (택배비 무료)'), won(r.total));
     $('form').hidden = true; $('bar').hidden = true; $('left').hidden = true;
     $('done').hidden = false;
     document.body.style.paddingBottom = '0';

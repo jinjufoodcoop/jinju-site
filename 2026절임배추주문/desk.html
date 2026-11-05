@@ -73,6 +73,7 @@ td.z{color:#C9C1B4}
 .pill.ok{background:var(--ok-bg);color:var(--teal-deep)}
 .pill.x{background:var(--x-bg);color:var(--muted)}
 .pill.pick{background:#FDE3E1;color:var(--red-deep);font-size:13px}
+.pill.rc{background:#E4ECF7;color:#24497A;font-size:13px}
 .ord .items{display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:var(--soft);border-radius:8px;padding:3px 9px;font-weight:600;font-size:14px}
 .ord .line{color:var(--ink);font-size:14px;overflow-wrap:anywhere}
@@ -141,6 +142,8 @@ td.z{color:#C9C1B4}
   function when(ts){ var x = new Date(ts); return (x.getMonth()+1) + '/' + x.getDate() + ' ' + String(x.getHours()).padStart(2,'0') + ':' + String(x.getMinutes()).padStart(2,'0'); }
   // 주문 페이지는 매장 수령이면 주소 칸에 「매장수령 · ○○점」을 적어 보낸다
   function storeOf(o){ var m = /^매장수령\s*·\s*(.+)$/.exec(o.address || ''); return m ? m[1] : ''; }
+  // 현금영수증은 요청사항 맨 앞에 「[현금영수증·개인 010-...]」 으로 붙어 온다 → [종류, 번호, 나머지 요청사항]
+  function rcOf(o){ var m = /^\[현금영수증·(\S+) ([^\]]+)\]\s*/.exec(o.memo || ''); return m ? [m[1], m[2], (o.memo || '').slice(m[0].length)] : ['', '', o.memo || '']; }
   function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
   function rpc(name, body){
@@ -220,7 +223,8 @@ td.z{color:#C9C1B4}
       ['김치속', sum(live,'qty_sok') + '상자', '입금 ' + sum(paid,'qty_sok')],
       ['김장밀키트', sum(live,'qty_kit') + '상자', '입금 ' + sum(paid,'qty_kit')],
       ['매장 수령', live.filter(storeOf).length + '건', ['금산점','초전점','진양호점'].map(function(s){
-        return s.replace('점','') + ' ' + live.filter(function(o){ return storeOf(o) === s; }).length; }).join(' · ')]
+        return s.replace('점','') + ' ' + live.filter(function(o){ return storeOf(o) === s; }).length; }).join(' · ')],
+      ['현금영수증', live.filter(function(o){ return rcOf(o)[0]; }).length + '건', '개인 ' + live.filter(function(o){ return rcOf(o)[0] === '개인'; }).length + ' · 사업자 ' + live.filter(function(o){ return rcOf(o)[0] === '사업자'; }).length]
     ].forEach(function(s){
       var d = el('div','stat'); d.appendChild(el('small',null,s[0])); d.appendChild(el('b',null,s[1])); d.appendChild(el('div','s2',s[2])); stats.appendChild(d);
     });
@@ -290,7 +294,9 @@ td.z{color:#C9C1B4}
       ad.appendChild(document.createTextNode((o.zipcode ? '(' + o.zipcode + ') ' : '') + o.address + (o.address_detail ? ' ' + o.address_detail : '')));
       c.appendChild(ad);
     }
-    if (o.memo) { var m = el('div','line'); m.appendChild(el('span',null,'요청 ')); m.appendChild(document.createTextNode(o.memo)); c.appendChild(m); }
+    var rcv = rcOf(o);
+    if (rcv[0]) { var rl = el('div','line'); rl.appendChild(el('span',null,'현금영수증 ')); rl.appendChild(el('span','pill rc', rcv[0] + ' ' + rcv[1])); c.appendChild(rl); }
+    if (rcv[2]) { var m = el('div','line'); m.appendChild(el('span',null,'요청 ')); m.appendChild(document.createTextNode(rcv[2])); c.appendChild(m); }
 
     var ft = el('div','ft');
     ft.appendChild(el('span','amt', won(o.total_amount)));
@@ -323,11 +329,11 @@ td.z{color:#C9C1B4}
   /* ── 엑셀(CSV) 내려받기 ── */
   $('csv').addEventListener('click', function(){
     var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
-                '절임배추','절임배추발송일','김치속','김치속발송일','김장밀키트','밀키트발송일','금액','요청사항'];
+                '절임배추','절임배추발송일','김치속','김치속발송일','김장밀키트','밀키트발송일','금액','현금영수증','현금영수증번호','요청사항'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
       return [o.id, when(o.created_at), o.canceled ? '취소' : o.paid ? '입금완료' : '입금전', storeOf(o) ? storeOf(o) + ' 수령' : '택배',
         o.orderer_name, o.orderer_phone, o.recipient_name, o.recipient_phone, o.zipcode || '', o.address, o.address_detail || '',
-        o.qty_baechu, o.date_baechu || '', o.qty_sok, o.date_sok || '', o.qty_kit, o.date_kit || '', o.total_amount, o.memo || ''];
+        o.qty_baechu, o.date_baechu || '', o.qty_sok, o.date_sok || '', o.qty_kit, o.date_kit || '', o.total_amount].concat(rcOf(o));
     });
     var csv = [head].concat(rows).map(function(r){
       return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
