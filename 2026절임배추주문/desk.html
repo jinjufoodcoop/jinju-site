@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>절임배추 주문 취합 (담당자)</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E83028; --red-deep:#C0221B; --orange:#F0A800; --green:#A8B048; --teal:#00A8A8; --teal-deep:#00706F;
+  --ink:#2B2721; --muted:#6B6358; --bg:#FBF7EF; --panel:#FFFFFF; --soft:#F4EDDF; --line:rgba(43,39,33,.14);
+  --ok-bg:#E3F3EF; --no-bg:#FFF1D6; --x-bg:#EEE9E1;
+  --sans:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--sans);word-break:keep-all}
+.stripe{display:flex;height:5px}.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:var(--orange)}
+.stripe i:nth-child(3){background:var(--green)}.stripe i:nth-child(4){background:var(--teal)}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+h1{font-size:22px;margin:4px 0 2px}
+.sub{color:var(--muted);margin:0 0 14px}
+button,input,select{font:inherit}
+.btn{border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 14px;font-weight:600;cursor:pointer;min-height:40px}
+.btn.dark{background:var(--ink);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+input[type=password],input[type=search]{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;min-height:42px;background:var(--panel);color:var(--ink);width:100%}
+
+/* 로그인 */
+.login{max-width:380px;margin:40px auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:12px}
+.err{color:var(--red-deep);font-weight:600;min-height:1.2em;margin:0}
+
+/* 요약 */
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.tools .grow{flex:1 1 200px;min-width:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat small{display:block;color:var(--muted);font-size:13px}
+.stat b{font-size:22px;font-variant-numeric:tabular-nums}
+.stat .s2{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+h2{font-size:17px;margin:22px 0 8px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+h2 small{font-weight:400;color:var(--muted);font-size:13px}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{background:var(--soft);font-weight:600;font-size:13px}
+th:first-child,td:first-child{text-align:left}
+tr.total td{font-weight:700;background:var(--soft)}
+td.z{color:#C9C1B4}
+
+/* 필터 */
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--panel);padding:8px 12px;font-weight:600;cursor:pointer;min-height:40px;color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+
+/* 주문 카드 */
+.list{display:grid;gap:10px}
+.ord{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--orange);border-radius:12px;padding:12px 14px;display:grid;gap:6px}
+.ord.paid{border-left-color:var(--teal-deep)}
+.ord.canceled{border-left-color:#B5ADA0;opacity:.62}
+.ord .hd{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.ord .no{font-weight:700;font-size:17px}
+.ord .who{font-weight:700;font-size:17px}
+.ord .t{color:var(--muted);font-size:13px}
+.pill{font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px}
+.pill.no{background:var(--no-bg);color:#8A5A00}
+.pill.ok{background:var(--ok-bg);color:var(--teal-deep)}
+.pill.x{background:var(--x-bg);color:var(--muted)}
+.ord .items{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--soft);border-radius:8px;padding:3px 9px;font-weight:600;font-size:14px}
+.ord .line{color:var(--ink);font-size:14px;overflow-wrap:anywhere}
+.ord .line span{color:var(--muted)}
+.ord .ft{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:2px}
+.ord .amt{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.ord .acts{display:flex;gap:8px}
+.ord .acts .btn{min-height:38px;padding:6px 12px}
+.ord .acts .on{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff}
+.ord .acts .xon{background:#6B6358;border-color:#6B6358;color:#fff}
+.empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:24px;text-align:center;color:var(--muted)}
+.foot{margin-top:20px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="wrap">
+  <h1>2026 절임배추 4일 특별 주문 · 취합</h1>
+  <p class="sub">담당자 전용 화면입니다. 주문자 개인정보가 있으니 링크와 비밀번호를 밖에 알리지 마세요.</p>
+
+  <form class="login" id="login">
+    <label for="pw"><b>비밀번호</b></label>
+    <input type="password" id="pw" autocomplete="current-password">
+    <button class="btn dark" id="loginBtn">들어가기</button>
+    <p class="err" id="loginErr" role="alert"></p>
+  </form>
+
+  <div id="app" hidden>
+    <div class="tools">
+      <input type="search" id="q" class="grow" placeholder="이름·전화번호·주문번호로 찾기">
+      <div class="seg" role="group" aria-label="입금 상태로 거르기">
+        <button type="button" data-f="all" aria-pressed="true">전체</button>
+        <button type="button" data-f="no" aria-pressed="false">입금 전</button>
+        <button type="button" data-f="ok" aria-pressed="false">입금 완료</button>
+      </div>
+      <button type="button" class="btn" id="reload">새로고침</button>
+      <button type="button" class="btn" id="csv">엑셀로 내려받기</button>
+      <button type="button" class="btn" id="logout">나가기</button>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <h2>발송일별 상자 수 <small id="dayNote">취소 뺀 전체 주문 기준</small></h2>
+    <div class="tbl"><table id="days"></table></div>
+
+    <h2>주문 목록 <small id="listNote"></small></h2>
+    <div class="list" id="list"></div>
+    <p class="foot" id="foot"></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+  var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+  var KEY = 'jinju.kj.desk';
+  var P = { baechu:{name:'절임배추', price:43200}, sok:{name:'김치속', price:87300}, kit:{name:'김장밀키트', price:65700} };
+  var DOW = ['일','월','화','수','목','금','토'];
+
+  var pass = '', orders = [], filter = 'all', loadedAt = null;
+  function $(id){ return document.getElementById(id); }
+  function won(n){ return (n||0).toLocaleString('ko-KR') + '원'; }
+  function md(d){ if (!d) return ''; var x = new Date(d + 'T00:00:00+09:00'); return (x.getMonth()+1) + '/' + String(x.getDate()).padStart(2,'0') + '(' + DOW[x.getDay()] + ')'; }
+  function arrive(d){ var x = new Date(d + 'T00:00:00+09:00'); x.setDate(x.getDate()+1); return (x.getMonth()+1) + '/' + String(x.getDate()).padStart(2,'0') + '(' + DOW[x.getDay()] + ')'; }
+  function when(ts){ var x = new Date(ts); return (x.getMonth()+1) + '/' + x.getDate() + ' ' + String(x.getHours()).padStart(2,'0') + ':' + String(x.getMinutes()).padStart(2,'0'); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function rpc(name, body){
+    return fetch(SB_URL + '/rpc/' + name, {
+      method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    }).then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+  }
+
+  /* ── 들어가기 ── */
+  function load(){
+    return rpc('kimjang_desk_list', { p_pass: pass }).then(function(r){
+      if (r.error) throw { msg: r.error };
+      orders = r.orders || []; loadedAt = new Date();
+      render();
+    });
+  }
+  $('login').addEventListener('submit', function(e){
+    e.preventDefault();
+    pass = $('pw').value; $('loginErr').textContent = ''; $('loginBtn').disabled = true;
+    load().then(function(){
+      try { sessionStorage.setItem(KEY, pass); } catch(err){}
+      $('login').hidden = true; $('app').hidden = false;
+    }).catch(function(err){
+      $('loginErr').textContent = err && err.msg ? err.msg : '불러오지 못했습니다. 통신 상태를 확인해 주세요.';
+    }).then(function(){ $('loginBtn').disabled = false; });
+  });
+  $('logout').addEventListener('click', function(){
+    try { sessionStorage.removeItem(KEY); } catch(err){}
+    pass = ''; orders = []; $('pw').value = '';
+    $('app').hidden = true; $('login').hidden = false;
+  });
+  try { var saved = sessionStorage.getItem(KEY); if (saved) { $('pw').value = saved; $('loginBtn').click(); } } catch(err){}
+
+  $('reload').addEventListener('click', function(){
+    var b = this; b.disabled = true;
+    load().catch(function(err){ alertBar(err && err.msg || '불러오지 못했습니다.'); }).then(function(){ b.disabled = false; });
+  });
+  setInterval(function(){ if (pass && !$('app').hidden && !document.hidden) load().catch(function(){}); }, 60000);
+  function alertBar(t){ $('foot').textContent = t; }
+
+  /* ── 거르기 ── */
+  document.querySelectorAll('.seg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      filter = b.getAttribute('data-f');
+      document.querySelectorAll('.seg button').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+      render();
+    });
+  });
+  $('q').addEventListener('input', render);
+
+  function visible(){
+    var q = $('q').value.trim().replace(/-/g,'');
+    return orders.filter(function(o){
+      if (filter === 'no' && (o.paid || o.canceled)) return false;
+      if (filter === 'ok' && (!o.paid || o.canceled)) return false;
+      if (!q) return true;
+      var hay = [o.id, o.orderer_name, o.recipient_name, o.orderer_phone, o.recipient_phone].join(' ').replace(/-/g,'');
+      return hay.indexOf(q) >= 0;
+    });
+  }
+
+  /* ── 그리기 ── */
+  function render(){
+    var live = orders.filter(function(o){ return !o.canceled; });
+    var paid = live.filter(function(o){ return o.paid; });
+    var unpaid = live.filter(function(o){ return !o.paid; });
+    function sum(a, f){ return a.reduce(function(s,o){ return s + (o[f]||0); }, 0); }
+
+    var stats = $('stats'); stats.innerHTML = '';
+    [
+      ['주문', live.length + '건', '취소 ' + (orders.length - live.length) + '건 제외'],
+      ['입금 완료', paid.length + '건', won(sum(paid,'total_amount'))],
+      ['입금 전', unpaid.length + '건', won(sum(unpaid,'total_amount'))],
+      ['절임배추', sum(live,'qty_baechu') + '상자', '입금 ' + sum(paid,'qty_baechu')],
+      ['김치속', sum(live,'qty_sok') + '상자', '입금 ' + sum(paid,'qty_sok')],
+      ['김장밀키트', sum(live,'qty_kit') + '상자', '입금 ' + sum(paid,'qty_kit')]
+    ].forEach(function(s){
+      var d = el('div','stat'); d.appendChild(el('small',null,s[0])); d.appendChild(el('b',null,s[1])); d.appendChild(el('div','s2',s[2])); stats.appendChild(d);
+    });
+
+    // 발송일별
+    var base = filter === 'ok' ? paid : filter === 'no' ? unpaid : live;
+    $('dayNote').textContent = filter === 'ok' ? '입금 완료 주문 기준' : filter === 'no' ? '입금 전 주문 기준' : '취소 뺀 전체 주문 기준';
+    var days = {};
+    base.forEach(function(o){
+      ['baechu','sok','kit'].forEach(function(k){
+        var q = o['qty_' + k], d = o['date_' + k];
+        if (!q || !d) return;
+        days[d] = days[d] || { baechu:0, sok:0, kit:0 };
+        days[d][k] += q;
+      });
+    });
+    var t = $('days'); t.innerHTML = '';
+    var hr = t.insertRow(); ['발송일 → 도착','절임배추','김치속','김장밀키트','합계'].forEach(function(h){ var th = el('th',null,h); hr.appendChild(th); });
+    var keys = Object.keys(days).sort(), tot = { baechu:0, sok:0, kit:0 };
+    if (!keys.length) { var r0 = t.insertRow(); var c0 = r0.insertCell(); c0.colSpan = 5; c0.textContent = '아직 없습니다'; c0.style.textAlign = 'center'; }
+    keys.forEach(function(d){
+      var r = t.insertRow(), v = days[d];
+      r.insertCell().textContent = md(d) + ' → ' + arrive(d);
+      ['baechu','sok','kit'].forEach(function(k){ var c = r.insertCell(); c.textContent = v[k]; if (!v[k]) c.className = 'z'; tot[k] += v[k]; });
+      r.insertCell().textContent = v.baechu + v.sok + v.kit;
+    });
+    if (keys.length) {
+      var rt = t.insertRow(); rt.className = 'total';
+      rt.insertCell().textContent = '합계';
+      ['baechu','sok','kit'].forEach(function(k){ rt.insertCell().textContent = tot[k]; });
+      rt.insertCell().textContent = tot.baechu + tot.sok + tot.kit;
+    }
+
+    // 목록
+    var vis = visible(), list = $('list'); list.innerHTML = '';
+    $('listNote').textContent = vis.length + '건 · 최근 주문이 위';
+    if (!vis.length) list.appendChild(el('div','empty', orders.length ? '찾는 주문이 없습니다.' : '아직 들어온 주문이 없습니다. 주문이 들어오면 여기에 한 건씩 나옵니다.'));
+    vis.forEach(function(o){ list.appendChild(card(o)); });
+    $('foot').textContent = loadedAt ? '불러온 시각 ' + when(loadedAt) + ' · 1분마다 저절로 새로 불러옵니다' : '';
+  }
+
+  function card(o){
+    var c = el('article', 'ord' + (o.canceled ? ' canceled' : o.paid ? ' paid' : ''));
+    var hd = el('div','hd');
+    hd.appendChild(el('span','no','#' + o.id));
+    hd.appendChild(el('span','who',o.orderer_name));
+    hd.appendChild(el('span','t',o.orderer_phone));
+    hd.appendChild(el('span','pill ' + (o.canceled ? 'x' : o.paid ? 'ok' : 'no'), o.canceled ? '취소' : o.paid ? '입금 완료' : '입금 전'));
+    hd.appendChild(el('span','t','주문 ' + when(o.created_at)));
+    c.appendChild(hd);
+
+    var it = el('div','items');
+    ['baechu','sok','kit'].forEach(function(k){
+      if (o['qty_' + k]) it.appendChild(el('span','chip', P[k].name + ' ' + o['qty_' + k] + ' · ' + md(o['date_' + k]) + ' 발송'));
+    });
+    c.appendChild(it);
+
+    var to = el('div','line'); to.appendChild(el('span',null,'받는 분 '));
+    to.appendChild(document.createTextNode(o.recipient_name + ' ' + o.recipient_phone));
+    c.appendChild(to);
+    var ad = el('div','line'); ad.appendChild(el('span',null,'주소 '));
+    ad.appendChild(document.createTextNode((o.zipcode ? '(' + o.zipcode + ') ' : '') + o.address + (o.address_detail ? ' ' + o.address_detail : '')));
+    c.appendChild(ad);
+    if (o.memo) { var m = el('div','line'); m.appendChild(el('span',null,'요청 ')); m.appendChild(document.createTextNode(o.memo)); c.appendChild(m); }
+
+    var ft = el('div','ft');
+    ft.appendChild(el('span','amt', won(o.total_amount)));
+    var acts = el('div','acts');
+    var bp = el('button','btn' + (o.paid ? ' on' : ''), o.paid ? '✓ 입금 확인됨' : '입금 확인');
+    bp.type = 'button'; bp.setAttribute('aria-pressed', String(!!o.paid));
+    bp.addEventListener('click', function(){ mark(o, 'paid', !o.paid, bp); });
+    var bx = el('button','btn' + (o.canceled ? ' xon' : ''), o.canceled ? '취소 풀기' : '취소');
+    bx.type = 'button';
+    bx.addEventListener('click', function(){
+      if (!o.canceled && bx.getAttribute('data-sure') !== '1') { bx.setAttribute('data-sure','1'); bx.textContent = '정말 취소?'; setTimeout(function(){ if (bx.isConnected && !o.canceled) { bx.removeAttribute('data-sure'); bx.textContent = '취소'; } }, 3000); return; }
+      mark(o, 'canceled', !o.canceled, bx);
+    });
+    acts.appendChild(bp); acts.appendChild(bx);
+    ft.appendChild(acts);
+    c.appendChild(ft);
+    return c;
+  }
+
+  function mark(o, field, value, btn){
+    btn.disabled = true;
+    rpc('kimjang_desk_mark', { p_pass: pass, p_id: o.id, p_field: field, p_value: value })
+      .then(function(r){
+        if (r.error) throw { msg: r.error };
+        o[field] = value; render();
+      })
+      .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
+  }
+
+  /* ── 엑셀(CSV) 내려받기 ── */
+  $('csv').addEventListener('click', function(){
+    var head = ['주문번호','주문시각','상태','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
+                '절임배추','절임배추발송일','김치속','김치속발송일','김장밀키트','밀키트발송일','금액','요청사항'];
+    var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
+      return [o.id, when(o.created_at), o.canceled ? '취소' : o.paid ? '입금완료' : '입금전',
+        o.orderer_name, o.orderer_phone, o.recipient_name, o.recipient_phone, o.zipcode || '', o.address, o.address_detail || '',
+        o.qty_baechu, o.date_baechu || '', o.qty_sok, o.date_sok || '', o.qty_kit, o.date_kit || '', o.total_amount, o.memo || ''];
+    });
+    var csv = [head].concat(rows).map(function(r){
+      return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
+    }).join('\r\n');
+    var blob = new Blob(['﻿' + csv], { type:'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    var d = new Date();
+    a.href = URL.createObjectURL(blob);
+    a.download = '2026절임배추_특별주문_' + (d.getMonth()+1) + '월' + d.getDate() + '일' + String(d.getHours()).padStart(2,'0') + '시.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  });
+})();
+</script>
+</body>
+</html>
