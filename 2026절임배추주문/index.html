@@ -327,7 +327,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
       return '<option value="' + d[0] + '">' + d[1] + ' 발송 → ' + d[2] + ' 도착</option>';
     }).join('');
     el.innerHTML =
-      '<img src="' + it.img + '" alt="' + it.name + '" width="104" height="104" loading="lazy">' +
+      '<img src="' + it.img + '" alt="' + it.name + '" width="104" height="104">' +
       '<div><div class="name">' + it.name + '</div><div class="spec">' + it.spec + '</div>' +
       '<div class="price"><s>' + won(it.list) + '</s><span class="off">10%</span><strong>' + won(it.price) + '</strong></div></div>' +
       '<div class="controls">' +
