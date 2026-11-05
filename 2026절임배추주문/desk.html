@@ -72,6 +72,7 @@ td.z{color:#C9C1B4}
 .pill.no{background:var(--no-bg);color:#8A5A00}
 .pill.ok{background:var(--ok-bg);color:var(--teal-deep)}
 .pill.x{background:var(--x-bg);color:var(--muted)}
+.pill.pick{background:#FDE3E1;color:var(--red-deep);font-size:13px}
 .ord .items{display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:var(--soft);border-radius:8px;padding:3px 9px;font-weight:600;font-size:14px}
 .ord .line{color:var(--ink);font-size:14px;overflow-wrap:anywhere}
@@ -138,6 +139,8 @@ td.z{color:#C9C1B4}
   function md(d){ if (!d) return ''; var x = new Date(d + 'T00:00:00+09:00'); return (x.getMonth()+1) + '/' + String(x.getDate()).padStart(2,'0') + '(' + DOW[x.getDay()] + ')'; }
   function arrive(d){ var x = new Date(d + 'T00:00:00+09:00'); x.setDate(x.getDate()+1); return (x.getMonth()+1) + '/' + String(x.getDate()).padStart(2,'0') + '(' + DOW[x.getDay()] + ')'; }
   function when(ts){ var x = new Date(ts); return (x.getMonth()+1) + '/' + x.getDate() + ' ' + String(x.getHours()).padStart(2,'0') + ':' + String(x.getMinutes()).padStart(2,'0'); }
+  // 주문 페이지는 매장 수령이면 주소 칸에 「매장수령 · ○○점」을 적어 보낸다
+  function storeOf(o){ var m = /^매장수령\s*·\s*(.+)$/.exec(o.address || ''); return m ? m[1] : ''; }
   function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
   function rpc(name, body){
@@ -215,7 +218,9 @@ td.z{color:#C9C1B4}
       ['입금 전', unpaid.length + '건', won(sum(unpaid,'total_amount'))],
       ['절임배추', sum(live,'qty_baechu') + '상자', '입금 ' + sum(paid,'qty_baechu')],
       ['김치속', sum(live,'qty_sok') + '상자', '입금 ' + sum(paid,'qty_sok')],
-      ['김장밀키트', sum(live,'qty_kit') + '상자', '입금 ' + sum(paid,'qty_kit')]
+      ['김장밀키트', sum(live,'qty_kit') + '상자', '입금 ' + sum(paid,'qty_kit')],
+      ['매장 수령', live.filter(storeOf).length + '건', ['금산점','초전점','진양호점'].map(function(s){
+        return s.replace('점','') + ' ' + live.filter(function(o){ return storeOf(o) === s; }).length; }).join(' · ')]
     ].forEach(function(s){
       var d = el('div','stat'); d.appendChild(el('small',null,s[0])); d.appendChild(el('b',null,s[1])); d.appendChild(el('div','s2',s[2])); stats.appendChild(d);
     });
@@ -276,9 +281,15 @@ td.z{color:#C9C1B4}
     var to = el('div','line'); to.appendChild(el('span',null,'받는 분 '));
     to.appendChild(document.createTextNode(o.recipient_name + ' ' + o.recipient_phone));
     c.appendChild(to);
-    var ad = el('div','line'); ad.appendChild(el('span',null,'주소 '));
-    ad.appendChild(document.createTextNode((o.zipcode ? '(' + o.zipcode + ') ' : '') + o.address + (o.address_detail ? ' ' + o.address_detail : '')));
-    c.appendChild(ad);
+    if (storeOf(o)) {
+      var sp = el('div','line'); sp.appendChild(el('span',null,'받는 곳 '));
+      sp.appendChild(el('span','pill pick', storeOf(o) + ' 직접 수령'));
+      c.appendChild(sp);
+    } else {
+      var ad = el('div','line'); ad.appendChild(el('span',null,'주소 '));
+      ad.appendChild(document.createTextNode((o.zipcode ? '(' + o.zipcode + ') ' : '') + o.address + (o.address_detail ? ' ' + o.address_detail : '')));
+      c.appendChild(ad);
+    }
     if (o.memo) { var m = el('div','line'); m.appendChild(el('span',null,'요청 ')); m.appendChild(document.createTextNode(o.memo)); c.appendChild(m); }
 
     var ft = el('div','ft');
@@ -311,10 +322,10 @@ td.z{color:#C9C1B4}
 
   /* ── 엑셀(CSV) 내려받기 ── */
   $('csv').addEventListener('click', function(){
-    var head = ['주문번호','주문시각','상태','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
+    var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
                 '절임배추','절임배추발송일','김치속','김치속발송일','김장밀키트','밀키트발송일','금액','요청사항'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
-      return [o.id, when(o.created_at), o.canceled ? '취소' : o.paid ? '입금완료' : '입금전',
+      return [o.id, when(o.created_at), o.canceled ? '취소' : o.paid ? '입금완료' : '입금전', storeOf(o) ? storeOf(o) + ' 수령' : '택배',
         o.orderer_name, o.orderer_phone, o.recipient_name, o.recipient_phone, o.zipcode || '', o.address, o.address_detail || '',
         o.qty_baechu, o.date_baechu || '', o.qty_sok, o.date_sok || '', o.qty_kit, o.date_kit || '', o.total_amount, o.memo || ''];
     });

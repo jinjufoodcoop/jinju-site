@@ -96,6 +96,12 @@ label.l i{color:var(--red);font-style:normal}
 .btn2{border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);font:600 16px var(--sans);border-radius:12px;padding:0 14px;min-height:48px;cursor:pointer;white-space:nowrap}
 .check{display:flex;gap:10px;align-items:flex-start;font-weight:500;cursor:pointer}
 .check input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:var(--teal-deep)}
+.ways{display:grid;gap:8px}
+.way{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:56px}
+.way input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--teal-deep)}
+.way span{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+.way small{color:var(--muted);font-size:14px}
+.way:has(input:checked){border-color:var(--teal);box-shadow:0 0 0 1px var(--teal);background:#F2FAF9}
 
 /* 입금 안내 */
 .pay{background:#FFF4D6;border:1.5px solid var(--orange);border-radius:14px;padding:16px}
@@ -176,6 +182,24 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
     </section>
 
     <section>
+      <h2>받는 방법</h2>
+      <div class="card">
+        <div class="ways" role="radiogroup" aria-label="받는 방법">
+          <label class="way"><input type="radio" name="way" value="ship" checked> <span><b>택배로 받기</b><small>택배비 무료</small></span></label>
+          <label class="way"><input type="radio" name="way" value="store"> <span><b>매장에서 직접 받기</b><small>금산점 · 초전점 · 진양호점</small></span></label>
+        </div>
+        <div id="storeBox" hidden>
+          <label class="l" style="display:block;margin:14px 0 8px">받으실 매장 <i>*</i></label>
+          <div class="ways" id="stores" role="radiogroup" aria-label="받으실 매장">
+            <label class="way"><input type="radio" name="store" value="금산점"> <span><b>금산점</b><small>055-762-1242</small></span></label>
+            <label class="way"><input type="radio" name="store" value="초전점"> <span><b>초전점</b><small>055-755-5888</small></span></label>
+            <label class="way"><input type="radio" name="store" value="진양호점"> <span><b>진양호점</b><small>055-746-1240</small></span></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
       <h2>받으시는 분</h2>
       <div class="card">
         <div class="field">
@@ -191,7 +215,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
             <input type="tel" id="rPhone" inputmode="numeric" placeholder="010-0000-0000" maxlength="13">
           </div>
         </div>
-        <div class="field">
+        <div class="field" id="addrBox">
           <label class="l" for="addr">받는 주소 <i>*</i></label>
           <div class="row">
             <input type="text" id="zip" placeholder="우편번호" readonly aria-label="우편번호">
@@ -201,7 +225,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
           <input type="text" id="addr2" placeholder="나머지 주소 (동·호수)" maxlength="100" aria-label="나머지 주소">
         </div>
         <div class="field">
-          <label class="l" for="memo">배송 요청사항</label>
+          <label class="l" for="memo" id="memoL">배송 요청사항</label>
           <textarea id="memo" maxlength="300" placeholder="예) 문 앞에 두어 주세요"></textarea>
         </div>
       </div>
@@ -233,7 +257,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
       <h2>개인정보 동의</h2>
       <div class="card">
         <div class="terms">모으는 것: 주문자·받는 분 이름, 휴대폰 번호, 주소<br>
-        쓰는 곳: 주문 확인, 입금 안내 문자, 택배 발송<br>
+        쓰는 곳: 주문 확인, 입금 안내 문자, 택배 발송 또는 매장 수령 확인<br>
         보관 기간: 발송 및 정산을 마친 뒤 지체 없이 파기</div>
         <label class="check"><input type="checkbox" id="agree"> 위 내용에 동의합니다 <span style="color:var(--red)">*</span></label>
       </div>
@@ -361,12 +385,29 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
       $('item-' + it.key).classList.toggle('on', q > 0);
     });
     $('sum').textContent = won(total());
-    $('sumInfo').textContent = cnt ? '모두 ' + cnt + '상자 · 택배비 무료' : '상품을 골라 주세요 · 택배비 무료';
+    var tail = document.querySelector('input[name=way][value=store]:checked') ? '매장 수령' : '택배비 무료';
+    $('sumInfo').textContent = cnt ? '모두 ' + cnt + '상자 · ' + tail : '상품을 골라 주세요 · ' + tail;
   }
   render();
 
   /* ── 받는 분 ── */
   $('same').addEventListener('change', function(){ $('rBox').hidden = this.checked; });
+
+  /* ── 받는 방법: 택배 / 매장 직접 수령 ──
+     서버 표는 그대로 두고, 매장 수령이면 주소 칸에 「매장수령 · ○○점」을 적어 보낸다.
+     담당자 화면(desk.html)은 이 글자로 매장 수령 주문을 알아본다. */
+  function way(){ var r = document.querySelector('input[name=way]:checked'); return r ? r.value : 'ship'; }
+  function store(){ var r = document.querySelector('input[name=store]:checked'); return r ? r.value : ''; }
+  function applyWay(){
+    var pick = way() === 'store';
+    $('storeBox').hidden = !pick;
+    $('addrBox').hidden = pick;
+    $('memoL').textContent = pick ? '요청사항' : '배송 요청사항';
+    $('memo').placeholder = pick ? '예) 오후에 찾으러 가겠습니다' : '예) 문 앞에 두어 주세요';
+    render(); say('');
+  }
+  document.querySelectorAll('input[name=way]').forEach(function(r){ r.addEventListener('change', applyWay); });
+  document.querySelectorAll('input[name=store]').forEach(function(r){ r.addEventListener('change', function(){ $('stores').classList.remove('need'); say(''); }); });
 
   /* ── 전화번호 자동 줄표 ── */
   function fmtPhone(v){
@@ -414,7 +455,9 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
       if (!$('rName').value.trim()) return need($('rName'), '받는 분 이름을 적어 주세요.');
       if (!phoneOk($('rPhone').value)) return need($('rPhone'), '받는 분 휴대폰 번호를 확인해 주세요.');
     }
-    if ($('addr').value.trim().length < 5) return need($('addr'), '받는 주소를 적어 주세요.');
+    if (way() === 'store') {
+      if (!store()) return need($('stores'), '받으실 매장을 골라 주세요.');
+    } else if ($('addr').value.trim().length < 5) return need($('addr'), '받는 주소를 적어 주세요.');
     if (!$('agree').checked) return need($('agree'), '개인정보 동의에 체크해 주세요.');
     return true;
   }
@@ -426,15 +469,15 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
     say('');
     if (!check()) return;
 
-    var same = $('same').checked;
+    var same = $('same').checked, pick = way() === 'store';
     var body = {
       p_orderer_name: $('oName').value.trim(),
       p_orderer_phone: $('oPhone').value.trim(),
       p_recipient_name: same ? $('oName').value.trim() : $('rName').value.trim(),
       p_recipient_phone: same ? $('oPhone').value.trim() : $('rPhone').value.trim(),
-      p_zipcode: $('zip').value.trim(),
-      p_address: $('addr').value.trim(),
-      p_address_detail: $('addr2').value.trim(),
+      p_zipcode: pick ? '' : $('zip').value.trim(),
+      p_address: pick ? '매장수령 · ' + store() : $('addr').value.trim(),
+      p_address_detail: pick ? '' : $('addr2').value.trim(),
       p_qty_baechu: qty.baechu, p_date_baechu: $('d-baechu').value || null,
       p_qty_sok: qty.sok,       p_date_sok: $('d-sok').value || null,
       p_qty_kit: qty.kit,       p_date_kit: $('d-kit').value || null,
@@ -472,7 +515,8 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
       var d = it.dates.filter(function(x){ return x[0] === b['p_date_' + it.key]; })[0];
       addRow(it.name + ' ' + qty[it.key] + '상자', d ? d[1] + ' 발송' : '');
     });
-    addRow('입금하실 금액 (택배비 무료)', won(r.total));
+    addRow('받는 곳', /^매장수령/.test(b.p_address) ? b.p_address.replace('매장수령 · ', '') + ' 직접 수령' : '택배');
+    addRow('입금하실 금액' + (/^매장수령/.test(b.p_address) ? '' : ' (택배비 무료)'), won(r.total));
     $('form').hidden = true; $('bar').hidden = true; $('left').hidden = true;
     $('done').hidden = false;
     document.body.style.paddingBottom = '0';
