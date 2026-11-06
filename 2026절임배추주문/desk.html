@@ -84,6 +84,19 @@ td.z{color:#C9C1B4}
 .ord .acts .btn{min-height:38px;padding:6px 12px}
 .ord .acts .on{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff}
 .ord .acts .xon{background:#6B6358;border-color:#6B6358;color:#fff}
+/* 수령일 변경 */
+.chip.chg{background:#FDE3E1;color:var(--red-deep)}
+.chip s{color:var(--muted);font-weight:400}
+.chgbox{background:var(--soft);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.chgbox .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chgbox .row b{min-width:76px}
+.chgbox .orig{color:var(--muted);font-size:13px}
+.chgbox select{border:1.5px solid var(--line);border-radius:8px;padding:6px 8px;min-height:38px;background:var(--panel);color:var(--ink);max-width:100%}
+.chgbox .addrpart,.chgbox .shipbox{display:grid;gap:8px}
+.chgbox .addrpart{border-top:1px dashed var(--line);padding-top:10px}
+.chgbox input[type=text]{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;min-height:38px;background:var(--panel);color:var(--ink);width:100%;min-width:0}
+.chgbox .row input[type=text]{width:auto;flex:0 1 110px}
+.chgbox .note{color:var(--muted);font-size:13px;margin:0}
 .empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:24px;text-align:center;color:var(--muted)}
 .foot{margin-top:20px;color:var(--muted);font-size:13px}
 </style>
@@ -133,6 +146,14 @@ td.z{color:#C9C1B4}
   var KEY = 'jinju.kj.desk';
   var P = { baechu:{name:'절임배추', price:43200}, sok:{name:'김치속', price:87300}, kit:{name:'김장밀키트', price:65700} };
   var DOW = ['일','월','화','수','목','금','토'];
+  // 고를 수 있는 발송일 (주문 페이지·서버와 같은 표). 김장밀키트는 12/15~18 발송만
+  var SHIP = ['2026-11-17','2026-11-18','2026-11-19','2026-11-20','2026-11-24','2026-11-25','2026-11-26','2026-11-27',
+              '2026-12-01','2026-12-02','2026-12-03','2026-12-04','2026-12-08','2026-12-09','2026-12-10','2026-12-11',
+              '2026-12-15','2026-12-16','2026-12-17','2026-12-18'];
+  var SHIP_KIT = SHIP.filter(function(d){ return d >= '2026-12-15'; });
+  // 실제로 보낼 날 — 바꾼 날짜가 있으면 그것, 없으면 주문하신 분이 고른 날짜
+  function eff(o, k){ return o['chg_date_' + k] || o['date_' + k]; }
+  function changed(o){ return ['baechu','sok','kit'].some(function(k){ return o['qty_' + k] && o['chg_date_' + k]; }); }
 
   var pass = '', orders = [], filter = 'all', loadedAt = null;
   function $(id){ return document.getElementById(id); }
@@ -141,7 +162,13 @@ td.z{color:#C9C1B4}
   function arrive(d){ var x = new Date(d + 'T00:00:00+09:00'); x.setDate(x.getDate()+1); return (x.getMonth()+1) + '/' + String(x.getDate()).padStart(2,'0') + '(' + DOW[x.getDay()] + ')'; }
   function when(ts){ var x = new Date(ts); return (x.getMonth()+1) + '/' + x.getDate() + ' ' + String(x.getHours()).padStart(2,'0') + ':' + String(x.getMinutes()).padStart(2,'0'); }
   // 주문 페이지는 매장 수령이면 주소 칸에 「매장수령 · ○○점」을 적어 보낸다
-  function storeOf(o){ var m = /^매장수령\s*·\s*(.+)$/.exec(o.address || ''); return m ? m[1] : ''; }
+  function storeIn(a){ var m = /^매장수령\s*·\s*(.+)$/.exec(a || ''); return m ? m[1] : ''; }
+  // 실제로 보낼 곳 — 담당자가 바꾼 주소가 있으면 그것, 없으면 주문하신 분이 적은 주소
+  function addrOf(o){ return o.chg_address ? { zip:o.chg_zipcode, address:o.chg_address, detail:o.chg_address_detail }
+                                           : { zip:o.zipcode, address:o.address, detail:o.address_detail }; }
+  function storeOf(o){ return storeIn(addrOf(o).address); }
+  function addrText(a){ return storeIn(a.address) ? storeIn(a.address) + ' 직접 수령' : (a.zip ? '(' + a.zip + ') ' : '') + a.address + (a.detail ? ' ' + a.detail : ''); }
+  var STORES = ['금산점','초전점','진양호점'];
   // 현금영수증은 요청사항 맨 앞에 「[현금영수증·개인 010-...]」 으로 붙어 온다 → [종류, 번호, 나머지 요청사항]
   function rcOf(o){ var m = /^\[현금영수증·(\S+) ([^\]]+)\]\s*/.exec(o.memo || ''); return m ? [m[1], m[2], (o.memo || '').slice(m[0].length)] : ['', '', o.memo || '']; }
   function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -183,7 +210,8 @@ td.z{color:#C9C1B4}
     var b = this; b.disabled = true;
     load().catch(function(err){ alertBar(err && err.msg || '불러오지 못했습니다.'); }).then(function(){ b.disabled = false; });
   });
-  setInterval(function(){ if (pass && !$('app').hidden && !document.hidden) load().catch(function(){}); }, 60000);
+  // 변경 칸을 열어 두고 적는 중이면 저절로 새로 불러오지 않는다 (적던 주소가 지워지지 않게)
+  setInterval(function(){ if (pass && !$('app').hidden && !document.hidden && !document.querySelector('.chgbox')) load().catch(function(){}); }, 60000);
   function alertBar(t){ $('foot').textContent = t; }
 
   /* ── 거르기 ── */
@@ -224,18 +252,20 @@ td.z{color:#C9C1B4}
       ['김장밀키트', sum(live,'qty_kit') + '상자', '입금 ' + sum(paid,'qty_kit')],
       ['매장 수령', live.filter(storeOf).length + '건', ['금산점','초전점','진양호점'].map(function(s){
         return s.replace('점','') + ' ' + live.filter(function(o){ return storeOf(o) === s; }).length; }).join(' · ')],
-      ['현금영수증', live.filter(function(o){ return rcOf(o)[0]; }).length + '건', '개인 ' + live.filter(function(o){ return rcOf(o)[0] === '개인'; }).length + ' · 사업자 ' + live.filter(function(o){ return rcOf(o)[0] === '사업자'; }).length]
+      ['현금영수증', live.filter(function(o){ return rcOf(o)[0]; }).length + '건', '개인 ' + live.filter(function(o){ return rcOf(o)[0] === '개인'; }).length + ' · 사업자 ' + live.filter(function(o){ return rcOf(o)[0] === '사업자'; }).length],
+      ['변경 요청 반영', live.filter(function(o){ return changed(o) || o.chg_address; }).length + '건',
+        '수령일 ' + live.filter(changed).length + ' · 받는 곳 ' + live.filter(function(o){ return o.chg_address; }).length]
     ].forEach(function(s){
       var d = el('div','stat'); d.appendChild(el('small',null,s[0])); d.appendChild(el('b',null,s[1])); d.appendChild(el('div','s2',s[2])); stats.appendChild(d);
     });
 
     // 발송일별
     var base = filter === 'ok' ? paid : filter === 'no' ? unpaid : live;
-    $('dayNote').textContent = filter === 'ok' ? '입금 완료 주문 기준' : filter === 'no' ? '입금 전 주문 기준' : '취소 뺀 전체 주문 기준';
+    $('dayNote').textContent = (filter === 'ok' ? '입금 완료 주문 기준' : filter === 'no' ? '입금 전 주문 기준' : '취소 뺀 전체 주문 기준') + ' · 바꾼 수령일 반영';
     var days = {};
     base.forEach(function(o){
       ['baechu','sok','kit'].forEach(function(k){
-        var q = o['qty_' + k], d = o['date_' + k];
+        var q = o['qty_' + k], d = eff(o, k);
         if (!q || !d) return;
         days[d] = days[d] || { baechu:0, sok:0, kit:0 };
         days[d][k] += q;
@@ -278,22 +308,37 @@ td.z{color:#C9C1B4}
 
     var it = el('div','items');
     ['baechu','sok','kit'].forEach(function(k){
-      if (o['qty_' + k]) it.appendChild(el('span','chip', P[k].name + ' ' + o['qty_' + k] + ' · ' + md(o['date_' + k]) + ' 발송'));
+      if (!o['qty_' + k]) return;
+      var cd = o['chg_date_' + k];
+      if (!cd) { it.appendChild(el('span','chip', P[k].name + ' ' + o['qty_' + k] + ' · ' + md(o['date_' + k]) + ' 발송 → ' + arrive(o['date_' + k]) + ' 수령')); return; }
+      // 바꾼 경우: 주문하신 날짜는 줄 그어 남기고, 바꾼 날짜를 함께 보여 준다
+      var ch = el('span','chip chg', P[k].name + ' ' + o['qty_' + k] + ' · ');
+      ch.appendChild(el('s', null, md(o['date_' + k]) + ' 발송'));
+      ch.appendChild(document.createTextNode(' ▶ 변경 ' + md(cd) + ' 발송 → ' + arrive(cd) + ' 수령'));
+      it.appendChild(ch);
     });
     c.appendChild(it);
+    if (o.chg_at && changed(o)) c.appendChild(el('div','t','수령일 바꾼 때 ' + when(o.chg_at)));
 
     var to = el('div','line'); to.appendChild(el('span',null,'받는 분 '));
     to.appendChild(document.createTextNode(o.recipient_name + ' ' + o.recipient_phone));
     c.appendChild(to);
-    if (storeOf(o)) {
-      var sp = el('div','line'); sp.appendChild(el('span',null,'받는 곳 '));
-      sp.appendChild(el('span','pill pick', storeOf(o) + ' 직접 수령'));
-      c.appendChild(sp);
+    var ad = el('div','line');
+    if (o.chg_address) {
+      // 바꾼 경우: 주문하신 주소는 줄 그어 남기고, 바꾼 곳을 함께 보여 준다
+      ad.appendChild(el('span',null,'받는 곳 '));
+      ad.appendChild(el('s', null, addrText({ zip:o.zipcode, address:o.address, detail:o.address_detail })));
+      ad.appendChild(document.createTextNode(' ▶ '));
+      ad.appendChild(el('span', 'pill pick', '변경 ' + addrText(addrOf(o))));
+    } else if (storeOf(o)) {
+      ad.appendChild(el('span',null,'받는 곳 '));
+      ad.appendChild(el('span','pill pick', storeOf(o) + ' 직접 수령'));
     } else {
-      var ad = el('div','line'); ad.appendChild(el('span',null,'주소 '));
-      ad.appendChild(document.createTextNode((o.zipcode ? '(' + o.zipcode + ') ' : '') + o.address + (o.address_detail ? ' ' + o.address_detail : '')));
-      c.appendChild(ad);
+      ad.appendChild(el('span',null,'주소 '));
+      ad.appendChild(document.createTextNode(addrText(addrOf(o))));
     }
+    c.appendChild(ad);
+    if (o.chg_address && o.chg_addr_at) c.appendChild(el('div','t','받는 곳 바꾼 때 ' + when(o.chg_addr_at)));
     var rcv = rcOf(o);
     if (rcv[0]) { var rl = el('div','line'); rl.appendChild(el('span',null,'현금영수증 ')); rl.appendChild(el('span','pill rc', rcv[0] + ' ' + rcv[1])); c.appendChild(rl); }
     if (rcv[2]) { var m = el('div','line'); m.appendChild(el('span',null,'요청 ')); m.appendChild(document.createTextNode(rcv[2])); c.appendChild(m); }
@@ -310,10 +355,152 @@ td.z{color:#C9C1B4}
       if (!o.canceled && bx.getAttribute('data-sure') !== '1') { bx.setAttribute('data-sure','1'); bx.textContent = '정말 취소?'; setTimeout(function(){ if (bx.isConnected && !o.canceled) { bx.removeAttribute('data-sure'); bx.textContent = '취소'; } }, 3000); return; }
       mark(o, 'canceled', !o.canceled, bx);
     });
-    acts.appendChild(bp); acts.appendChild(bx);
+    var bd = el('button','btn','수령일·주소 변경');
+    bd.type = 'button'; bd.setAttribute('aria-expanded','false');
+    bd.addEventListener('click', function(){
+      var open = c.querySelector('.chgbox');
+      if (open) { open.remove(); delete openBox[o.id]; bd.setAttribute('aria-expanded','false'); return; }
+      c.appendChild(chgBox(o)); bd.setAttribute('aria-expanded','true');
+    });
+    acts.appendChild(bd); acts.appendChild(bp); acts.appendChild(bx);
     ft.appendChild(acts);
     c.appendChild(ft);
+    if (openBox[o.id]) c.appendChild(chgBox(o));
     return c;
+  }
+
+  /* ── 수령일 바꾸기 ── */
+  var openBox = {};   // 저장 뒤 다시 그려도 열어 둔 칸이 닫히지 않게
+  function chgBox(o){
+    openBox[o.id] = true;
+    var box = el('div','chgbox');
+    box.appendChild(el('p','note','주문하신 분이 고른 날짜·주소는 그대로 남습니다. 바꾼 것은 따로 적혀, 발송일별 상자 수·매장 수령 수·엑셀에 반영됩니다.'));
+    ['baechu','sok','kit'].forEach(function(k){
+      if (!o['qty_' + k]) return;
+      var row = el('div','row');
+      row.appendChild(el('b', null, P[k].name));
+      row.appendChild(el('span','orig','주문 ' + md(o['date_' + k]) + ' 발송 → ' + arrive(o['date_' + k]) + ' 수령'));
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', P[k].name + ' 바꿀 날짜');
+      (k === 'kit' ? SHIP_KIT : SHIP).forEach(function(d){
+        var op = document.createElement('option'); op.value = d;
+        op.textContent = md(d) + ' 발송 → ' + arrive(d) + ' 수령' + (d === o['date_' + k] ? ' (주문한 날)' : '');
+        if (d === eff(o, k)) op.selected = true;
+        sel.appendChild(op);
+      });
+      row.appendChild(sel);
+      var save = el('button','btn dark','저장'); save.type = 'button';
+      save.addEventListener('click', function(){ setDate(o, k, sel.value === o['date_' + k] ? null : sel.value, save); });
+      row.appendChild(save);
+      if (o['chg_date_' + k]) {
+        var back = el('button','btn','주문한 날로 되돌리기'); back.type = 'button';
+        back.addEventListener('click', function(){ setDate(o, k, null, back); });
+        row.appendChild(back);
+      }
+      box.appendChild(row);
+    });
+    box.appendChild(addrPart(o));
+    var close = el('button','btn','닫기'); close.type = 'button';
+    close.addEventListener('click', function(){ delete openBox[o.id]; render(); });
+    var cr = el('div','row'); cr.appendChild(close); box.appendChild(cr);
+    return box;
+  }
+
+  /* ── 받는 곳(택배 주소 · 매장) 바꾸기 ── */
+  function addrPart(o){
+    var cur = addrOf(o), wrap = el('div','addrpart');
+    var r1 = el('div','row'); r1.appendChild(el('b',null,'받는 곳'));
+    r1.appendChild(el('span','orig','주문 ' + addrText({ zip:o.zipcode, address:o.address, detail:o.address_detail })));
+    wrap.appendChild(r1);
+
+    var r2 = el('div','row');
+    var sel = document.createElement('select'); sel.setAttribute('aria-label','받는 방법');
+    [['ship','택배로 받기']].concat(STORES.map(function(s){ return [s, s + ' 직접 수령']; })).forEach(function(v){
+      var op = document.createElement('option'); op.value = v[0]; op.textContent = v[1]; sel.appendChild(op);
+    });
+    sel.value = storeIn(cur.address) || 'ship';
+    r2.appendChild(sel); wrap.appendChild(r2);
+
+    var ship = el('div','shipbox');
+    var r3 = el('div','row');
+    var zip = document.createElement('input'); zip.type = 'text'; zip.placeholder = '우편번호'; zip.setAttribute('aria-label','우편번호'); zip.size = 7;
+    var find = el('button','btn','주소 찾기'); find.type = 'button';
+    r3.appendChild(zip); r3.appendChild(find); ship.appendChild(r3);
+    var addr = document.createElement('input'); addr.type = 'text'; addr.placeholder = '주소'; addr.setAttribute('aria-label','주소');
+    var det = document.createElement('input'); det.type = 'text'; det.placeholder = '상세주소 (동·호수)'; det.setAttribute('aria-label','상세주소');
+    ship.appendChild(addr); ship.appendChild(det);
+    if (!storeIn(cur.address)) { zip.value = cur.zip || ''; addr.value = cur.address || ''; det.value = cur.detail || ''; }
+    wrap.appendChild(ship);
+    function syncWay(){ ship.hidden = sel.value !== 'ship'; }
+    sel.addEventListener('change', syncWay); syncWay();
+
+    find.addEventListener('click', function(){
+      loadPostcode(function(ok){
+        if (!ok) { alertBar('주소 찾기를 불러오지 못했습니다. 주소를 직접 적어 주세요.'); addr.focus(); return; }
+        new daum.Postcode({ oncomplete: function(r){
+          zip.value = r.zonecode; addr.value = r.roadAddress || r.jibunAddress; det.value = ''; det.focus();
+        }}).open();
+      });
+    });
+
+    var r4 = el('div','row');
+    var save = el('button','btn dark','받는 곳 저장'); save.type = 'button';
+    save.addEventListener('click', function(){
+      if (sel.value === 'ship') {
+        if (addr.value.trim().length < 5) { alertBar('주소를 적어 주세요.'); addr.focus(); return; }
+        setAddr(o, zip.value.trim(), addr.value.trim(), det.value.trim(), save);
+      } else setAddr(o, '', '매장수령 · ' + sel.value, '', save);
+    });
+    r4.appendChild(save);
+    if (o.chg_address) {
+      var back = el('button','btn','주문한 곳으로 되돌리기'); back.type = 'button';
+      back.addEventListener('click', function(){ setAddr(o, null, null, null, back); });
+      r4.appendChild(back);
+    }
+    wrap.appendChild(r4);
+    return wrap;
+  }
+
+  var pcState = 0, pcWait = [];   // 우편번호 찾기(다음 주소) 스크립트는 처음 누를 때만 불러온다
+  function loadPostcode(cb){
+    if (window.daum && daum.Postcode) return cb(true);
+    pcWait.push(cb); if (pcState) return; pcState = 1;
+    var s = document.createElement('script');
+    s.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    s.onload = function(){ pcState = 0; pcWait.splice(0).forEach(function(f){ f(!!(window.daum && daum.Postcode)); }); };
+    s.onerror = function(){ pcState = 0; pcWait.splice(0).forEach(function(f){ f(false); }); };
+    document.head.appendChild(s);
+  }
+
+  function setAddr(o, z, a, d, btn){
+    // 주문하신 곳과 똑같으면 「되돌리기」로 친다
+    if (a && a === o.address && (z || '') === (o.zipcode || '') && (d || '') === (o.address_detail || '')) { z = a = d = null; }
+    btn.disabled = true;
+    rpc('kimjang_desk_set_addr', { p_pass: pass, p_id: o.id, p_zipcode: z, p_address: a, p_address_detail: d })
+      .then(function(r){
+        if (r.error) throw { msg: r.error };
+        o.chg_zipcode = a ? (storeIn(a) ? null : z || null) : null;
+        o.chg_address = a || null;
+        o.chg_address_detail = a ? (storeIn(a) ? null : d || null) : null;
+        o.chg_addr_at = new Date().toISOString();
+        delete openBox[o.id];
+        render();
+        alertBar('#' + o.id + ' ' + o.orderer_name + ' · 받는 곳을 ' + (a ? addrText(addrOf(o)) + '(으)로 바꿨습니다.' : '주문한 곳으로 되돌렸습니다.'));
+      })
+      .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
+  }
+
+  function setDate(o, k, d, btn){
+    btn.disabled = true;
+    rpc('kimjang_desk_set_date', { p_pass: pass, p_id: o.id, p_item: k, p_date: d })
+      .then(function(r){
+        if (r.error) throw { msg: r.error };
+        o['chg_date_' + k] = d; o.chg_at = new Date().toISOString();
+        delete openBox[o.id];
+        render();
+        alertBar('#' + o.id + ' ' + o.orderer_name + ' · ' + P[k].name + ' 수령일을 ' + (d ? md(d) + ' 발송 → ' + arrive(d) + ' 수령으로 바꿨습니다.' : '주문한 날로 되돌렸습니다.'));
+      })
+      .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
   }
 
   function mark(o, field, value, btn){
@@ -329,11 +516,18 @@ td.z{color:#C9C1B4}
   /* ── 엑셀(CSV) 내려받기 ── */
   $('csv').addEventListener('click', function(){
     var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
-                '절임배추','절임배추발송일','김치속','김치속발송일','김장밀키트','밀키트발송일','금액','현금영수증','현금영수증번호','요청사항'];
+                '절임배추','절임배추발송일','절임배추변경발송일','김치속','김치속발송일','김치속변경발송일','김장밀키트','밀키트발송일','밀키트변경발송일',
+                '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
-      return [o.id, when(o.created_at), o.canceled ? '취소' : o.paid ? '입금완료' : '입금전', storeOf(o) ? storeOf(o) + ' 수령' : '택배',
+      var st0 = storeIn(o.address), chgCols = o.chg_address
+        ? [storeOf(o) ? storeOf(o) + ' 수령' : '택배', o.chg_zipcode || '', storeOf(o) ? '' : o.chg_address, o.chg_address_detail || '']
+        : ['', '', '', ''];
+      return [o.id, when(o.created_at), o.canceled ? '취소' : o.paid ? '입금완료' : '입금전', st0 ? st0 + ' 수령' : '택배',
         o.orderer_name, o.orderer_phone, o.recipient_name, o.recipient_phone, o.zipcode || '', o.address, o.address_detail || '',
-        o.qty_baechu, o.date_baechu || '', o.qty_sok, o.date_sok || '', o.qty_kit, o.date_kit || '', o.total_amount].concat(rcOf(o));
+        o.qty_baechu, o.date_baechu || '', o.qty_baechu ? o.chg_date_baechu || '' : '',
+        o.qty_sok, o.date_sok || '', o.qty_sok ? o.chg_date_sok || '' : '',
+        o.qty_kit, o.date_kit || '', o.qty_kit ? o.chg_date_kit || '' : '',
+        o.total_amount].concat(rcOf(o), chgCols);
     });
     var csv = [head].concat(rows).map(function(r){
       return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
