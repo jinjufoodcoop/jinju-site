@@ -135,6 +135,9 @@ label.l i{color:var(--red);font-style:normal}
 .done td:last-child{text-align:right;font-weight:600}
 .closed{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
 .closed h2{justify-content:center}
+.mine{display:block;margin-top:14px;background:var(--panel);border:1.5px solid var(--teal-deep);border-radius:12px;padding:12px 14px;color:var(--ink);text-decoration:none;text-align:left;font-size:16px}
+.mine b{color:var(--teal-deep)}
+.mine small{display:block;color:var(--muted);font-size:14px}
 footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -150,12 +153,14 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
     <div class="perks"><span class="perk">10% 할인</span><span class="perk t">택배비 무료</span></div>
     <p class="why">진주드림몰 할인 예산이 일찍 끝나 주문을 놓친 조합원님을 위해, 진주텃밭이 같은 혜택(10% 할인 · 택배비 무료)을 자체로 4일 동안만 열었습니다.</p>
     <p class="left" id="left"></p>
+    <a class="mine" href="check.html">이미 주문하셨나요? <b>내 주문 확인하기 →</b><small>주문 내용 · 입금 계좌 · 금액 · 입금 확인 여부</small></a>
   </header>
 
   <div id="closed" class="closed" hidden>
     <h2>주문 기간이 끝났습니다</h2>
     <p>11월 8일(일) 자정에 특별 주문을 마감했습니다. 함께해 주셔서 고맙습니다.<br>
     문의 사무국 <b>055-763-1243</b></p>
+    <a class="mine" href="check.html">주문하셨나요? <b>내 주문 확인하기 →</b><small>주문 내용 · 입금 계좌 · 금액 · 입금 확인 여부</small></a>
   </div>
 
   <form id="form" novalidate>
@@ -296,6 +301,7 @@ footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;bord
         <div><div class="num">농협 351-0836-5221-33</div><div class="who">진주우리먹거리협동조합 진주텃밭</div></div>
       </div>
     </div>
+    <a class="mine" href="check.html">나중에 <b>내 주문 확인하기 →</b><small>주문자 이름·연락처로 언제든 다시 볼 수 있습니다</small></a>
     <p class="hint" style="margin-top:14px">문의 사무국 055-763-1243</p>
   </div>
 

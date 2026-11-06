@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>내 주문 확인 · 진주텃밭 절임배추 특별 주문</title>
+<meta name="description" content="진주텃밭 절임배추 특별 주문 — 주문자 이름과 연락처로 내 주문, 입금 계좌, 금액을 확인하세요.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 주문 페이지(index.html)와 같은 색·글씨 크기. 50~60대 조합원이 휴대폰으로 보는 것을 기준으로 */
+:root{
+  --red:#E83028; --red-deep:#C0221B; --orange:#F0A800; --green:#A8B048;
+  --teal:#00A8A8; --teal-deep:#00706F;
+  --ink:#2B2721; --muted:#6B6358; --bg:#FBF7EF; --panel:#FFFFFF; --soft:#F4EDDF;
+  --line:rgba(43,39,33,.14);
+  --serif:'Gowun Batang','Nanum Myeongjo',serif;
+  --sans:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--sans);word-break:keep-all}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:40px}
+.stripe{display:flex;height:6px}.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:var(--orange)}
+.stripe i:nth-child(3){background:var(--green)}.stripe i:nth-child(4){background:var(--teal)}
+.top{padding-block:22px 4px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--muted);font-size:15px;text-decoration:none}
+.brand img{height:30px;width:auto}
+h1{font:700 clamp(28px,8vw,36px)/1.25 var(--serif);margin:14px 0 6px}
+.sub{color:var(--muted);margin:0 0 18px;font-size:16px}
+h2{font:700 20px/1.35 var(--serif);margin:0 0 10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.field{display:grid;gap:6px;margin-bottom:14px}
+label{font-weight:600}
+input{width:100%;font:500 18px var(--sans);color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:12px;min-height:52px}
+.hint{font-size:14px;color:var(--muted)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.go{width:100%;border:0;background:var(--red);color:#fff;font:700 19px var(--sans);border-radius:12px;min-height:56px;cursor:pointer}
+.go:disabled{background:#8C857B;cursor:default}
+.msg{margin:12px 0 0;font-weight:600;color:var(--red-deep);min-height:1em}
+
+/* 결과 */
+.res{margin-top:22px;display:grid;gap:14px}
+.ord{background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--orange);border-radius:14px;padding:16px;display:grid;gap:10px}
+.ord.paid{border-top-color:var(--teal-deep)}
+.ord.cx{border-top-color:#B5ADA0}
+.ord .hd{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;justify-content:space-between}
+.ord .no{font-weight:700;font-size:19px}
+.ord .t{color:var(--muted);font-size:14px}
+.state{border-radius:12px;padding:10px 12px;font-weight:700;font-size:17px}
+.state.no{background:#FFF1D6;color:#8A5A00}
+.state.ok{background:#E3F3EF;color:var(--teal-deep)}
+.state.cx{background:#EEE9E1;color:var(--muted)}
+.state small{display:block;font-weight:500;font-size:15px;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+td{padding:8px 2px;border-bottom:1px solid var(--line);vertical-align:top}
+td:last-child{text-align:right;font-weight:600}
+td small{display:block;color:var(--muted);font-weight:500;font-size:14px}
+.amt td{border-bottom:0;font-size:19px}
+.amt td:last-child{color:var(--red-deep);font-size:22px}
+.pay{background:#FFF4D6;border:1.5px solid var(--orange);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.acct{background:var(--panel);border-radius:10px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.acct .num{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;user-select:all}
+.acct .who{font-size:14px;color:var(--muted)}
+.btn2{border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);font:600 16px var(--sans);border-radius:12px;padding:0 14px;min-height:46px;cursor:pointer;white-space:nowrap}
+.pay.done{background:var(--soft);border-color:var(--line)}
+td:first-child:not([colspan]){white-space:nowrap}
+td.addr{text-align:left;padding-left:12px;overflow-wrap:anywhere}
+.datenote{background:#FDECEA;border-left:5px solid var(--red);border-radius:10px;padding:10px 12px;font-size:16px}
+.datenote b{color:var(--red-deep)}
+.datenote a{display:inline-block;font-weight:700;color:var(--red-deep);font-size:18px;white-space:nowrap}
+.pay p{margin:0;font-size:15px}
+.pay strong{color:var(--red-deep)}
+.none{background:var(--panel);border:1.5px dashed var(--line);border-radius:14px;padding:18px;text-align:center}
+.none p{margin:6px 0 0;color:var(--muted);font-size:16px}
+.back{display:inline-block;margin-top:24px;color:var(--teal-deep);font-weight:600}
+footer{margin-top:30px;padding-top:16px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./"><img src="../img/logo.png" alt=""> 진주텃밭협동조합</a>
+    <h1>내 주문 확인</h1>
+    <p class="sub">절임배추 4일 특별 주문(11/5~11/8)을 하셨다면, 주문하실 때 적은 <b>주문자 이름</b>과 <b>연락처</b>를 넣어 주세요. 주문 내용과 입금하실 계좌·금액이 나옵니다.</p>
+  </header>
+
+  <form class="card" id="f" novalidate>
+    <div class="field">
+      <label for="nm">주문자 이름</label>
+      <input type="text" id="nm" autocomplete="name" maxlength="20" placeholder="예) 홍길동">
+    </div>
+    <div class="field">
+      <label for="ph">주문자 연락처</label>
+      <input type="tel" id="ph" autocomplete="tel" inputmode="numeric" maxlength="13" placeholder="010-0000-0000">
+      <div class="hint">받는 분이 아니라 <b>주문하신 분</b>의 이름·연락처입니다.</div>
+    </div>
+    <button class="go" id="go">주문 확인하기</button>
+    <p class="msg" id="msg" role="alert"></p>
+  </form>
+
+  <div class="res" id="res" aria-live="polite"></div>
+
+  <a class="back" href="./">← 절임배추 특별 주문 페이지로</a>
+  <footer>진주우리먹거리협동조합 진주텃밭 · 문의 사무국 055-763-1243</footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+  var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+  var ACCT = '농협 351-0836-5221-33';
+  var P = [['baechu','불암플러스 절임배추'],['sok','김치속'],['kit','김장밀키트']];
+  var DOW = ['일','월','화','수','목','금','토'];
+  function $(id){ return document.getElementById(id); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function won(n){ return (n||0).toLocaleString('ko-KR') + '원'; }
+  function day(d, plus){ var x = new Date(d + 'T00:00:00+09:00'); x.setDate(x.getDate() + (plus||0)); return (x.getMonth()+1) + '/' + String(x.getDate()).padStart(2,'0') + '(' + DOW[x.getDay()] + ')'; }
+  function when(ts){ var x = new Date(ts); return (x.getMonth()+1) + '월 ' + x.getDate() + '일 ' + String(x.getHours()).padStart(2,'0') + ':' + String(x.getMinutes()).padStart(2,'0'); }
+  function fmtPhone(v){ var d = v.replace(/\D/g,'').slice(0,11); return d.length < 4 ? d : d.length < 8 ? d.slice(0,3) + '-' + d.slice(3) : d.slice(0,3) + '-' + d.slice(3, d.length - 4) + '-' + d.slice(-4); }
+
+  $('ph').addEventListener('input', function(){ this.value = fmtPhone(this.value); });
+
+  $('f').addEventListener('submit', function(e){
+    e.preventDefault();
+    var nm = $('nm').value.trim(), ph = $('ph').value.replace(/\D/g,'');
+    $('msg').textContent = '';
+    if (!nm) { $('msg').textContent = '주문자 이름을 넣어 주세요.'; $('nm').focus(); return; }
+    if (!/^0\d{8,10}$/.test(ph)) { $('msg').textContent = '연락처를 확인해 주세요.'; $('ph').focus(); return; }
+    var b = $('go'); b.disabled = true; b.textContent = '찾는 중…';
+    fetch(SB_URL + '/rpc/kimjang_lookup', {
+      method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify({ p_name: nm, p_phone: ph })
+    }).then(function(r){ if (!r.ok) throw 0; return r.json(); })
+      .then(function(r){
+        if (r.error) { $('msg').textContent = r.error; $('res').innerHTML = ''; return; }
+        show(r.orders || [], nm);
+      })
+      .catch(function(){ $('msg').textContent = '연결이 잘 안 됩니다. 잠시 뒤에 다시 눌러 주세요.'; })
+      .then(function(){ b.disabled = false; b.textContent = '주문 확인하기'; });
+  });
+
+  function show(list, nm){
+    var res = $('res'); res.innerHTML = '';
+    if (!list.length) {
+      var n = el('div','none'); n.appendChild(el('b',null,'주문을 찾지 못했습니다'));
+      n.appendChild(el('p',null,'주문하실 때 적은 주문자 이름·연락처와 똑같이 넣었는지 확인해 주세요. 그래도 안 나오면 사무국(055-763-1243)으로 연락 주세요.'));
+      res.appendChild(n); return;
+    }
+    res.appendChild(el('h2', null, nm + '님 주문 ' + list.length + '건'));
+    list.forEach(function(o){ res.appendChild(card(o, nm)); });
+    res.firstChild.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function card(o, nm){
+    var c = el('article', 'ord' + (o.canceled ? ' cx' : o.paid ? ' paid' : ''));
+    var hd = el('div','hd'); hd.appendChild(el('span','no','주문번호 ' + o.id));
+    c.appendChild(hd);
+
+    var st;
+    if (o.canceled) { st = el('div','state cx','취소된 주문입니다'); }
+    else if (o.paid) { st = el('div','state ok','✓ 입금 완료' + (o.paid_date ? ' (' + day(o.paid_date) + ' 입금)' : '')); st.appendChild(el('small',null,'입금이 확인되어 주문이 최종 접수되었습니다.')); }
+    else { st = el('div','state no','입금 확인 전입니다'); st.appendChild(el('small',null,'입금까지 마치셔야 최종 접수됩니다.')); }
+    c.appendChild(st);
+
+    var t = el('table');
+    var ro = t.insertRow(); ro.insertCell().textContent = '주문일'; ro.insertCell().textContent = when(o.created_at);
+    P.forEach(function(p){
+      var q = o['qty_' + p[0]], d = o['date_' + p[0]];
+      if (!q) return;
+      var r = t.insertRow(), a = r.insertCell(), b = r.insertCell();
+      a.textContent = p[1] + ' ' + q + '상자';
+      if (d) a.appendChild(el('small', null, day(d) + ' 발송 → ' + day(d, 1) + ' 도착'));
+      a.colSpan = 2; r.deleteCell(1); a.style.textAlign = 'left';
+    });
+    var store = /^매장수령/.test(o.place);
+    var rp = t.insertRow(); rp.insertCell().textContent = store ? '받는 곳' : '배송지';
+    var pc = rp.insertCell(); pc.className = 'addr';
+    pc.textContent = store ? o.place.replace(/^매장수령\s*·\s*/, '') + ' 직접 수령' : o.place.replace(/^택배\s*·\s*/, '');
+    var rr = t.insertRow(); rr.insertCell().textContent = '받는 분'; rr.insertCell().textContent = o.recipient;
+    var ra = t.insertRow(); ra.className = 'amt';
+    ra.insertCell().textContent = o.paid ? '입금하신 금액' : '입금하실 금액'; ra.insertCell().textContent = won(o.total_amount);
+    c.appendChild(t);
+
+    if (!o.canceled) {
+      var dn = el('div','datenote');
+      dn.appendChild(el('b', null, '수령 날짜는 직접 바꾸실 수 없습니다.'));
+      dn.appendChild(document.createTextNode(' 날짜를 바꾸시려면 사무실로 연락 주세요. '));
+      var tel = el('a', null, '☎ 055-763-1243'); tel.href = 'tel:0557631243';
+      dn.appendChild(tel);
+      c.appendChild(dn);
+    }
+
+    if (!o.canceled) {
+      var pay = el('div','pay' + (o.paid ? ' done' : ''));
+      pay.appendChild(el('b', null, '입금 계좌'));
+      var ac = el('div','acct');
+      var w = el('div'); w.appendChild(el('div','num',ACCT)); w.appendChild(el('div','who','진주우리먹거리협동조합 진주텃밭')); ac.appendChild(w);
+      var cp = el('button','btn2','계좌 복사'); cp.type = 'button';
+      cp.addEventListener('click', function(){ copy('351-0836-5221-33', cp); });
+      ac.appendChild(cp); pay.appendChild(ac);
+      if (!o.paid) {
+        var p1 = el('p'); p1.appendChild(el('strong', null, '입금자명은 주문자 이름(' + nm + ')과 같아야 합니다.')); pay.appendChild(p1);
+        pay.appendChild(el('p', null, '이미 입금하셨는데 「입금 확인 전」으로 나오면, 담당자가 아직 통장을 확인하지 못한 것입니다. 확인되면 이 화면에 「입금 완료」와 입금일이 나옵니다.'));
+      }
+      c.appendChild(pay);
+    }
+    return c;
+  }
+
+  function copy(text, b){
+    function ok(){ b.textContent = '복사됨'; setTimeout(function(){ b.textContent = '계좌 복사'; }, 1800); }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
+    function fallback(){ var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch(e){} ta.remove(); }
+  }
+})();
+</script>
+</body>
+</html>
