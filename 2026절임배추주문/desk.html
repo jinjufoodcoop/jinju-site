@@ -97,6 +97,7 @@ td.z{color:#C9C1B4}
 .chgbox input[type=date]{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;min-height:38px;background:var(--panel);color:var(--ink)}
 .chgbox input[type=text]{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;min-height:38px;background:var(--panel);color:var(--ink);width:100%;min-width:0}
 .chgbox .row input[type=text]{width:auto;flex:0 1 110px}
+.chgbox .row input.payer{flex:0 1 180px}
 .chgbox .note{color:var(--muted);font-size:13px;margin:0}
 .empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:24px;text-align:center;color:var(--muted)}
 .foot{margin-top:20px;color:var(--muted);font-size:13px}
@@ -231,7 +232,7 @@ td.z{color:#C9C1B4}
       if (filter === 'no' && (o.paid || o.canceled)) return false;
       if (filter === 'ok' && (!o.paid || o.canceled)) return false;
       if (!q) return true;
-      var hay = [o.id, o.orderer_name, o.recipient_name, o.orderer_phone, o.recipient_phone].join(' ').replace(/-/g,'');
+      var hay = [o.id, o.orderer_name, o.recipient_name, o.orderer_phone, o.recipient_phone, o.payer_name || ''].join(' ').replace(/-/g,'');
       return hay.indexOf(q) >= 0;
     });
   }
@@ -379,7 +380,8 @@ td.z{color:#C9C1B4}
     if (o.paid && !o.canceled) {
       var pl = el('div','line'); pl.appendChild(el('span',null,'입금일 '));
       pl.appendChild(document.createTextNode(o.paid_date ? md(o.paid_date) + ' ' : '아직 안 적음 '));
-      var pe = el('button','btn', o.paid_date ? '입금일 고치기' : '입금일 적기'); pe.type = 'button';
+      if (o.payer_name) { pl.appendChild(el('span',null,'· 입금자 ')); pl.appendChild(el('b',null,o.payer_name)); pl.appendChild(document.createTextNode(' ')); }
+      var pe = el('button','btn', o.paid_date ? '입금일·입금자 고치기' : '입금일 적기'); pe.type = 'button';
       pe.style.minHeight = '32px'; pe.style.padding = '2px 10px'; pe.style.fontSize = '13px';
       pe.addEventListener('click', function(){
         var open = c.querySelector('.chgbox.pay');
@@ -400,16 +402,23 @@ td.z{color:#C9C1B4}
   function payBox(o){
     openPay[o.id] = true;
     var box = el('div','chgbox pay');
-    box.appendChild(el('p','note','통장에 돈이 들어온 날을 골라 주세요. 회계 확인용으로 엑셀에도 나옵니다.'));
+    box.appendChild(el('p','note','통장에 돈이 들어온 날을 골라 주세요. 입금자 이름이 주문자(' + o.orderer_name + ')와 다르면 입금자명도 적어 주세요. 회계 확인용으로 엑셀에도 나옵니다.'));
+    var row0 = el('div','row'); row0.appendChild(el('b',null,'입금자명'));
+    var nm = document.createElement('input'); nm.type = 'text'; nm.maxLength = 30; nm.setAttribute('aria-label','입금자명');
+    nm.placeholder = '주문자와 다를 때만'; nm.value = o.payer_name || ''; nm.className = 'payer';
+    row0.appendChild(nm);
+    box.appendChild(row0);
     var row = el('div','row'); row.appendChild(el('b',null,'입금일'));
     var inp = document.createElement('input'); inp.type = 'date'; inp.setAttribute('aria-label','입금일');
     inp.min = '2026-11-01'; inp.max = todayKST(); inp.value = o.paid_date || todayKST();
     row.appendChild(inp);
-    var ok = el('button','btn dark', o.paid ? '입금일 저장' : '입금 확인'); ok.type = 'button';
+    var ok = el('button','btn dark', o.paid ? '저장' : '입금 확인'); ok.type = 'button';
     ok.addEventListener('click', function(){
       if (!inp.value) { alertBar('입금일을 골라 주세요.'); inp.focus(); return; }
       if (inp.value < inp.min || inp.value > inp.max) { alertBar('입금일을 확인해 주세요. (11월 1일부터 오늘까지)'); inp.focus(); return; }
-      pay(o, true, inp.value, ok);
+      var who = nm.value.trim();
+      if (who === String(o.orderer_name || '').trim()) who = '';   // 주문자와 같으면 따로 적지 않는다
+      pay(o, true, inp.value, ok, who);
     });
     row.appendChild(ok);
     var cl = el('button','btn','닫기'); cl.type = 'button';
@@ -418,15 +427,16 @@ td.z{color:#C9C1B4}
     box.appendChild(row);
     return box;
   }
-  function pay(o, paid, d, btn){
+  function pay(o, paid, d, btn, who){
     btn.disabled = true;
-    rpc('kimjang_desk_pay', { p_pass: pass, p_id: o.id, p_paid: paid, p_date: d })
+    who = paid ? (who || '') : '';
+    rpc('kimjang_desk_pay', { p_pass: pass, p_id: o.id, p_paid: paid, p_date: d, p_payer: who || null })
       .then(function(r){
         if (r.error) throw { msg: r.error };
-        o.paid = paid; o.paid_date = paid ? d : null;
+        o.paid = paid; o.paid_date = paid ? d : null; o.payer_name = who || null;
         delete openPay[o.id];
         render();
-        alertBar('#' + o.id + ' ' + o.orderer_name + ' · ' + (paid ? '입금 확인 (입금일 ' + md(d) + ')' : '입금 확인을 풀었습니다.'));
+        alertBar('#' + o.id + ' ' + o.orderer_name + ' · ' + (paid ? '입금 확인 (입금일 ' + md(d) + (who ? ' · 입금자 ' + who : '') + ')' : '입금 확인을 풀었습니다.'));
       })
       .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
   }
@@ -579,7 +589,7 @@ td.z{color:#C9C1B4}
   $('csv').addEventListener('click', function(){
     var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
                 '절임배추','절임배추발송일','절임배추변경발송일','김치속','김치속발송일','김치속변경발송일','김장밀키트','밀키트발송일','밀키트변경발송일',
-                '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소','입금일'];
+                '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소','입금일','입금자명(주문자와 다를 때)'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
       var st0 = storeIn(o.address), chgCols = o.chg_address
         ? [storeOf(o) ? storeOf(o) + ' 수령' : '택배', o.chg_zipcode || '', storeOf(o) ? '' : o.chg_address, o.chg_address_detail || '']
@@ -589,7 +599,7 @@ td.z{color:#C9C1B4}
         o.qty_baechu, o.date_baechu || '', o.qty_baechu ? o.chg_date_baechu || '' : '',
         o.qty_sok, o.date_sok || '', o.qty_sok ? o.chg_date_sok || '' : '',
         o.qty_kit, o.date_kit || '', o.qty_kit ? o.chg_date_kit || '' : '',
-        o.total_amount].concat(rcOf(o), chgCols, [o.paid && o.paid_date ? o.paid_date : '']);
+        o.total_amount].concat(rcOf(o), chgCols, [o.paid && o.paid_date ? o.paid_date : '', o.paid && o.payer_name ? o.payer_name : '']);
     });
     var csv = [head].concat(rows).map(function(r){
       return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
