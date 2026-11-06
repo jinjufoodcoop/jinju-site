@@ -94,6 +94,7 @@ td.z{color:#C9C1B4}
 .chgbox select{border:1.5px solid var(--line);border-radius:8px;padding:6px 8px;min-height:38px;background:var(--panel);color:var(--ink);max-width:100%}
 .chgbox .addrpart,.chgbox .shipbox{display:grid;gap:8px}
 .chgbox .addrpart{border-top:1px dashed var(--line);padding-top:10px}
+.chgbox input[type=date]{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;min-height:38px;background:var(--panel);color:var(--ink)}
 .chgbox input[type=text]{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;min-height:38px;background:var(--panel);color:var(--ink);width:100%;min-width:0}
 .chgbox .row input[type=text]{width:auto;flex:0 1 110px}
 .chgbox .note{color:var(--muted);font-size:13px;margin:0}
@@ -302,7 +303,8 @@ td.z{color:#C9C1B4}
     hd.appendChild(el('span','no','#' + o.id));
     hd.appendChild(el('span','who',o.orderer_name));
     hd.appendChild(el('span','t',o.orderer_phone));
-    hd.appendChild(el('span','pill ' + (o.canceled ? 'x' : o.paid ? 'ok' : 'no'), o.canceled ? '취소' : o.paid ? '입금 완료' : '입금 전'));
+    hd.appendChild(el('span','pill ' + (o.canceled ? 'x' : o.paid ? 'ok' : 'no'),
+      o.canceled ? '취소' : o.paid ? '입금 완료 · ' + (o.paid_date ? md(o.paid_date) : '입금일 없음') : '입금 전'));
     hd.appendChild(el('span','t','주문 ' + when(o.created_at)));
     c.appendChild(hd);
 
@@ -348,7 +350,16 @@ td.z{color:#C9C1B4}
     var acts = el('div','acts');
     var bp = el('button','btn' + (o.paid ? ' on' : ''), o.paid ? '✓ 입금 확인됨' : '입금 확인');
     bp.type = 'button'; bp.setAttribute('aria-pressed', String(!!o.paid));
-    bp.addEventListener('click', function(){ mark(o, 'paid', !o.paid, bp); });
+    bp.addEventListener('click', function(){
+      if (!o.paid) {   // 입금 확인 → 입금일 고르는 칸 열기
+        var open = c.querySelector('.chgbox.pay');
+        if (open) { open.remove(); delete openPay[o.id]; return; }
+        c.appendChild(payBox(o)); return;
+      }
+      // 입금 확인 풀기는 한 번 더 묻는다 (입금일도 함께 지워지므로)
+      if (bp.getAttribute('data-sure') !== '1') { bp.setAttribute('data-sure','1'); bp.textContent = '입금 확인 풀까요?'; setTimeout(function(){ if (bp.isConnected && o.paid) { bp.removeAttribute('data-sure'); bp.textContent = '✓ 입금 확인됨'; } }, 3000); return; }
+      pay(o, false, null, bp);
+    });
     var bx = el('button','btn' + (o.canceled ? ' xon' : ''), o.canceled ? '취소 풀기' : '취소');
     bx.type = 'button';
     bx.addEventListener('click', function(){
@@ -358,15 +369,66 @@ td.z{color:#C9C1B4}
     var bd = el('button','btn','수령일·주소 변경');
     bd.type = 'button'; bd.setAttribute('aria-expanded','false');
     bd.addEventListener('click', function(){
-      var open = c.querySelector('.chgbox');
+      var open = c.querySelector('.chgbox:not(.pay)');
       if (open) { open.remove(); delete openBox[o.id]; bd.setAttribute('aria-expanded','false'); return; }
       c.appendChild(chgBox(o)); bd.setAttribute('aria-expanded','true');
     });
     acts.appendChild(bd); acts.appendChild(bp); acts.appendChild(bx);
     ft.appendChild(acts);
     c.appendChild(ft);
+    if (o.paid && !o.canceled) {
+      var pl = el('div','line'); pl.appendChild(el('span',null,'입금일 '));
+      pl.appendChild(document.createTextNode(o.paid_date ? md(o.paid_date) + ' ' : '아직 안 적음 '));
+      var pe = el('button','btn', o.paid_date ? '입금일 고치기' : '입금일 적기'); pe.type = 'button';
+      pe.style.minHeight = '32px'; pe.style.padding = '2px 10px'; pe.style.fontSize = '13px';
+      pe.addEventListener('click', function(){
+        var open = c.querySelector('.chgbox.pay');
+        if (open) { open.remove(); delete openPay[o.id]; return; }
+        c.appendChild(payBox(o));
+      });
+      pl.appendChild(pe);
+      c.insertBefore(pl, ft);
+    }
     if (openBox[o.id]) c.appendChild(chgBox(o));
+    if (openPay[o.id]) c.appendChild(payBox(o));
     return c;
+  }
+
+  /* ── 입금 확인 + 입금일 ── */
+  var openPay = {};
+  function todayKST(){ return new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); }
+  function payBox(o){
+    openPay[o.id] = true;
+    var box = el('div','chgbox pay');
+    box.appendChild(el('p','note','통장에 돈이 들어온 날을 골라 주세요. 회계 확인용으로 엑셀에도 나옵니다.'));
+    var row = el('div','row'); row.appendChild(el('b',null,'입금일'));
+    var inp = document.createElement('input'); inp.type = 'date'; inp.setAttribute('aria-label','입금일');
+    inp.min = '2026-11-01'; inp.max = todayKST(); inp.value = o.paid_date || todayKST();
+    row.appendChild(inp);
+    var ok = el('button','btn dark', o.paid ? '입금일 저장' : '입금 확인'); ok.type = 'button';
+    ok.addEventListener('click', function(){
+      if (!inp.value) { alertBar('입금일을 골라 주세요.'); inp.focus(); return; }
+      if (inp.value < inp.min || inp.value > inp.max) { alertBar('입금일을 확인해 주세요. (11월 1일부터 오늘까지)'); inp.focus(); return; }
+      pay(o, true, inp.value, ok);
+    });
+    row.appendChild(ok);
+    var cl = el('button','btn','닫기'); cl.type = 'button';
+    cl.addEventListener('click', function(){ delete openPay[o.id]; render(); });
+    row.appendChild(cl);
+    box.appendChild(row);
+    return box;
+  }
+  function pay(o, paid, d, btn){
+    btn.disabled = true;
+    rpc('kimjang_desk_pay', { p_pass: pass, p_id: o.id, p_paid: paid, p_date: d })
+      .then(function(r){
+        if (r.error) throw { msg: r.error };
+        o.paid = paid; o.paid_date = paid ? d : null;
+        delete openPay[o.id];
+        render();
+        alertBar('#' + o.id + ' ' + o.orderer_name + ' · ' + (paid ? '입금 확인 (입금일 ' + md(d) + ')' : '입금 확인을 풀었습니다.'));
+      })
+      .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
   }
 
   /* ── 수령일 바꾸기 ── */
@@ -517,7 +579,7 @@ td.z{color:#C9C1B4}
   $('csv').addEventListener('click', function(){
     var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
                 '절임배추','절임배추발송일','절임배추변경발송일','김치속','김치속발송일','김치속변경발송일','김장밀키트','밀키트발송일','밀키트변경발송일',
-                '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소'];
+                '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소','입금일'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
       var st0 = storeIn(o.address), chgCols = o.chg_address
         ? [storeOf(o) ? storeOf(o) + ' 수령' : '택배', o.chg_zipcode || '', storeOf(o) ? '' : o.chg_address, o.chg_address_detail || '']
@@ -527,7 +589,7 @@ td.z{color:#C9C1B4}
         o.qty_baechu, o.date_baechu || '', o.qty_baechu ? o.chg_date_baechu || '' : '',
         o.qty_sok, o.date_sok || '', o.qty_sok ? o.chg_date_sok || '' : '',
         o.qty_kit, o.date_kit || '', o.qty_kit ? o.chg_date_kit || '' : '',
-        o.total_amount].concat(rcOf(o), chgCols);
+        o.total_amount].concat(rcOf(o), chgCols, [o.paid && o.paid_date ? o.paid_date : '']);
     });
     var csv = [head].concat(rows).map(function(r){
       return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
