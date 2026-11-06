@@ -80,7 +80,8 @@ td.z{color:#C9C1B4}
 .ord .line span{color:var(--muted)}
 .ord .ft{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:2px}
 .ord .amt{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
-.ord .acts{display:flex;gap:8px}
+.ord .acts{display:flex;flex-wrap:wrap;gap:8px}
+.list,.ord,.chgbox,.chgbox .addrpart,.chgbox .shipbox{grid-template-columns:minmax(0,1fr)}.ord{min-width:0}.ord .amt{min-width:0;overflow-wrap:anywhere}
 .ord .acts .btn{min-height:38px;padding:6px 12px}
 .ord .acts .on{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff}
 .ord .acts .xon{background:#6B6358;border-color:#6B6358;color:#fff}
@@ -91,6 +92,7 @@ td.z{color:#C9C1B4}
 .chgbox .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .chgbox .row b{min-width:76px}
 .chgbox .orig{color:var(--muted);font-size:13px}
+.amt s.orig{color:var(--muted);font-weight:400;font-size:15px}
 .chgbox select{border:1.5px solid var(--line);border-radius:8px;padding:6px 8px;min-height:38px;background:var(--panel);color:var(--ink);max-width:100%}
 .chgbox .addrpart,.chgbox .shipbox{display:grid;gap:8px}
 .chgbox .addrpart{border-top:1px dashed var(--line);padding-top:10px}
@@ -155,7 +157,12 @@ td.z{color:#C9C1B4}
   var SHIP_KIT = SHIP.filter(function(d){ return d >= '2026-12-15'; });
   // 실제로 보낼 날 — 바꾼 날짜가 있으면 그것, 없으면 주문하신 분이 고른 날짜
   function eff(o, k){ return o['chg_date_' + k] || o['date_' + k]; }
-  function changed(o){ return ['baechu','sok','kit'].some(function(k){ return o['qty_' + k] && o['chg_date_' + k]; }); }
+  // 실제로 보낼 수량 — 바꾼 수량이 있으면 그것, 없으면 주문하신 수량
+  function qn(o, k){ var c = o['chg_qty_' + k]; return c != null ? c : (o['qty_' + k] || 0); }
+  // 실제로 받을 금액 — 수량을 바꿨으면 다시 계산한 금액
+  function amt(o){ return o.chg_total_amount != null ? o.chg_total_amount : o.total_amount; }
+  function changed(o){ return ['baechu','sok','kit'].some(function(k){ return qn(o, k) && o['chg_date_' + k]; }); }
+  function qtyChanged(o){ return ['baechu','sok','kit'].some(function(k){ return o['chg_qty_' + k] != null; }); }
 
   var pass = '', orders = [], filter = 'all', loadedAt = null;
   function $(id){ return document.getElementById(id); }
@@ -242,32 +249,33 @@ td.z{color:#C9C1B4}
     var live = orders.filter(function(o){ return !o.canceled; });
     var paid = live.filter(function(o){ return o.paid; });
     var unpaid = live.filter(function(o){ return !o.paid; });
-    function sum(a, f){ return a.reduce(function(s,o){ return s + (o[f]||0); }, 0); }
+    function sum(a, f){ return a.reduce(function(s,o){ return s + (typeof f === 'function' ? f(o) : (o[f]||0)); }, 0); }
+    function qf(k){ return function(o){ return qn(o, k); }; }
 
     var stats = $('stats'); stats.innerHTML = '';
     [
       ['주문', live.length + '건', '취소 ' + (orders.length - live.length) + '건 제외'],
-      ['입금 완료', paid.length + '건', won(sum(paid,'total_amount'))],
-      ['입금 전', unpaid.length + '건', won(sum(unpaid,'total_amount'))],
-      ['절임배추', sum(live,'qty_baechu') + '상자', '입금 ' + sum(paid,'qty_baechu')],
-      ['김치속', sum(live,'qty_sok') + '상자', '입금 ' + sum(paid,'qty_sok')],
-      ['김장밀키트', sum(live,'qty_kit') + '상자', '입금 ' + sum(paid,'qty_kit')],
+      ['입금 완료', paid.length + '건', won(sum(paid,amt))],
+      ['입금 전', unpaid.length + '건', won(sum(unpaid,amt))],
+      ['절임배추', sum(live,qf('baechu')) + '상자', '입금 ' + sum(paid,qf('baechu'))],
+      ['김치속', sum(live,qf('sok')) + '상자', '입금 ' + sum(paid,qf('sok'))],
+      ['김장밀키트', sum(live,qf('kit')) + '상자', '입금 ' + sum(paid,qf('kit'))],
       ['매장 수령', live.filter(storeOf).length + '건', ['금산점','초전점','진양호점'].map(function(s){
         return s.replace('점','') + ' ' + live.filter(function(o){ return storeOf(o) === s; }).length; }).join(' · ')],
       ['현금영수증', live.filter(function(o){ return rcOf(o)[0]; }).length + '건', '개인 ' + live.filter(function(o){ return rcOf(o)[0] === '개인'; }).length + ' · 사업자 ' + live.filter(function(o){ return rcOf(o)[0] === '사업자'; }).length],
-      ['변경 요청 반영', live.filter(function(o){ return changed(o) || o.chg_address; }).length + '건',
-        '수령일 ' + live.filter(changed).length + ' · 받는 곳 ' + live.filter(function(o){ return o.chg_address; }).length]
+      ['변경 요청 반영', live.filter(function(o){ return changed(o) || qtyChanged(o) || o.chg_address; }).length + '건',
+        '수량 ' + live.filter(qtyChanged).length + ' · 수령일 ' + live.filter(changed).length + ' · 받는 곳 ' + live.filter(function(o){ return o.chg_address; }).length]
     ].forEach(function(s){
       var d = el('div','stat'); d.appendChild(el('small',null,s[0])); d.appendChild(el('b',null,s[1])); d.appendChild(el('div','s2',s[2])); stats.appendChild(d);
     });
 
     // 발송일별
     var base = filter === 'ok' ? paid : filter === 'no' ? unpaid : live;
-    $('dayNote').textContent = (filter === 'ok' ? '입금 완료 주문 기준' : filter === 'no' ? '입금 전 주문 기준' : '취소 뺀 전체 주문 기준') + ' · 바꾼 수령일 반영';
+    $('dayNote').textContent = (filter === 'ok' ? '입금 완료 주문 기준' : filter === 'no' ? '입금 전 주문 기준' : '취소 뺀 전체 주문 기준') + ' · 바꾼 수량·수령일 반영';
     var days = {};
     base.forEach(function(o){
       ['baechu','sok','kit'].forEach(function(k){
-        var q = o['qty_' + k], d = eff(o, k);
+        var q = qn(o, k), d = eff(o, k);
         if (!q || !d) return;
         days[d] = days[d] || { baechu:0, sok:0, kit:0 };
         days[d][k] += q;
@@ -311,17 +319,26 @@ td.z{color:#C9C1B4}
 
     var it = el('div','items');
     ['baechu','sok','kit'].forEach(function(k){
-      if (!o['qty_' + k]) return;
+      var q0 = o['qty_' + k] || 0, q = qn(o, k), cq = o['chg_qty_' + k] != null;
+      if (!q0 && !q) return;
       var cd = o['chg_date_' + k];
-      if (!cd) { it.appendChild(el('span','chip', P[k].name + ' ' + o['qty_' + k] + ' · ' + md(o['date_' + k]) + ' 발송 → ' + arrive(o['date_' + k]) + ' 수령')); return; }
-      // 바꾼 경우: 주문하신 날짜는 줄 그어 남기고, 바꾼 날짜를 함께 보여 준다
-      var ch = el('span','chip chg', P[k].name + ' ' + o['qty_' + k] + ' · ');
-      ch.appendChild(el('s', null, md(o['date_' + k]) + ' 발송'));
-      ch.appendChild(document.createTextNode(' ▶ 변경 ' + md(cd) + ' 발송 → ' + arrive(cd) + ' 수령'));
+      if (!cd && !cq) { it.appendChild(el('span','chip', P[k].name + ' ' + q + ' · ' + md(o['date_' + k]) + ' 발송 → ' + arrive(o['date_' + k]) + ' 수령')); return; }
+      // 바꾼 경우: 주문하신 수량·날짜는 줄 그어 남기고, 바꾼 것을 함께 보여 준다
+      var ch = el('span','chip chg', P[k].name + ' ');
+      if (cq) { ch.appendChild(el('s', null, q0 + '상자')); ch.appendChild(document.createTextNode(' ▶ ' + q + '상자')); }
+      else ch.appendChild(document.createTextNode(String(q)));
+      if (!q) { ch.appendChild(document.createTextNode(' (뺌)')); it.appendChild(ch); return; }
+      ch.appendChild(document.createTextNode(' · '));
+      var d = eff(o, k);
+      if (cd && o['date_' + k]) { ch.appendChild(el('s', null, md(o['date_' + k]) + ' 발송')); ch.appendChild(document.createTextNode(' ▶ 변경 ')); }
+      ch.appendChild(document.createTextNode(md(d) + ' 발송 → ' + arrive(d) + ' 수령'));
       it.appendChild(ch);
     });
     c.appendChild(it);
-    if (o.chg_at && changed(o)) c.appendChild(el('div','t','수령일 바꾼 때 ' + when(o.chg_at)));
+    var ct = [];
+    if (o.chg_qty_at && qtyChanged(o)) ct.push('수량 바꾼 때 ' + when(o.chg_qty_at));
+    if (o.chg_at && changed(o)) ct.push('수령일 바꾼 때 ' + when(o.chg_at));
+    if (ct.length) c.appendChild(el('div','t', ct.join(' · ')));
 
     var to = el('div','line'); to.appendChild(el('span',null,'받는 분 '));
     to.appendChild(document.createTextNode(o.recipient_name + ' ' + o.recipient_phone));
@@ -347,7 +364,16 @@ td.z{color:#C9C1B4}
     if (rcv[2]) { var m = el('div','line'); m.appendChild(el('span',null,'요청 ')); m.appendChild(document.createTextNode(rcv[2])); c.appendChild(m); }
 
     var ft = el('div','ft');
-    ft.appendChild(el('span','amt', won(o.total_amount)));
+    if (o.chg_total_amount != null && o.chg_total_amount !== o.total_amount) {
+      // 수량을 바꿔 금액이 달라진 경우: 처음 금액은 줄 긋고, 입금 뒤면 더 받을 돈·돌려드릴 돈을 함께 보여 준다
+      var am = el('span','amt'); am.appendChild(el('s', 'orig', won(o.total_amount))); am.appendChild(document.createTextNode(' ▶ ' + won(o.chg_total_amount)));
+      if (o.paid && !o.canceled) {
+        var diff = o.chg_total_amount - o.total_amount;
+        am.appendChild(document.createTextNode(' '));
+        am.appendChild(el('span','pill pick', diff > 0 ? '추가로 받을 돈 ' + won(diff) : '돌려드릴 돈 ' + won(-diff)));
+      }
+      ft.appendChild(am);
+    } else ft.appendChild(el('span','amt', won(o.total_amount)));
     var acts = el('div','acts');
     var bp = el('button','btn' + (o.paid ? ' on' : ''), o.paid ? '✓ 입금 확인됨' : '입금 확인');
     bp.type = 'button'; bp.setAttribute('aria-pressed', String(!!o.paid));
@@ -367,7 +393,7 @@ td.z{color:#C9C1B4}
       if (!o.canceled && bx.getAttribute('data-sure') !== '1') { bx.setAttribute('data-sure','1'); bx.textContent = '정말 취소?'; setTimeout(function(){ if (bx.isConnected && !o.canceled) { bx.removeAttribute('data-sure'); bx.textContent = '취소'; } }, 3000); return; }
       mark(o, 'canceled', !o.canceled, bx);
     });
-    var bd = el('button','btn','수령일·주소 변경');
+    var bd = el('button','btn','수량·수령일·주소 변경');
     bd.type = 'button'; bd.setAttribute('aria-expanded','false');
     bd.addEventListener('click', function(){
       var open = c.querySelector('.chgbox:not(.pay)');
@@ -446,27 +472,43 @@ td.z{color:#C9C1B4}
   function chgBox(o){
     openBox[o.id] = true;
     var box = el('div','chgbox');
-    box.appendChild(el('p','note','주문하신 분이 고른 날짜·주소는 그대로 남습니다. 바꾼 것은 따로 적혀, 발송일별 상자 수·매장 수령 수·엑셀에 반영됩니다.'));
+    box.appendChild(el('p','note','주문하신 분이 고른 수량·날짜·주소는 그대로 남습니다. 바꾼 것은 따로 적혀, 금액·발송일별 상자 수·매장 수령 수·엑셀·「내 주문 확인」에 반영됩니다. 수량을 0으로 하면 그 상품을 뺍니다.'));
     ['baechu','sok','kit'].forEach(function(k){
-      if (!o['qty_' + k]) return;
+      var q0 = o['qty_' + k] || 0, d0 = o['date_' + k];
       var row = el('div','row');
       row.appendChild(el('b', null, P[k].name));
-      row.appendChild(el('span','orig','주문 ' + md(o['date_' + k]) + ' 발송 → ' + arrive(o['date_' + k]) + ' 수령'));
+      row.appendChild(el('span','orig', q0 ? '주문 ' + q0 + '상자 · ' + md(d0) + ' 발송 → ' + arrive(d0) + ' 수령' : '주문 안 함'));
+      var qs = document.createElement('select');
+      qs.setAttribute('aria-label', P[k].name + ' 바꿀 수량');
+      for (var n = 0; n <= 29; n++) {
+        var qo = document.createElement('option'); qo.value = n;
+        qo.textContent = n + '상자' + (n === q0 ? ' (주문한 수량)' : '');
+        if (n === qn(o, k)) qo.selected = true;
+        qs.appendChild(qo);
+      }
+      row.appendChild(qs);
       var sel = document.createElement('select');
       sel.setAttribute('aria-label', P[k].name + ' 바꿀 날짜');
+      var op0 = document.createElement('option'); op0.value = ''; op0.textContent = '발송일 고르기'; sel.appendChild(op0);
       (k === 'kit' ? SHIP_KIT : SHIP).forEach(function(d){
         var op = document.createElement('option'); op.value = d;
-        op.textContent = md(d) + ' 발송 → ' + arrive(d) + ' 수령' + (d === o['date_' + k] ? ' (주문한 날)' : '');
+        op.textContent = md(d) + ' 발송 → ' + arrive(d) + ' 수령' + (d === d0 ? ' (주문한 날)' : '');
         if (d === eff(o, k)) op.selected = true;
         sel.appendChild(op);
       });
       row.appendChild(sel);
+      function syncQ(){ sel.hidden = qs.value === '0'; }
+      qs.addEventListener('change', syncQ); syncQ();
       var save = el('button','btn dark','저장'); save.type = 'button';
-      save.addEventListener('click', function(){ setDate(o, k, sel.value === o['date_' + k] ? null : sel.value, save); });
+      save.addEventListener('click', function(){
+        var nq = +qs.value;
+        if (nq > 0 && !sel.value) { alertBar(P[k].name + ' 발송일을 골라 주세요.'); sel.focus(); return; }
+        setItem(o, k, nq, nq > 0 ? sel.value : null, save);
+      });
       row.appendChild(save);
-      if (o['chg_date_' + k]) {
-        var back = el('button','btn','주문한 날로 되돌리기'); back.type = 'button';
-        back.addEventListener('click', function(){ setDate(o, k, null, back); });
+      if (o['chg_date_' + k] || o['chg_qty_' + k] != null) {
+        var back = el('button','btn','주문한 대로 되돌리기'); back.type = 'button';
+        back.addEventListener('click', function(){ setItem(o, k, q0, q0 ? d0 : null, back); });
         row.appendChild(back);
       }
       box.appendChild(row);
@@ -562,15 +604,22 @@ td.z{color:#C9C1B4}
       .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
   }
 
-  function setDate(o, k, d, btn){
+  // 상품 하나의 수량 + 발송일 저장 (수량 0 = 그 상품 빼기). 처음과 같으면 서버가 「되돌리기」로 친다
+  function setItem(o, k, q, d, btn){
     btn.disabled = true;
-    rpc('kimjang_desk_set_date', { p_pass: pass, p_id: o.id, p_item: k, p_date: d })
+    rpc('kimjang_desk_set_item', { p_pass: pass, p_id: o.id, p_item: k, p_qty: q, p_date: d })
       .then(function(r){
         if (r.error) throw { msg: r.error };
-        o['chg_date_' + k] = d; o.chg_at = new Date().toISOString();
+        var q0 = o['qty_' + k] || 0, now = new Date().toISOString();
+        if (q !== qn(o, k)) o.chg_qty_at = now;
+        if (q > 0 && d !== eff(o, k)) o.chg_at = now;
+        o['chg_qty_' + k] = q === q0 ? null : q;
+        o['chg_date_' + k] = (q === 0 || d === o['date_' + k]) ? null : d;
+        o.chg_total_amount = r.total === o.total_amount ? null : r.total;
         delete openBox[o.id];
         render();
-        alertBar('#' + o.id + ' ' + o.orderer_name + ' · ' + P[k].name + ' 수령일을 ' + (d ? md(d) + ' 발송 → ' + arrive(d) + ' 수령으로 바꿨습니다.' : '주문한 날로 되돌렸습니다.'));
+        alertBar('#' + o.id + ' ' + o.orderer_name + ' · ' + P[k].name + ' ' +
+          (q ? q + '상자 · ' + md(d) + ' 발송 → ' + arrive(d) + ' 수령' : '뺌') + '(으)로 저장했습니다. 금액 ' + won(r.total));
       })
       .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
   }
@@ -589,17 +638,20 @@ td.z{color:#C9C1B4}
   $('csv').addEventListener('click', function(){
     var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
                 '절임배추','절임배추발송일','절임배추변경발송일','김치속','김치속발송일','김치속변경발송일','김장밀키트','밀키트발송일','밀키트변경발송일',
-                '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소','입금일','입금자명(주문자와 다를 때)'];
+                '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소','입금일','입금자명(주문자와 다를 때)',
+                '절임배추변경수량','김치속변경수량','밀키트변경수량','변경금액','차액(변경금액-금액)'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
       var st0 = storeIn(o.address), chgCols = o.chg_address
         ? [storeOf(o) ? storeOf(o) + ' 수령' : '택배', o.chg_zipcode || '', storeOf(o) ? '' : o.chg_address, o.chg_address_detail || '']
         : ['', '', '', ''];
       return [o.id, when(o.created_at), o.canceled ? '취소' : o.paid ? '입금완료' : '입금전', st0 ? st0 + ' 수령' : '택배',
         o.orderer_name, o.orderer_phone, o.recipient_name, o.recipient_phone, o.zipcode || '', o.address, o.address_detail || '',
-        o.qty_baechu, o.date_baechu || '', o.qty_baechu ? o.chg_date_baechu || '' : '',
-        o.qty_sok, o.date_sok || '', o.qty_sok ? o.chg_date_sok || '' : '',
-        o.qty_kit, o.date_kit || '', o.qty_kit ? o.chg_date_kit || '' : '',
-        o.total_amount].concat(rcOf(o), chgCols, [o.paid && o.paid_date ? o.paid_date : '', o.paid && o.payer_name ? o.payer_name : '']);
+        o.qty_baechu, o.date_baechu || '', qn(o,'baechu') ? o.chg_date_baechu || '' : '',
+        o.qty_sok, o.date_sok || '', qn(o,'sok') ? o.chg_date_sok || '' : '',
+        o.qty_kit, o.date_kit || '', qn(o,'kit') ? o.chg_date_kit || '' : '',
+        o.total_amount].concat(rcOf(o), chgCols, [o.paid && o.paid_date ? o.paid_date : '', o.paid && o.payer_name ? o.payer_name : ''],
+        ['baechu','sok','kit'].map(function(k){ return o['chg_qty_' + k] != null ? o['chg_qty_' + k] : ''; }),
+        o.chg_total_amount != null ? [o.chg_total_amount, o.chg_total_amount - o.total_amount] : ['', '']);
     });
     var csv = [head].concat(rows).map(function(r){
       return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
