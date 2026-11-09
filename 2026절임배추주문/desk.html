@@ -100,6 +100,7 @@ td.z{color:#C9C1B4}
 .chgbox input[type=text]{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;min-height:38px;background:var(--panel);color:var(--ink);width:100%;min-width:0}
 .chgbox .row input[type=text]{width:auto;flex:0 1 110px}
 .chgbox .row input.payer{flex:0 1 180px}
+.ord .hd .btn.mini{min-height:30px;padding:2px 10px;font-size:13px;border-width:1px}
 .chgbox .note{color:var(--muted);font-size:13px;margin:0}
 .empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:24px;text-align:center;color:var(--muted)}
 .foot{margin-top:20px;color:var(--muted);font-size:13px}
@@ -239,7 +240,7 @@ td.z{color:#C9C1B4}
       if (filter === 'no' && (o.paid || o.canceled)) return false;
       if (filter === 'ok' && (!o.paid || o.canceled)) return false;
       if (!q) return true;
-      var hay = [o.id, o.orderer_name, o.recipient_name, o.orderer_phone, o.recipient_phone, o.payer_name || ''].join(' ').replace(/-/g,'');
+      var hay = [o.id, o.orderer_name, o.orig_orderer_name || '', o.recipient_name, o.orig_recipient_name || '', o.orderer_phone, o.recipient_phone, o.payer_name || ''].join(' ').replace(/-/g,'');
       return hay.indexOf(q) >= 0;
     });
   }
@@ -311,11 +312,25 @@ td.z{color:#C9C1B4}
     var hd = el('div','hd');
     hd.appendChild(el('span','no','#' + o.id));
     hd.appendChild(el('span','who',o.orderer_name));
+    var bn = el('button','btn mini','이름 고치기'); bn.type = 'button';
+    bn.addEventListener('click', function(){
+      var open = c.querySelector('.chgbox.nm');
+      if (open) { open.remove(); delete openName[o.id]; return; }
+      c.insertBefore(nameBox(o), c.children[1]);
+    });
+    hd.appendChild(bn);
     hd.appendChild(el('span','t',o.orderer_phone));
     hd.appendChild(el('span','pill ' + (o.canceled ? 'x' : o.paid ? 'ok' : 'no'),
       o.canceled ? '취소' : o.paid ? '입금 완료 · ' + (o.paid_date ? md(o.paid_date) : '입금일 없음') : '입금 전'));
     hd.appendChild(el('span','t','주문 ' + when(o.created_at)));
     c.appendChild(hd);
+    if (openName[o.id]) c.appendChild(nameBox(o));
+    if (o.orig_orderer_name) {
+      var nl = el('div','t'); nl.appendChild(document.createTextNode('주문자명 고침 · 처음 적은 이름 '));
+      nl.appendChild(el('s', null, o.orig_orderer_name));
+      if (o.chg_name_at) nl.appendChild(document.createTextNode(' · 고친 때 ' + when(o.chg_name_at)));
+      c.appendChild(nl);
+    }
 
     var it = el('div','items');
     ['baechu','sok','kit'].forEach(function(k){
@@ -343,6 +358,12 @@ td.z{color:#C9C1B4}
     var to = el('div','line'); to.appendChild(el('span',null,'받는 분 '));
     to.appendChild(document.createTextNode(o.recipient_name + ' ' + o.recipient_phone));
     c.appendChild(to);
+    if (o.orig_recipient_name) {
+      var rn = el('div','t'); rn.appendChild(document.createTextNode('받는 분 이름 고침 · 처음 적은 이름 '));
+      rn.appendChild(el('s', null, o.orig_recipient_name));
+      if (o.chg_rname_at) rn.appendChild(document.createTextNode(' · 고친 때 ' + when(o.chg_rname_at)));
+      c.appendChild(rn);
+    }
     var ad = el('div','line');
     if (o.chg_address) {
       // 바꾼 경우: 주문하신 주소는 줄 그어 남기고, 바꾼 곳을 함께 보여 준다
@@ -420,6 +441,56 @@ td.z{color:#C9C1B4}
     if (openBox[o.id]) c.appendChild(chgBox(o));
     if (openPay[o.id]) c.appendChild(payBox(o));
     return c;
+  }
+
+  /* ── 주문자 이름 고치기 (오타) ── */
+  var openName = {};
+  var NAMES = [ { f:'orderer_name',   label:'주문자명',      rpc:'kimjang_desk_set_name',  at:'chg_name_at'  },
+                { f:'recipient_name', label:'받는 분 이름', rpc:'kimjang_desk_set_rname', at:'chg_rname_at' } ];
+  function nameBox(o){
+    openName[o.id] = true;
+    var box = el('div','chgbox nm');
+    box.appendChild(el('p','note','이름을 잘못 적었을 때 바로잡습니다. 처음 적은 이름은 따로 남습니다. 「내 주문 확인」은 주문자의 고친 이름·처음 이름 모두로 찾아집니다.'));
+    var first = null;
+    NAMES.forEach(function(nk){
+      var row = el('div','row'); row.appendChild(el('b',null,nk.label));
+      var inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 20; inp.className = 'payer';
+      inp.setAttribute('aria-label','고칠 ' + nk.label); inp.value = o[nk.f] || '';
+      inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); ok.click(); } });
+      row.appendChild(inp); if (!first) first = inp;
+      var ok = el('button','btn dark','저장'); ok.type = 'button';
+      ok.addEventListener('click', function(){
+        var v = inp.value.trim();
+        if (!v) { alertBar(nk.label + '을 적어 주세요.'); inp.focus(); return; }
+        if (v === o[nk.f]) { alertBar(nk.label + '이 그대로입니다.'); return; }
+        setName(o, nk, v, ok);
+      });
+      row.appendChild(ok);
+      if (o['orig_' + nk.f]) {
+        var back = el('button','btn','처음 이름(' + o['orig_' + nk.f] + ')으로 되돌리기'); back.type = 'button';
+        back.addEventListener('click', function(){ setName(o, nk, o['orig_' + nk.f], back); });
+        row.appendChild(back);
+      }
+      box.appendChild(row);
+    });
+    var cl = el('button','btn','닫기'); cl.type = 'button';
+    cl.addEventListener('click', function(){ delete openName[o.id]; render(); });
+    var cr = el('div','row'); cr.appendChild(cl); box.appendChild(cr);
+    setTimeout(function(){ if (first && first.isConnected && document.activeElement === document.body) first.focus(); }, 0);
+    return box;
+  }
+  function setName(o, nk, v, btn){
+    var before = o[nk.f];
+    btn.disabled = true;
+    rpc(nk.rpc, { p_pass: pass, p_id: o.id, p_name: v })
+      .then(function(r){
+        if (r.error) throw { msg: r.error };
+        o[nk.f] = v; o['orig_' + nk.f] = r.orig || null; o[nk.at] = new Date().toISOString();
+        delete openName[o.id];
+        render();
+        alertBar('#' + o.id + ' ' + nk.label + '을 ' + before + ' → ' + v + '(으)로 고쳤습니다.');
+      })
+      .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
   }
 
   /* ── 입금 확인 + 입금일 ── */
@@ -639,7 +710,7 @@ td.z{color:#C9C1B4}
     var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
                 '절임배추','절임배추발송일','절임배추변경발송일','김치속','김치속발송일','김치속변경발송일','김장밀키트','밀키트발송일','밀키트변경발송일',
                 '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소','입금일','입금자명(주문자와 다를 때)',
-                '절임배추변경수량','김치속변경수량','밀키트변경수량','변경금액','차액(변경금액-금액)'];
+                '절임배추변경수량','김치속변경수량','밀키트변경수량','변경금액','차액(변경금액-금액)','처음 적은 주문자명(고친 경우)','처음 적은 받는분(고친 경우)'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
       var st0 = storeIn(o.address), chgCols = o.chg_address
         ? [storeOf(o) ? storeOf(o) + ' 수령' : '택배', o.chg_zipcode || '', storeOf(o) ? '' : o.chg_address, o.chg_address_detail || '']
@@ -651,7 +722,8 @@ td.z{color:#C9C1B4}
         o.qty_kit, o.date_kit || '', qn(o,'kit') ? o.chg_date_kit || '' : '',
         o.total_amount].concat(rcOf(o), chgCols, [o.paid && o.paid_date ? o.paid_date : '', o.paid && o.payer_name ? o.payer_name : ''],
         ['baechu','sok','kit'].map(function(k){ return o['chg_qty_' + k] != null ? o['chg_qty_' + k] : ''; }),
-        o.chg_total_amount != null ? [o.chg_total_amount, o.chg_total_amount - o.total_amount] : ['', '']);
+        o.chg_total_amount != null ? [o.chg_total_amount, o.chg_total_amount - o.total_amount] : ['', ''],
+        [o.orig_orderer_name || '', o.orig_recipient_name || '']);
     });
     var csv = [head].concat(rows).map(function(r){
       return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
