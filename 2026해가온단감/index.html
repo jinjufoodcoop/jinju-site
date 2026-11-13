@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>해가온 못난이 단감 주문 · 진주텃밭</title>
+<meta name="description" content="길을 잃은 가정용 못난이 단감 — 흠은 있지만 맛은 그대로. 해가온농장(김대연 생산자, 진주시 진성면) 10kg 1상자 35,000원, 택배비 포함.">
+<meta name="robots" content="noindex">
+<meta property="og:site_name" content="진주텃밭협동조합">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="길을 잃은 못난이 단감을 부탁드려요 · 해가온 단감 10kg 35,000원">
+<meta property="og:description" content="흠은 있지만 맛은 그대로 | 저탄소 인증 · 진주텃밭·한살림 공급 농가 | 택배비 포함">
+<meta property="og:url" content="https://jjcoop.co.kr/2026해가온단감/">
+<meta property="og:image" content="https://jjcoop.co.kr/img/dangam/og.jpg">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="800">
+<link rel="icon" href="../img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 절임배추 특별 주문 페이지와 같은 틀. 감빛 주황을 더함. 50~60대 조합원이 휴대폰으로 보는 것을 기준으로 글씨를 크게 */
+:root{
+  --red:#E83028; --red-deep:#C0221B;
+  --orange:#F0A800; --green:#A8B048; --green-deep:#4F5722;
+  --teal:#00A8A8; --teal-deep:#00706F;
+  --gam:#E8730C; --gam-deep:#B4520A; --gam-soft:#FFF1E2;
+  --ink:#2B2721; --muted:#6B6358;
+  --bg:#FBF7EF; --panel:#FFFFFF; --soft:#F4EDDF;
+  --line:rgba(43,39,33,.14);
+  --serif:'Gowun Batang','Nanum Myeongjo',serif;
+  --sans:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--sans);word-break:keep-all;
+  padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stripe{display:flex;height:6px}.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:var(--orange)}
+.stripe i:nth-child(3){background:var(--green)}.stripe i:nth-child(4){background:var(--teal)}
+
+/* 머리 */
+.top{padding-block:18px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--muted);font-size:15px}
+.brand img{height:30px;width:auto}
+.hero{position:relative;margin:14px 0 0;border-radius:18px;overflow:hidden;aspect-ratio:4/5;background:var(--soft)}
+.hero img{width:100%;height:100%;object-fit:cover}
+.hero .cap{position:absolute;inset:auto 0 0 0;padding:60px 18px 18px;color:#fff;
+  background:linear-gradient(to top,rgba(30,18,6,.82),rgba(30,18,6,0))}
+.hero .kicker{display:inline-block;background:var(--gam);color:#fff;font-weight:700;font-size:14px;border-radius:999px;padding:3px 12px}
+h1{font:700 clamp(29px,8.4vw,42px)/1.25 var(--serif);margin:10px 0 4px;text-wrap:balance}
+.hero p{margin:0;font-size:16px;opacity:.95}
+.price-box{margin-top:14px;background:var(--panel);border:1.5px solid var(--gam);border-radius:16px;padding:16px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.price-box .what{font-weight:700;font-size:18px}
+.price-box .what small{display:block;font-weight:500;font-size:15px;color:var(--muted)}
+.price-box .won{font:700 30px var(--sans);color:var(--gam-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
+.price-box .won small{font-size:15px;color:var(--muted);font-weight:600;margin-left:4px}
+.badges{display:flex;gap:8px;margin:12px 0 0;flex-wrap:wrap}
+.badge{background:var(--green-deep);color:#fff;font-weight:600;border-radius:999px;padding:5px 13px;font-size:15px}
+.badge.t{background:var(--teal-deep)}
+.badge.o{background:var(--gam-deep)}
+
+/* 칸 */
+section{margin-top:30px}
+h2{font:700 22px/1.35 var(--serif);margin:0 0 12px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+h2 small{font:500 14px var(--sans);color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+
+/* 부탁 글 */
+.letter{background:var(--gam-soft);border-radius:16px;padding:20px 18px;font:400 18px/1.85 var(--serif)}
+.letter p{margin:0 0 12px}.letter p:last-child{margin:0}
+.letter b{color:var(--gam-deep)}
+.letter .sign{font:600 15px var(--sans);color:var(--muted);text-align:right;margin-top:14px}
+
+/* 농사 이야기 */
+.story{display:grid;gap:18px}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.st img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.st .tx{padding:14px 16px 16px}
+.st .when{font-weight:700;font-size:14px;color:var(--gam-deep)}
+.st h3{font:700 19px/1.4 var(--serif);margin:2px 0 8px}
+.st blockquote{margin:10px 0 0;padding:10px 14px;border-left:4px solid var(--gam);background:var(--gam-soft);
+  border-radius:0 10px 10px 0;font:400 16px/1.75 var(--serif);white-space:pre-line}
+.st .from{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* 흠과 */
+.ugly{display:grid;gap:12px}
+.ugly img{border-radius:14px;width:100%;aspect-ratio:1/1;object-fit:cover}
+.ugly ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.ugly .tip{margin-top:12px;background:#FFF4D6;border-radius:12px;padding:12px 14px;font-weight:600}
+
+/* 상품 정보 표 */
+.info{width:100%;border-collapse:collapse;font-size:16px}
+.info th,.info td{padding:10px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.info th{width:30%;color:var(--muted);font-weight:600}
+
+/* 주문 */
+.qrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.qrow .name{font-weight:700;font-size:18px}
+.qrow .spec{color:var(--muted);font-size:15px}
+.qty{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.qty button{width:52px;height:52px;border:0;background:var(--soft);font-size:26px;font-weight:700;color:var(--ink);cursor:pointer}
+.qty button:active{background:#E9DFCB}
+.qty output{min-width:56px;text-align:center;font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+input[type=text],input[type=tel],textarea{width:100%;font:500 17px var(--sans);color:var(--ink);background:var(--panel);
+  border:1.5px solid var(--line);border-radius:12px;padding:12px;min-height:48px}
+textarea{min-height:76px;resize:vertical}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.need{border-color:var(--red)!important}
+.hint{font-size:14px;color:var(--muted);margin-top:6px}
+.field{display:grid;gap:6px;margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+label.l{font-weight:600}
+label.l i{color:var(--red);font-style:normal}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.btn2{border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);font:600 16px var(--sans);border-radius:12px;padding:0 14px;min-height:48px;cursor:pointer;white-space:nowrap}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:500;cursor:pointer}
+.check input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:var(--teal-deep)}
+.ways{display:grid;gap:8px}
+.way{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:56px}
+.way input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--teal-deep)}
+.way span{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+.way small{color:var(--muted);font-size:14px}
+.way:has(input:checked){border-color:var(--teal);box-shadow:0 0 0 1px var(--teal);background:#F2FAF9}
+
+.pay{background:#FFF4D6;border:1.5px solid var(--orange);border-radius:14px;padding:16px}
+.pay ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.pay strong{color:var(--red-deep)}
+.acct{margin:14px 0 4px;background:var(--panel);border-radius:12px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.acct .num{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;user-select:all}
+.acct .who{font-size:15px;color:var(--muted)}
+.terms{font-size:14px;color:var(--muted);background:var(--soft);border-radius:10px;padding:10px 12px;margin:0 0 10px}
+
+/* 아래 고정 띠 */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;z-index:5;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-block:12px}
+.bar .sum{flex:1;min-width:0}
+.bar .sum small{display:block;font-size:13px;color:#D9D2C5}
+.bar .sum b{font-size:22px;font-variant-numeric:tabular-nums}
+.go{border:0;background:var(--gam);color:#fff;font:700 18px var(--sans);border-radius:12px;padding:0 22px;min-height:52px;cursor:pointer;white-space:nowrap}
+.go:disabled{background:#8C857B;cursor:default}
+.msg{margin-top:12px;font-weight:600;color:var(--red-deep);min-height:1em}
+
+.done{text-align:center;padding-block:24px}
+.done .ok{width:64px;height:64px;border-radius:50%;background:var(--teal-deep);color:#fff;font-size:34px;line-height:64px;margin:0 auto 12px}
+.done h2{justify-content:center;font-size:24px}
+.done table{width:100%;border-collapse:collapse;margin:14px 0;text-align:left;font-variant-numeric:tabular-nums}
+.done td{padding:8px 4px;border-bottom:1px solid var(--line)}
+.done td:last-child{text-align:right;font-weight:600}
+.closed{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.closed h2{justify-content:center}
+footer{margin-top:34px;padding-block:20px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+.insta{display:inline-block;margin-top:6px;color:var(--gam-deep);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><img src="../img/logo.png" alt=""> 진주텃밭협동조합</div>
+    <div class="hero">
+      <img src="../img/dangam/hero.jpg" alt="선별대 위에 가득 쌓인 해가온 단감" width="1080" height="1440">
+      <div class="cap">
+        <span class="kicker">가정용 못난이 단감</span>
+        <h1>길을 잃은 단감을<br>부탁드려요</h1>
+        <p>해가온농장 · 김대연 생산자 · 진주시 진성면</p>
+      </div>
+    </div>
+    <div class="price-box">
+      <div class="what">해가온 단감 10kg 1상자<small>가정용 흠과 · 택배비 포함</small></div>
+      <div class="won">35,000원</div>
+    </div>
+    <div class="badges">
+      <span class="badge">저탄소 인증</span>
+      <span class="badge t">진주텃밭 공급 농가</span>
+      <span class="badge o">한살림 공급 농가</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="letter">
+      <p>주말 비가 오고 나면 기온이 뚝 떨어진답니다.<br>
+      아직 나무에는 손길이 모자라 감이 달려 있네요.</p>
+      <p>올해 유난히 감 농사가 힘들었다고 합니다.<br>
+      많은 양의 <b>가정용 못난이 단감이 길을 잃었어요.</b> ㅠ</p>
+      <p>벌레 자국, 긁힌 자국, 흠집은 있지만<br><b>맛은 그대로입니다.</b><br>
+      자연 속에서 가꾼 단감입니다.</p>
+      <div class="sign">진주텃밭 공급지원팀</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>해가온의 올해 감 농사 <small>생산자 인스타그램에서 옮겼습니다</small></h2>
+    <div class="story">
+      <article class="st">
+        <img src="../img/dangam/sunburn.jpg" alt="뜨거운 햇볕에 껍질이 데어 쭈글해진 감" loading="lazy" width="481" height="640" style="aspect-ratio:4/4">
+        <div class="tx">
+          <div class="when">7~8월 · 폭염과 가뭄</div>
+          <h3>45일 넘게 비가 오지 않았습니다</h3>
+          <p>40도를 넘나드는 폭염에 감 껍질이 데고, 잎은 말라 갔습니다. 넓은 감밭에 한꺼번에 물을 줄 수 없어, 줄마다 물길을 잠갔다 열었다 하며 밤새 물을 길어 주었습니다.</p>
+          <blockquote>별을 보며
+달을 보며
+떠오르는 해를 보며
+긴 하루를 보냈다</blockquote>
+          <div class="from">— 해가온단감, 8월 9일</div>
+        </div>
+      </article>
+
+      <article class="st">
+        <img src="../img/dangam/tree.jpg" alt="파란 하늘 아래 가지에 달린 주황빛 단감" loading="lazy" width="640" height="480">
+        <div class="tx">
+          <div class="when">10월 · 감이 익어 가는 때</div>
+          <h3>깍지와 노린재에게 내어 주고, 새에게도 내어 주고</h3>
+          <blockquote>감이 큰다
+감이 색이 난다
+…
+잘 익은 감은 새들이 먼저 맛보고
+아이고
+우리한테도 좀 남겨 주시라</blockquote>
+          <div class="from">— 해가온단감, 10월 3일</div>
+        </div>
+      </article>
+
+      <article class="st">
+        <img src="../img/dangam/packing.jpg" alt="작업장에서 단감을 선별하고 봉지에 담는 모습" loading="lazy" width="640" height="427">
+        <div class="tx">
+          <div class="when">10~11월 · 수확과 선별</div>
+          <h3>「우리에게 가을은 그저 감 따는 날들」</h3>
+          <p>자고 일어나 감밭으로, 선별·포장·택배·저장고 입고·배달. 네 번째 감 수확입니다. 냉해, 햇볕 데임, 깍지벌레, 탄저병, 긴 가뭄, 멧돼지… 해마다 변수가 도사리는데, 올해는 <b>노린재 피해</b>까지 겹쳤습니다.</p>
+        </div>
+      </article>
+
+      <article class="st">
+        <img src="../img/dangam/sunbyeol.jpg" alt="선별대에 줄지어 놓인 단감들" loading="lazy" width="1080" height="1440" style="aspect-ratio:4/4">
+        <div class="tx">
+          <div class="when">왜 흠이 생겼을까요</div>
+          <h3>약을 독하게 치지 않아서입니다</h3>
+          <p>해가온은 <b>한살림·진주텃밭 기준</b>에 맞춰 방제합니다. 탄저병도 막아 내고 깍지벌레도 다 잡았지만, 센 약을 쓰지 않으니 노린재는 죽지 않고 오후가 되면 다시 돌아와 감을 쪽쪽 빨아 먹었습니다. 그 자국이 껍질에 남았습니다.</p>
+          <blockquote>3년을 농사를 지었다.
+그래 봐야 겨우 3번.
+…
+하루하루의 노동이
+모든 가치와 이름을 대신한다.</blockquote>
+          <div class="from">— 해가온단감, 9월 25일</div>
+        </div>
+      </article>
+    </div>
+    <a class="insta" href="https://www.instagram.com/dangam_9002/" target="_blank" rel="noopener">해가온단감 인스타그램 더 보기 →</a>
+  </section>
+
+  <section>
+    <h2>흠은 있어도, 맛은 그대로</h2>
+    <div class="card ugly">
+      <img src="../img/dangam/heumgwa.jpg" alt="껍질에 벌레 자국과 얼룩이 있는 가정용 단감 실제 모습" loading="lazy" width="1080" height="1440">
+      <div>
+        <p style="margin:0 0 8px"><b>사진 그대로의 감이 갑니다.</b> 선물용으로는 내지 못한 가정용입니다.</p>
+        <ul>
+          <li>노린재가 빨아 먹은 자국, 얼룩, 긁힌 자국이 있습니다.</li>
+          <li>모양과 크기가 고르지 않습니다.</li>
+          <li>속살과 맛은 상품과 같습니다.</li>
+        </ul>
+        <div class="tip">🔪 생산자 한마디 — 「껍질을 조금 두껍게 깎아서 드시면 됩니다!」</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>상품 정보</h2>
+    <div class="card">
+      <table class="info">
+        <tr><th>상품</th><td>해가온 단감 (가정용 흠과)</td></tr>
+        <tr><th>무게</th><td>10kg 1상자</td></tr>
+        <tr><th>가격</th><td><b>35,000원</b> (택배비 포함)</td></tr>
+        <tr><th>생산자</th><td>김대연 · 해가온농장<br>경남 진주시 진성면</td></tr>
+        <tr><th>인증</th><td>저탄소 농축산물 인증</td></tr>
+        <tr><th>공급처</th><td>진주텃밭 · 한살림에 공급하는 농가</td></tr>
+        <tr><th>배송</th><td>주문을 모은 뒤 <b>차례대로 출고</b>합니다.<br>진주텃밭이 택배로 보내드립니다.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <div id="closed" class="closed" hidden>
+    <h2>주문을 마감했습니다</h2>
+    <p>준비한 단감이 모두 나갔습니다. 함께해 주셔서 고맙습니다.<br>문의 사무국 <b>055-763-1243</b></p>
+  </div>
+
+  <form id="form" novalidate>
+    <section>
+      <h2 id="order">주문하기</h2>
+      <div class="card">
+        <div class="qrow">
+          <div><div class="name">해가온 단감 10kg</div><div class="spec">1상자 35,000원 · 택배비 포함</div></div>
+          <div class="qty" id="qtyBox">
+            <button type="button" data-d="-1" aria-label="한 상자 빼기">−</button>
+            <output id="q" aria-live="polite">1</output>
+            <button type="button" data-d="1" aria-label="한 상자 더하기">+</button>
+          </div>
+        </div>
+        <p class="hint">받는 곳이 다르면 주문을 따로 해 주세요. (한 주문 = 한 주소)</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>주문하시는 분</h2>
+      <div class="card">
+        <div class="field">
+          <label class="l" for="oName">이름 <i>*</i></label>
+          <input type="text" id="oName" autocomplete="name" maxlength="20">
+          <div class="hint">입금하실 때 쓰는 이름(입금자명)과 <b>같게</b> 적어 주세요.</div>
+        </div>
+        <div class="field">
+          <label class="l" for="oPhone">휴대폰 번호 <i>*</i></label>
+          <input type="tel" id="oPhone" autocomplete="tel" inputmode="numeric" placeholder="010-0000-0000" maxlength="13">
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>받으시는 분</h2>
+      <div class="card">
+        <div class="field">
+          <label class="check"><input type="checkbox" id="same" checked> 주문하시는 분과 같습니다</label>
+        </div>
+        <div id="rBox" hidden>
+          <div class="field">
+            <label class="l" for="rName">받는 분 이름 <i>*</i></label>
+            <input type="text" id="rName" maxlength="20">
+          </div>
+          <div class="field">
+            <label class="l" for="rPhone">받는 분 휴대폰 <i>*</i></label>
+            <input type="tel" id="rPhone" inputmode="numeric" placeholder="010-0000-0000" maxlength="13">
+          </div>
+        </div>
+        <div class="field">
+          <label class="l" for="addr">받는 주소 <i>*</i></label>
+          <div class="row">
+            <input type="text" id="zip" placeholder="우편번호" readonly aria-label="우편번호">
+            <button type="button" class="btn2" id="findAddr">주소 찾기</button>
+          </div>
+          <input type="text" id="addr" placeholder="주소 찾기를 누르거나 직접 적어 주세요" maxlength="200">
+          <input type="text" id="addr2" placeholder="나머지 주소 (동·호수)" maxlength="100" aria-label="나머지 주소">
+        </div>
+        <div class="field">
+          <label class="l" for="memo">배송 요청사항</label>
+          <textarea id="memo" maxlength="250" placeholder="예) 문 앞에 두어 주세요"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>입금 안내</h2>
+      <div class="pay">
+        <ul>
+          <li>결제는 <b>계좌이체</b>입니다.</li>
+          <li><strong>입금까지 마치셔야 주문이 접수됩니다.</strong></li>
+          <li><strong>주문자 이름과 입금자명이 같아야 합니다.</strong></li>
+          <li>주문을 모은 뒤 <b>차례대로 출고</b>합니다. 진주텃밭이 택배로 보내드립니다.</li>
+        </ul>
+        <div class="acct">
+          <div><div class="num">농협 351-0836-5221-33</div><div class="who">진주우리먹거리협동조합 진주텃밭</div></div>
+          <button type="button" class="btn2" id="copyAcct">계좌 복사</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>개인정보 동의</h2>
+      <div class="card">
+        <div class="terms">모으는 것: 주문자·받는 분 이름, 휴대폰 번호, 주소<br>
+        쓰는 곳: 주문 확인, 입금 확인, 택배 발송<br>
+        보관 기간: 발송과 정산을 마친 뒤 지체 없이 파기</div>
+        <label class="check"><input type="checkbox" id="agree"> 위 내용에 동의합니다 <span style="color:var(--red)">*</span></label>
+      </div>
+      <p class="msg" id="msg" role="alert"></p>
+    </section>
+  </form>
+
+  <div id="done" class="done" hidden>
+    <div class="ok" aria-hidden="true">✓</div>
+    <h2>주문이 들어왔습니다</h2>
+    <p>주문번호 <b id="dNo"></b></p>
+    <table id="dTable"></table>
+    <div class="pay" style="text-align:left">
+      <ul>
+        <li><strong>아래 계좌로 입금하시면 주문이 접수됩니다.</strong></li>
+        <li><strong>입금자명은 주문자 이름(<span id="dName"></span>)과 같아야 합니다.</strong></li>
+        <li>주문을 모은 뒤 차례대로 출고합니다. 진주텃밭이 택배로 보내드립니다.</li>
+      </ul>
+      <div class="acct">
+        <div><div class="num">농협 351-0836-5221-33</div><div class="who">진주우리먹거리협동조합 진주텃밭</div></div>
+      </div>
+    </div>
+    <p style="margin-top:16px">길을 잃은 단감에 길을 내어 주셔서 고맙습니다. 🧡</p>
+    <p class="hint">문의 사무국 055-763-1243</p>
+  </div>
+
+  <footer>진주우리먹거리협동조합 진주텃밭 · 경남 진주시 금산면 금산순환로 61 · 사무국 055-763-1243<br>
+  사진과 농사 이야기: 해가온농장 인스타그램(@dangam_9002), 생산자 허락을 받아 옮겼습니다.</footer>
+</div>
+
+<div class="bar" id="bar">
+  <div class="wrap">
+    <div class="sum"><small id="sumInfo">1상자 · 택배비 포함</small><b id="sum">35,000원</b></div>
+    <button type="button" class="go" id="go">주문하기</button>
+  </div>
+</div>
+
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async></script>
+<script>
+(function(){
+  'use strict';
+  var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+  var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+  var PRICE = 35000, MAXQ = 20;
+  var CLOSE_AT = null;   // 마감 날짜가 정해지면 new Date('2026-11-30T00:00:00+09:00').getTime() 처럼 넣는다
+  // 홈페이지(jjcoop.co.kr)가 아닌 곳에서 열면 미리보기 — 주문을 서버로 보내지 않는다
+  var PREVIEW = !/jjcoop\.co\.kr$/.test(location.hostname);
+  var qty = 1;
+
+  function $(id){ return document.getElementById(id); }
+  function won(n){ return n.toLocaleString('ko-KR') + '원'; }
+  function say(t){ $('msg').textContent = t; }
+
+  function isClosed(){ return CLOSE_AT !== null && Date.now() >= CLOSE_AT; }
+  function closeNow(){ $('form').hidden = true; $('bar').hidden = true; $('closed').hidden = false; document.body.style.paddingBottom = '0'; }
+  if (isClosed()) closeNow();
+  // 담당자 화면에서 「주문 받기 멈추기」를 눌렀으면 마감 화면을 보여준다
+  if (!PREVIEW) {
+    fetch(SB_URL + '/rpc/dangam_status', { method:'POST', headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' }, body:'{}' })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if (j && j.open === false) closeNow(); })
+      .catch(function(){});
+  }
+
+  function render(){
+    $('q').textContent = qty;
+    $('sum').textContent = won(qty * PRICE);
+    $('sumInfo').textContent = qty + '상자 (' + (qty * 10) + 'kg) · 택배비 포함';
+  }
+  document.querySelectorAll('#qtyBox button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var n = qty + Number(b.getAttribute('data-d'));
+      if (n > MAXQ) { say(MAXQ + '상자가 넘는 주문은 사무국(055-763-1243)으로 연락 주세요.'); return; }
+      qty = Math.max(1, n); say(''); render();
+    });
+  });
+  render();
+
+  $('same').addEventListener('change', function(){ $('rBox').hidden = this.checked; });
+
+  function fmtPhone(v){
+    var d = v.replace(/\D/g,'').slice(0,11);
+    if (d.indexOf('02') === 0) return d.replace(/^(02)(\d{0,4})(\d{0,4}).*/, function(_,a,b,c){ return [a,b,c].filter(Boolean).join('-'); });
+    return d.replace(/^(\d{0,3})(\d{0,4})(\d{0,4}).*/, function(_,a,b,c){ return [a,b,c].filter(Boolean).join('-'); });
+  }
+  ['oPhone','rPhone'].forEach(function(id){ $(id).addEventListener('input', function(){ this.value = fmtPhone(this.value); }); });
+  function phoneOk(v){ return /^0\d{8,10}$/.test(v.replace(/\D/g,'')); }
+
+  $('findAddr').addEventListener('click', function(){
+    if (!window.daum || !daum.Postcode) { say('주소 찾기를 불러오지 못했습니다. 주소를 직접 적어 주세요.'); $('addr').focus(); return; }
+    new daum.Postcode({ oncomplete: function(r){
+      $('zip').value = r.zonecode; $('addr').value = r.roadAddress || r.jibunAddress;
+      $('addr').classList.remove('need'); $('addr2').focus();
+    }}).open();
+  });
+
+  $('copyAcct').addEventListener('click', function(){
+    var b = this;
+    function ok(){ b.textContent = '복사됨'; setTimeout(function(){ b.textContent = '계좌 복사'; }, 1800); }
+    if (navigator.clipboard) navigator.clipboard.writeText('농협 351-0836-5221-33').then(ok, function(){});
+  });
+
+  function need(el, text){ el.classList.add('need'); el.scrollIntoView({behavior:'smooth', block:'center'}); try{ el.focus({preventScroll:true}); }catch(e){} say(text); return false; }
+  document.querySelectorAll('input,textarea').forEach(function(el){ el.addEventListener('input', function(){ el.classList.remove('need'); }); });
+
+  function check(){
+    if (!$('oName').value.trim()) return need($('oName'), '주문하시는 분 이름을 적어 주세요.');
+    if (!phoneOk($('oPhone').value)) return need($('oPhone'), '휴대폰 번호를 확인해 주세요.');
+    if (!$('same').checked) {
+      if (!$('rName').value.trim()) return need($('rName'), '받는 분 이름을 적어 주세요.');
+      if (!phoneOk($('rPhone').value)) return need($('rPhone'), '받는 분 휴대폰 번호를 확인해 주세요.');
+    }
+    if ($('addr').value.trim().length < 5) return need($('addr'), '받는 주소를 적어 주세요.');
+    if (!$('agree').checked) return need($('agree'), '개인정보 동의에 체크해 주세요.');
+    return true;
+  }
+
+  var sending = false, jumped = false;
+  $('go').addEventListener('click', function(){
+    if (sending) return;
+    if (isClosed()) { closeNow(); return; }
+    var formTop = $('order');
+    if (!jumped && formTop.getBoundingClientRect().top > window.innerHeight) { jumped = true; formTop.scrollIntoView({behavior:'smooth'}); return; }  // 처음 누르면 주문 칸으로 내려간다
+    jumped = true;
+    say('');
+    if (!check()) return;
+    var same = $('same').checked;
+    var body = {
+      p_orderer_name: $('oName').value.trim(),
+      p_orderer_phone: $('oPhone').value.trim(),
+      p_recipient_name: same ? $('oName').value.trim() : $('rName').value.trim(),
+      p_recipient_phone: same ? $('oPhone').value.trim() : $('rPhone').value.trim(),
+      p_zipcode: $('zip').value.trim(),
+      p_address: $('addr').value.trim(),
+      p_address_detail: $('addr2').value.trim(),
+      p_qty: qty,
+      p_memo: $('memo').value.trim()
+    };
+    if (PREVIEW) { showDone({ order_no:'미리보기', total: qty * PRICE }, body); return; }
+
+    sending = true; $('go').disabled = true; $('go').textContent = '보내는 중…';
+    fetch(SB_URL + '/rpc/place_dangam_order', {
+      method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(function(res){ return res.json().catch(function(){ return {}; }).then(function(j){ if (!res.ok) throw new Error((j && j.message) || ''); return j; }); })
+      .then(function(r){ showDone(r, body); })
+      .catch(function(err){
+        var m = String(err && err.message || '');
+        say(/[가-힣]/.test(m) ? m : '주문을 보내지 못했습니다. 통신 상태를 확인하고 다시 눌러 주세요. (적으신 내용은 그대로 있습니다)');
+        if (/마감/.test(m)) closeNow();
+      })
+      .then(function(){ sending = false; $('go').disabled = false; $('go').textContent = '주문하기'; });
+  });
+
+  function showDone(r, b){
+    $('dNo').textContent = r.order_no;
+    $('dName').textContent = b.p_orderer_name;
+    var t = $('dTable'); t.innerHTML = '';
+    function addRow(a, c){ var tr = t.insertRow(); tr.insertCell().textContent = a; tr.insertCell().textContent = c; }
+    addRow('해가온 단감 10kg', b.p_qty + '상자');
+    addRow('받는 곳', (b.p_address + ' ' + b.p_address_detail).trim());
+    addRow('입금하실 금액 (택배비 포함)', won(r.total));
+    $('form').hidden = true; $('bar').hidden = true;
+    document.querySelectorAll('header, section:not(form section)').forEach(function(s){ s.hidden = true; });
+    $('done').hidden = false;
+    document.body.style.paddingBottom = '0';
+    window.scrollTo(0, 0);
+  }
+})();
+</script>
+</body>
+</html>

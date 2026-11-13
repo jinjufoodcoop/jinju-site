@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>해가온 단감 주문 취합 · 담당자</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E83028; --red-deep:#C0221B; --orange:#F0A800; --green:#A8B048; --teal:#00A8A8; --teal-deep:#00706F;
+  --gam:#E8730C; --gam-deep:#B4520A; --gam-soft:#FFF1E2;
+  --ink:#2B2721; --muted:#6B6358; --bg:#FBF7EF; --panel:#FFFFFF; --soft:#F4EDDF; --line:rgba(43,39,33,.14);
+  --sans:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);word-break:keep-all}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px 40px}
+.stripe{display:flex;height:6px}.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:var(--orange)}
+.stripe i:nth-child(3){background:var(--green)}.stripe i:nth-child(4){background:var(--teal)}
+h1{font-size:22px;margin:18px 0 4px}
+.sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+.sub a{color:var(--gam-deep)}
+button{font:600 15px var(--sans);border-radius:10px;border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);padding:0 14px;min-height:40px;cursor:pointer}
+button.pri{background:var(--gam);border-color:var(--gam);color:#fff}
+button.on{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff}
+button.warn{border-color:var(--red-deep);color:var(--red-deep)}
+button:disabled{opacity:.5;cursor:default}
+input[type=password],input[type=search],input[type=text],input[type=date]{font:500 15px var(--sans);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;min-height:40px;background:var(--panel);color:var(--ink)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+
+.login{max-width:360px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:20px;display:grid;gap:10px}
+.err{color:var(--red-deep);font-weight:600;min-height:1em}
+
+.state{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat small{display:block;color:var(--muted);font-size:13px}
+.stat b{font-size:22px;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;color:var(--muted);margin-left:4px}
+
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{min-height:36px;font-size:14px;border-color:var(--line)}
+.tabs button.cur{background:var(--ink);border-color:var(--ink);color:#fff}
+.tools input[type=search]{flex:1;min-width:180px}
+
+.list{display:grid;gap:10px}
+.o{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--orange);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.o.paid{border-left-color:var(--teal)}
+.o.shipped{border-left-color:var(--green);background:#FAFBF4}
+.o.canceled{border-left-color:#999;opacity:.6}
+.o .hd{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.o .no{font-weight:700}
+.o .when{color:var(--muted);font-size:13px}
+.o .qty{font-weight:700;color:var(--gam-deep)}
+.o .amt{font-weight:700;font-variant-numeric:tabular-nums}
+.tag{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;color:#fff}
+.tag.p{background:var(--teal-deep)}.tag.u{background:var(--orange);color:var(--ink)}.tag.s{background:#4F5722}.tag.c{background:#777}
+.o .who{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 16px;font-size:15px}
+.o .who small{color:var(--muted)}
+.o .memo{background:var(--soft);border-radius:8px;padding:6px 10px;font-size:14px}
+.o .acts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.o .acts button{min-height:36px;font-size:14px}
+.paybox{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--gam-soft);border-radius:10px;padding:8px}
+.empty{color:var(--muted);text-align:center;padding:30px}
+.preview{background:#FFF4D6;border:1.5px solid var(--orange);border-radius:10px;padding:8px 12px;font-weight:600;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="wrap">
+  <h1>해가온 단감 주문 취합</h1>
+  <p class="sub">담당자 전용 · 주문 페이지 <a href="./" target="_blank">jjcoop.co.kr/2026해가온단감</a> · 10kg 1상자 35,000원(택배비 포함) · 진주텃밭 택배 출고</p>
+  <div class="preview" id="previewNote" hidden>미리보기입니다 — 보이는 주문은 시험용 가짜 자료이고, 눌러도 서버에 저장되지 않습니다.</div>
+
+  <form class="login" id="login" autocomplete="on">
+    <label for="pw"><b>비밀번호</b> <small style="color:var(--muted)">(절임배추 담당자 화면과 같음)</small></label>
+    <input type="password" id="pw" autocomplete="current-password">
+    <button type="submit" class="pri" id="loginBtn">들어가기</button>
+    <div class="err" id="loginErr" role="alert"></div>
+  </form>
+
+  <div id="main" hidden>
+    <div class="state">
+      <div id="openText"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" id="toggleOpen"></button>
+        <button type="button" id="reload">새로 불러오기</button>
+        <button type="button" id="logout">나가기</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="tools">
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <input type="search" id="q" placeholder="이름·전화 뒷자리·주소·주문번호 찾기">
+    </div>
+    <div class="tools">
+      <button type="button" id="dlShip">📦 발송할 것 엑셀 (입금O·발송X)</button>
+      <button type="button" id="dlAll">전체 주문 엑셀</button>
+      <span class="err" id="msg" role="alert"></span>
+    </div>
+
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+  var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+  var KEY = 'dangam_desk_pw';
+  var PREVIEW = !/jjcoop\.co\.kr$/.test(location.hostname);
+  var pass = '', orders = [], isOpen = true, tab = 'all';
+
+  function $(id){ return document.getElementById(id); }
+  function won(n){ return (n||0).toLocaleString('ko-KR') + '원'; }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function today(){ var d = new Date(Date.now() + 9*36e5); return d.toISOString().slice(0,10); }
+  function fmtTime(t){ var d = new Date(t); return (d.getMonth()+1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
+
+  /* ── 미리보기용 가짜 주문 ── */
+  var FAKE = [
+    {id:3,created_at:new Date().toISOString(),orderer_name:'시험주문셋',orderer_phone:'010-0000-0003',recipient_name:'시험주문셋',recipient_phone:'010-0000-0003',zipcode:'52800',address:'경남 진주시 금산면 금산순환로 61',address_detail:'사무국',qty:1,total_amount:35000,memo:null,paid:false,paid_date:null,payer_name:null,shipped:false,canceled:false,staff_note:null},
+    {id:2,created_at:new Date(Date.now()-36e5).toISOString(),orderer_name:'시험주문둘',orderer_phone:'010-0000-0002',recipient_name:'받는사람',recipient_phone:'010-0000-0099',zipcode:'52700',address:'경남 진주시 진성면 시험로 1',address_detail:null,qty:3,total_amount:105000,memo:'문 앞에 두어 주세요',paid:true,paid_date:today(),payer_name:'다른이름',shipped:false,canceled:false,staff_note:null},
+    {id:1,created_at:new Date(Date.now()-864e5).toISOString(),orderer_name:'시험주문하나',orderer_phone:'010-0000-0001',recipient_name:'시험주문하나',recipient_phone:'010-0000-0001',zipcode:'52600',address:'경남 진주시 시험로 2',address_detail:'101동 101호',qty:2,total_amount:70000,memo:null,paid:true,paid_date:today(),payer_name:null,shipped:true,canceled:false,staff_note:'11/14 발송'}
+  ];
+
+  function rpc(name, body){
+    if (PREVIEW) {
+      if (name === 'dangam_desk_list') return Promise.resolve({ open:isOpen, orders: orders.length ? orders : FAKE.map(function(o){ return Object.assign({}, o); }) });
+      if (name === 'dangam_desk_set_open') return Promise.resolve({ ok:true, open: body.p_open });
+      if (name === 'dangam_desk_mark') {
+        var o = orders.filter(function(x){ return x.id === body.p_id; })[0];
+        if (body.p_field === 'paid') { o.paid = body.p_value; o.paid_date = body.p_value ? (body.p_date || today()) : null; o.payer_name = body.p_value ? (body.p_text || null) : null; }
+        else if (body.p_field === 'note') o.staff_note = body.p_text || null;
+        else o[body.p_field] = body.p_value;
+        return Promise.resolve({ ok:true });
+      }
+    }
+    return fetch(SB_URL + '/rpc/' + name, {
+      method:'POST', headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    }).then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error((j && j.message) || '서버 오류'); return j; }); });
+  }
+
+  /* ── 들어가기 ── */
+  $('login').addEventListener('submit', function(e){
+    e.preventDefault();
+    pass = $('pw').value; $('loginErr').textContent = '';
+    load(true);
+  });
+  $('logout').addEventListener('click', function(){
+    try { sessionStorage.removeItem(KEY); } catch(err){}
+    pass = ''; orders = []; $('pw').value = '';
+    $('main').hidden = true; $('login').hidden = false;
+  });
+  $('reload').addEventListener('click', function(){ load(false); });
+
+  function load(first){
+    $('msg').textContent = '';
+    rpc('dangam_desk_list', { p_pass: pass }).then(function(j){
+      if (j.error) {
+        if (first) $('loginErr').textContent = j.error; else $('msg').textContent = j.error;
+        return;
+      }
+      try { sessionStorage.setItem(KEY, pass); } catch(err){}
+      orders = j.orders || []; isOpen = j.open !== false;
+      $('login').hidden = true; $('main').hidden = false;
+      render();
+    }).catch(function(err){
+      var m = '불러오지 못했습니다. ' + (err && err.message || '');
+      if (first) $('loginErr').textContent = m; else $('msg').textContent = m;
+    });
+  }
+
+  /* ── 주문 받기 멈추기/열기 ── */
+  $('toggleOpen').addEventListener('click', function(){
+    var next = !isOpen;
+    if (!confirm(next ? '주문을 다시 받을까요?' : '주문 받기를 멈출까요?\n주문 페이지에 「주문을 마감했습니다」가 뜹니다.')) return;
+    rpc('dangam_desk_set_open', { p_pass: pass, p_open: next }).then(function(j){
+      if (j.error) { $('msg').textContent = j.error; return; }
+      isOpen = j.open; render();
+    }).catch(function(err){ $('msg').textContent = '바꾸지 못했습니다. ' + (err && err.message || ''); });
+  });
+
+  /* ── 탭 · 찾기 ── */
+  var TABS = [
+    ['all','전체', function(o){ return !o.canceled; }],
+    ['unpaid','입금 전', function(o){ return !o.canceled && !o.paid; }],
+    ['toship','발송할 것', function(o){ return !o.canceled && o.paid && !o.shipped; }],
+    ['shipped','발송함', function(o){ return !o.canceled && o.shipped; }],
+    ['canceled','취소', function(o){ return o.canceled; }]
+  ];
+  function tabFn(k){ return TABS.filter(function(t){ return t[0] === k; })[0][2]; }
+  $('q').addEventListener('input', function(){ renderList(); });
+
+  function sumQty(list){ return list.reduce(function(s,o){ return s + o.qty; }, 0); }
+
+  function render(){
+    $('openText').innerHTML = isOpen
+      ? '<span class="dot" style="background:var(--teal)"></span><b>지금 주문 받는 중</b>'
+      : '<span class="dot" style="background:var(--red)"></span><b>주문 받기 멈춤</b> <small style="color:var(--muted)">(주문 페이지에 마감 안내가 뜸)</small>';
+    $('toggleOpen').textContent = isOpen ? '주문 받기 멈추기' : '주문 다시 받기';
+    $('toggleOpen').className = isOpen ? 'warn' : 'pri';
+
+    var live = orders.filter(function(o){ return !o.canceled; });
+    var paid = live.filter(function(o){ return o.paid; });
+    var unpaid = live.filter(function(o){ return !o.paid; });
+    var toship = paid.filter(function(o){ return !o.shipped; });
+    var shipped = live.filter(function(o){ return o.shipped; });
+    function st(label, list, extra){ return '<div class="stat"><small>' + label + '</small><b>' + sumQty(list) + '상자</b><span>' + list.length + '건' + (extra || '') + '</span></div>'; }
+    $('stats').innerHTML =
+      st('전체 주문 (취소 빼고)', live, ' · ' + won(live.reduce(function(s,o){ return s + o.total_amount; }, 0))) +
+      st('입금 확인', paid, ' · ' + won(paid.reduce(function(s,o){ return s + o.total_amount; }, 0))) +
+      st('입금 전', unpaid) +
+      st('발송할 것 (입금O)', toship) +
+      st('발송함', shipped);
+
+    $('tabs').innerHTML = TABS.map(function(t){
+      var n = orders.filter(t[2]).length;
+      return '<button type="button" role="tab" data-k="' + t[0] + '" class="' + (t[0] === tab ? 'cur' : '') + '" aria-selected="' + (t[0] === tab) + '">' + t[1] + ' ' + n + '</button>';
+    }).join('');
+    $('tabs').querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){ tab = b.getAttribute('data-k'); render(); }); });
+    renderList();
+  }
+
+  function renderList(){
+    var q = $('q').value.trim().toLowerCase();
+    var list = orders.filter(tabFn(tab)).filter(function(o){
+      if (!q) return true;
+      return [o.id, o.orderer_name, o.orderer_phone, o.recipient_name, o.recipient_phone, o.address, o.address_detail, o.payer_name, o.memo, o.staff_note]
+        .join(' ').toLowerCase().replace(/-/g,'').indexOf(q.replace(/-/g,'')) >= 0;
+    });
+    if (!list.length) { $('list').innerHTML = '<div class="empty">주문이 없습니다.</div>'; return; }
+    $('list').innerHTML = list.map(card).join('');
+    $('list').querySelectorAll('[data-act]').forEach(function(b){ b.addEventListener('click', act); });
+  }
+
+  function card(o){
+    var cls = o.canceled ? 'canceled' : o.shipped ? 'shipped' : o.paid ? 'paid' : '';
+    var tags = o.canceled ? '<span class="tag c">취소</span>'
+      : (o.paid ? '<span class="tag p">입금 ' + esc((o.paid_date || '').slice(5).replace('-','/')) + '</span>' : '<span class="tag u">입금 전</span>') +
+        (o.shipped ? ' <span class="tag s">발송함</span>' : '');
+    var same = o.orderer_name === o.recipient_name && o.orderer_phone === o.recipient_phone;
+    return '<div class="o ' + cls + '" id="o' + o.id + '">' +
+      '<div class="hd"><span class="no">#' + o.id + '</span><span class="when">' + fmtTime(o.created_at) + '</span>' +
+        '<span class="qty">' + o.qty + '상자</span><span class="amt">' + won(o.total_amount) + '</span>' + tags + '</div>' +
+      '<div class="who">' +
+        '<div><small>주문</small> <b>' + esc(o.orderer_name) + '</b> ' + esc(o.orderer_phone) +
+          (o.payer_name ? ' <small>· 입금자명</small> <b>' + esc(o.payer_name) + '</b>' : '') + '</div>' +
+        '<div><small>받는 분</small> ' + (same ? '<small>(주문자와 같음)</small>' : '<b>' + esc(o.recipient_name) + '</b> ' + esc(o.recipient_phone)) + '</div>' +
+        '<div style="grid-column:1/-1"><small>주소</small> ' + (o.zipcode ? '(' + esc(o.zipcode) + ') ' : '') + esc(o.address) + ' ' + esc(o.address_detail || '') + '</div>' +
+      '</div>' +
+      (o.memo ? '<div class="memo">요청: ' + esc(o.memo) + '</div>' : '') +
+      (o.staff_note ? '<div class="memo" style="background:var(--gam-soft)">직원 메모: ' + esc(o.staff_note) + '</div>' : '') +
+      '<div class="acts">' +
+        (o.canceled ? '' :
+          (o.paid ? '<button type="button" data-act="unpay" data-id="' + o.id + '">입금 확인 풀기</button>'
+                  : '<button type="button" class="pri" data-act="payopen" data-id="' + o.id + '">입금 확인</button>') +
+          (o.paid ? (o.shipped ? '<button type="button" data-act="unship" data-id="' + o.id + '">발송 표시 풀기</button>'
+                               : '<button type="button" class="on" data-act="ship" data-id="' + o.id + '">발송함 표시</button>') : '')) +
+        '<button type="button" data-act="note" data-id="' + o.id + '">메모</button>' +
+        (o.canceled ? '<button type="button" data-act="uncancel" data-id="' + o.id + '">취소 풀기</button>'
+                    : '<button type="button" class="warn" data-act="cancel" data-id="' + o.id + '">취소</button>') +
+      '</div>' +
+      '<div class="paybox" id="pay' + o.id + '" hidden>' +
+        '<label>입금일 <input type="date" id="pd' + o.id + '" value="' + today() + '"></label>' +
+        '<input type="text" id="pn' + o.id + '" placeholder="입금자명 (주문자와 다를 때만)" maxlength="20">' +
+        '<button type="button" class="pri" data-act="pay" data-id="' + o.id + '">확인</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function mark(id, field, value, date, text){
+    $('msg').textContent = '';
+    return rpc('dangam_desk_mark', { p_pass: pass, p_id: id, p_field: field, p_value: value, p_date: date || null, p_text: text == null ? null : text })
+      .then(function(j){ if (j.error) { $('msg').textContent = j.error; return; } load(false); })
+      .catch(function(err){ $('msg').textContent = '저장하지 못했습니다. ' + (err && err.message || ''); });
+  }
+
+  function act(){
+    var id = Number(this.getAttribute('data-id')), a = this.getAttribute('data-act');
+    var o = orders.filter(function(x){ return x.id === id; })[0];
+    if (a === 'payopen') { $('pay' + id).hidden = false; $('pn' + id).focus(); return; }
+    if (a === 'pay') return mark(id, 'paid', true, $('pd' + id).value || today(), $('pn' + id).value.trim());
+    if (a === 'unpay') { if (confirm('#' + id + ' ' + o.orderer_name + ' 님 입금 확인을 풀까요?')) mark(id, 'paid', false); return; }
+    if (a === 'ship') return mark(id, 'shipped', true);
+    if (a === 'unship') return mark(id, 'shipped', false);
+    if (a === 'cancel') { if (confirm('#' + id + ' ' + o.orderer_name + ' 님 주문을 취소로 표시할까요?')) mark(id, 'canceled', true); return; }
+    if (a === 'uncancel') return mark(id, 'canceled', false);
+    if (a === 'note') { var t = prompt('직원 메모 (비우면 지움)', o.staff_note || ''); if (t !== null) mark(id, 'note', false, null, t); return; }
+  }
+
+  /* ── 엑셀(CSV) 내려받기 ── */
+  function csv(rows){ return '﻿' + rows.map(function(r){ return r.map(function(v){ v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(','); }).join('\r\n'); }
+  function save(name, text){
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type:'text/csv;charset=utf-8' }));
+    a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  }
+  function stamp(){ return today().replace(/-/g,''); }
+  $('dlShip').addEventListener('click', function(){
+    var list = orders.filter(function(o){ return !o.canceled && o.paid && !o.shipped; }).slice().reverse();
+    if (!list.length) { $('msg').textContent = '발송할 주문이 없습니다.'; return; }
+    var rows = [['주문번호','받는분','받는분전화','우편번호','주소','상세주소','상자수(10kg)','배송요청','주문자','주문자전화']];
+    list.forEach(function(o){ rows.push([o.id, o.recipient_name, o.recipient_phone, o.zipcode, o.address, o.address_detail, o.qty, o.memo, o.orderer_name, o.orderer_phone]); });
+    save('해가온단감_발송할것_' + stamp() + '.csv', csv(rows));
+  });
+  $('dlAll').addEventListener('click', function(){
+    var rows = [['주문번호','주문일시','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소','상자수','금액','배송요청','입금','입금일','입금자명','발송','취소','직원메모']];
+    orders.slice().reverse().forEach(function(o){
+      rows.push([o.id, new Date(o.created_at).toLocaleString('ko-KR'), o.orderer_name, o.orderer_phone, o.recipient_name, o.recipient_phone,
+        o.zipcode, o.address, o.address_detail, o.qty, o.total_amount, o.memo, o.paid ? 'O' : '', o.paid_date, o.payer_name,
+        o.shipped ? 'O' : '', o.canceled ? 'O' : '', o.staff_note]);
+    });
+    save('해가온단감_전체주문_' + stamp() + '.csv', csv(rows));
+  });
+
+  if (PREVIEW) { $('previewNote').hidden = false; $('pw').value = '미리보기'; }
+  try { var saved = sessionStorage.getItem(KEY); if (saved && !PREVIEW) { $('pw').value = saved; pass = saved; load(true); } } catch(err){}
+})();
+</script>
+</body>
+</html>
