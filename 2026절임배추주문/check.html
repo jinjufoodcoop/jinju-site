@@ -76,6 +76,15 @@ td.addr{text-align:left;padding-left:12px;overflow-wrap:anywhere}
 .datenote a{display:inline-block;font-weight:700;color:var(--red-deep);font-size:18px;white-space:nowrap}
 .pay p{margin:0;font-size:15px}
 .pay strong{color:var(--red-deep)}
+/* 로젠택배 송장 */
+.trk{background:#EEF4F3;border:1.5px solid #CFE3DF;border-radius:12px;padding:12px 14px;display:grid;gap:10px}
+.trk h3{margin:0;font-size:17px;color:var(--teal-deep)}
+.trk .it{display:grid;gap:6px}
+.trk .it b{font-size:16px}
+.trk .n{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:var(--panel);border-radius:10px;padding:8px 10px}
+.trk .n span{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.trk .n a{display:inline-flex;align-items:center;justify-content:center;background:var(--teal-deep);color:#fff;text-decoration:none;font-weight:700;font-size:16px;border-radius:10px;min-height:44px;padding:0 14px;white-space:nowrap}
+.trk .wait{color:var(--muted);font-size:15px;margin:0}
 .none{background:var(--panel);border:1.5px dashed var(--line);border-radius:14px;padding:18px;text-align:center}
 .none p{margin:6px 0 0;color:var(--muted);font-size:16px}
 .back{display:inline-block;margin-top:24px;color:var(--teal-deep);font-weight:600}
@@ -88,7 +97,7 @@ footer{margin-top:30px;padding-top:16px;color:var(--muted);font-size:14px;border
   <header class="top">
     <a class="brand" href="./"><img src="../img/logo.png" alt=""> 진주텃밭협동조합</a>
     <h1>내 주문 확인</h1>
-    <p class="sub">절임배추 4일 특별 주문(11/5~11/8)을 하셨다면, 주문하실 때 적은 <b>주문자 이름</b>과 <b>연락처</b>를 넣어 주세요. 주문 내용과 입금하실 계좌·금액이 나옵니다.</p>
+    <p class="sub">절임배추 4일 특별 주문(11/5~11/8)을 하셨다면, 주문하실 때 적은 <b>주문자 이름</b>과 <b>연락처</b>를 넣어 주세요. 주문 내용과 입금하실 계좌·금액이 나옵니다. 택배로 보낸 뒤에는 <b>로젠택배 송장번호</b>와 배송 조회도 여기서 보실 수 있습니다.</p>
   </header>
 
   <form class="card" id="f" novalidate>
@@ -189,6 +198,28 @@ footer{margin-top:30px;padding-top:16px;color:var(--muted);font-size:14px;border
     var ra = t.insertRow(); ra.className = 'amt';
     ra.insertCell().textContent = o.paid ? '입금하신 금액' : '입금하실 금액'; ra.insertCell().textContent = won(o.total_amount);
     c.appendChild(t);
+
+    // 택배 주문이면 로젠택배 송장번호 (보낸 상품만 번호가 있다)
+    if (!o.canceled && !store) {
+      var tk = el('div','trk'); tk.appendChild(el('h3', null, '🚚 로젠택배 송장번호'));
+      var any = false;
+      P.forEach(function(p){
+        if (!o['qty_' + p[0]]) return;
+        var ns = (o['track_' + p[0]] || '').split(',').filter(Boolean);
+        var it = el('div','it'); it.appendChild(el('b', null, p[1]));
+        if (!ns.length) { it.appendChild(el('p','wait', o['date_' + p[0]] ? day(o['date_' + p[0]]) + ' 발송 예정입니다. 보내고 나면 송장번호가 여기에 나옵니다.' : '보내고 나면 송장번호가 여기에 나옵니다.')); }
+        ns.forEach(function(n){
+          any = true;
+          var row = el('div','n'); row.appendChild(el('span', null, n));
+          var a = el('a', null, '배송 조회 ›'); a.href = 'https://www.ilogen.com/web/personal/trace/' + n; a.target = '_blank'; a.rel = 'noopener';
+          a.setAttribute('aria-label', p[1] + ' 송장 ' + n + ' 로젠택배에서 배송 조회');
+          row.appendChild(a); it.appendChild(row);
+        });
+        tk.appendChild(it);
+      });
+      if (any) tk.appendChild(el('p','wait','「배송 조회」를 누르면 로젠택배 화면에서 지금 어디쯤 왔는지 보입니다. 보낸 날 저녁이나 다음 날부터 조회될 수 있습니다.'));
+      c.appendChild(tk);
+    }
 
     if (!o.canceled) {
       var dn = el('div','datenote');

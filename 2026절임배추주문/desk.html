@@ -102,6 +102,21 @@ td.z{color:#C9C1B4}
 .chgbox .row input.payer{flex:0 1 180px}
 .ord .hd .btn.mini{min-height:30px;padding:2px 10px;font-size:13px;border-width:1px}
 .chgbox .note{color:var(--muted);font-size:13px;margin:0}
+/* 로젠 송장번호 */
+.trk{background:#EEF4F3;border:1px solid #CFE3DF;border-radius:10px;padding:8px 12px;display:grid;gap:6px;grid-template-columns:minmax(0,1fr)}
+.trk .tt{font-weight:700;font-size:14px;color:var(--teal-deep)}
+.trk .row{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.trk .row .lb{font-weight:600;font-size:14px;min-width:150px}
+.trk input{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;min-height:38px;background:var(--panel);color:var(--ink);flex:1 1 220px;min-width:0;font-variant-numeric:tabular-nums}
+.trk input.dirty{border-color:var(--orange);background:#FFFBEF}
+.trk .btn{min-height:38px;padding:6px 12px}
+.trk .cnt{font-size:13px;color:var(--muted);margin-top:-2px}
+.trk .cnt.good{color:var(--teal-deep);font-weight:600}
+.trk .cnt.warn{color:#A35F00;font-weight:700}
+.trk .links{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:13px}
+.trk .links a{color:var(--teal-deep);font-weight:600}
+.pill.tk{background:#E3F3EF;color:var(--teal-deep)}
+.pill.tkno{background:#EEE9E1;color:var(--muted)}
 .empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:24px;text-align:center;color:var(--muted)}
 .foot{margin-top:20px;color:var(--muted);font-size:13px}
 </style>
@@ -121,11 +136,12 @@ td.z{color:#C9C1B4}
 
   <div id="app" hidden>
     <div class="tools">
-      <input type="search" id="q" class="grow" placeholder="이름·전화번호·주문번호로 찾기">
+      <input type="search" id="q" class="grow" placeholder="이름·전화번호·주문번호·송장번호로 찾기">
       <div class="seg" role="group" aria-label="입금 상태로 거르기">
         <button type="button" data-f="all" aria-pressed="true">전체</button>
         <button type="button" data-f="no" aria-pressed="false">입금 전</button>
         <button type="button" data-f="ok" aria-pressed="false">입금 완료</button>
+        <button type="button" data-f="notrack" aria-pressed="false">송장 안 넣은 택배</button>
       </div>
       <button type="button" class="btn" id="reload">새로고침</button>
       <button type="button" class="btn" id="csv">엑셀로 내려받기</button>
@@ -164,6 +180,13 @@ td.z{color:#C9C1B4}
   function amt(o){ return o.chg_total_amount != null ? o.chg_total_amount : o.total_amount; }
   function changed(o){ return ['baechu','sok','kit'].some(function(k){ return qn(o, k) && o['chg_date_' + k]; }); }
   function qtyChanged(o){ return ['baechu','sok','kit'].some(function(k){ return o['chg_qty_' + k] != null; }); }
+  // 로젠택배 송장번호 — 상품마다 따로, 여러 개면 쉼표로 이어 저장되어 있다
+  var LOGEN = 'https://www.ilogen.com/web/personal/trace/';
+  function tracks(o, k){ return (o['track_' + k] || '').split(',').filter(Boolean); }
+  function shipKeys(o){ return ['baechu','sok','kit'].filter(function(k){ return qn(o, k) > 0; }); }
+  // 송장을 넣어야 하는 주문 = 취소 안 됨 + 택배 + 아직 송장 없는 상품이 있음
+  function needTrack(o){ return !o.canceled && !storeOf(o) && shipKeys(o).some(function(k){ return !tracks(o, k).length; }); }
+  function hasTrack(o){ return ['baechu','sok','kit'].some(function(k){ return tracks(o, k).length; }); }
 
   var pass = '', orders = [], filter = 'all', loadedAt = null;
   function $(id){ return document.getElementById(id); }
@@ -221,7 +244,8 @@ td.z{color:#C9C1B4}
     load().catch(function(err){ alertBar(err && err.msg || '불러오지 못했습니다.'); }).then(function(){ b.disabled = false; });
   });
   // 변경 칸을 열어 두고 적는 중이면 저절로 새로 불러오지 않는다 (적던 주소가 지워지지 않게)
-  setInterval(function(){ if (pass && !$('app').hidden && !document.hidden && !document.querySelector('.chgbox')) load().catch(function(){}); }, 60000);
+  // 송장번호를 적다가 저장 안 한 칸이 있어도 마찬가지
+  setInterval(function(){ if (pass && !$('app').hidden && !document.hidden && !document.querySelector('.chgbox') && !document.querySelector('.trk input.dirty')) load().catch(function(){}); }, 60000);
   function alertBar(t){ $('foot').textContent = t; }
 
   /* ── 거르기 ── */
@@ -239,8 +263,10 @@ td.z{color:#C9C1B4}
     return orders.filter(function(o){
       if (filter === 'no' && (o.paid || o.canceled)) return false;
       if (filter === 'ok' && (!o.paid || o.canceled)) return false;
+      if (filter === 'notrack' && !needTrack(o)) return false;
       if (!q) return true;
-      var hay = [o.id, o.orderer_name, o.orig_orderer_name || '', o.recipient_name, o.orig_recipient_name || '', o.orderer_phone, o.recipient_phone, o.payer_name || ''].join(' ').replace(/-/g,'');
+      var hay = [o.id, o.orderer_name, o.orig_orderer_name || '', o.recipient_name, o.orig_recipient_name || '', o.orderer_phone, o.recipient_phone, o.payer_name || '',
+                 o.track_baechu || '', o.track_sok || '', o.track_kit || ''].join(' ').replace(/-/g,'');
       return hay.indexOf(q) >= 0;
     });
   }
@@ -265,7 +291,12 @@ td.z{color:#C9C1B4}
         return s.replace('점','') + ' ' + live.filter(function(o){ return storeOf(o) === s; }).length; }).join(' · ')],
       ['현금영수증', live.filter(function(o){ return rcOf(o)[0]; }).length + '건', '개인 ' + live.filter(function(o){ return rcOf(o)[0] === '개인'; }).length + ' · 사업자 ' + live.filter(function(o){ return rcOf(o)[0] === '사업자'; }).length],
       ['변경 요청 반영', live.filter(function(o){ return changed(o) || qtyChanged(o) || o.chg_address; }).length + '건',
-        '수량 ' + live.filter(qtyChanged).length + ' · 수령일 ' + live.filter(changed).length + ' · 받는 곳 ' + live.filter(function(o){ return o.chg_address; }).length]
+        '수량 ' + live.filter(qtyChanged).length + ' · 수령일 ' + live.filter(changed).length + ' · 받는 곳 ' + live.filter(function(o){ return o.chg_address; }).length],
+      (function(){
+        var sh = live.filter(function(o){ return !storeOf(o) && shipKeys(o).length; });
+        var done = sh.filter(function(o){ return !needTrack(o); }).length;
+        return ['로젠 송장', done + ' / ' + sh.length + '건', '택배 주문 중 송장 다 넣음 · 남은 ' + (sh.length - done) + '건'];
+      })()
     ].forEach(function(s){
       var d = el('div','stat'); d.appendChild(el('small',null,s[0])); d.appendChild(el('b',null,s[1])); d.appendChild(el('div','s2',s[2])); stats.appendChild(d);
     });
@@ -383,6 +414,8 @@ td.z{color:#C9C1B4}
     var rcv = rcOf(o);
     if (rcv[0]) { var rl = el('div','line'); rl.appendChild(el('span',null,'현금영수증 ')); rl.appendChild(el('span','pill rc', rcv[0] + ' ' + rcv[1])); c.appendChild(rl); }
     if (rcv[2]) { var m = el('div','line'); m.appendChild(el('span',null,'요청 ')); m.appendChild(document.createTextNode(rcv[2])); c.appendChild(m); }
+    // 택배 주문이면 상품마다 송장번호 칸 (매장 수령·취소는 없음. 이미 적은 번호가 있으면 취소돼도 보여 준다)
+    if ((!o.canceled && !storeOf(o) && shipKeys(o).length) || hasTrack(o)) c.appendChild(trackBox(o));
 
     var ft = el('div','ft');
     if (o.chg_total_amount != null && o.chg_total_amount !== o.total_amount) {
@@ -441,6 +474,89 @@ td.z{color:#C9C1B4}
     if (openBox[o.id]) c.appendChild(chgBox(o));
     if (openPay[o.id]) c.appendChild(payBox(o));
     return c;
+  }
+
+  /* ── 로젠택배 송장번호 ── */
+  function trackBox(o){
+    var box = el('div','trk');
+    var tt = el('div','tt','로젠택배 송장번호 ');
+    tt.appendChild(el('span', needTrack(o) ? 'pill tkno' : 'pill tk', needTrack(o) ? '아직 다 안 넣음' : '✓ 다 넣음'));
+    box.appendChild(tt);
+    var keys = ['baechu','sok','kit'].filter(function(k){ return qn(o, k) > 0 || tracks(o, k).length; });
+    keys.forEach(function(k){
+      var row = el('div','row'), q = qn(o, k), d = eff(o, k);
+      row.appendChild(el('span','lb', P[k].name + ' ' + q + '상자' + (q && d ? ' · ' + md(d) + ' 발송' : '')));
+      var inp = document.createElement('input'); inp.type = 'text'; inp.inputMode = 'numeric';
+      inp.setAttribute('aria-label', '#' + o.id + ' ' + P[k].name + ' 송장번호');
+      inp.placeholder = q > 1 ? '송장번호 (상자마다 다르면 쉼표로 이어서)' : '송장번호';
+      var orig = tracks(o, k).join(', ');
+      inp.value = orig;
+      var cnt = el('div','cnt');
+      function sync(){ inp.classList.toggle('dirty', inp.value.trim() !== orig); countNote(cnt, pickNums(inp.value).length, q); }
+      inp.addEventListener('input', sync);
+      // 붙여넣기: 로젠 조회 화면·엑셀에서 여러 줄을 복사해 와도 송장번호만 골라 쉼표로 이어 넣는다
+      inp.addEventListener('paste', function(e){
+        var txt = (e.clipboardData || window.clipboardData).getData('text') || '';
+        e.preventDefault();
+        var found = pickNums(txt);
+        if (!found.length) { alertBar('붙여넣은 글에서 송장번호를 찾지 못했습니다.'); return; }
+        var all = inp.selectionStart === 0 && inp.selectionEnd === inp.value.length;   // 칸을 다 골라 놓고 붙이면 바꿔 넣기
+        var had = all ? [] : pickNums(inp.value);
+        var add = found.filter(function(n){ return had.indexOf(n) < 0; });
+        inp.value = had.concat(add).join(', ');
+        sync();
+        alertBar('#' + o.id + ' ' + P[k].name + ' · ' + (add.length ? '송장번호 ' + add.length + '개를 넣었습니다' + (found.length > add.length ? ' (이미 있던 ' + (found.length - add.length) + '개는 뺌)' : '') + '. 「저장」을 눌러 주세요.' : '붙여넣은 번호는 이미 다 들어 있습니다.'));
+      });
+      inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); ok.click(); } });
+      row.appendChild(inp);
+      var ok = el('button','btn dark','저장'); ok.type = 'button';
+      ok.addEventListener('click', function(){
+        if (inp.value.trim() === orig) { alertBar('#' + o.id + ' ' + P[k].name + ' 송장번호가 그대로입니다.'); return; }
+        setTrack(o, k, inp.value, ok);
+      });
+      row.appendChild(ok);
+      box.appendChild(row);
+      if (q) { countNote(cnt, pickNums(inp.value).length, q); box.appendChild(cnt); }
+      var ns = tracks(o, k);
+      if (ns.length) {
+        var lk = el('div','links'); lk.appendChild(el('span', null, '조회:'));
+        ns.forEach(function(n){ var a = el('a', null, n); a.href = LOGEN + n; a.target = '_blank'; a.rel = 'noopener'; lk.appendChild(a); });
+        box.appendChild(lk);
+      }
+    });
+    if (o.track_at) box.appendChild(el('div','t','송장 적은 때 ' + when(o.track_at)));
+    return box;
+  }
+  // 글 속에서 송장번호처럼 생긴 숫자만 골라낸다 (하이픈은 지움, 9~14자리, 같은 번호는 한 번만).
+  // 전화번호(010-1234-5678 꼴)와 날짜(8자리 이하)는 빼고 고른다.
+  function pickNums(txt){
+    var out = [];
+    (String(txt).match(/\d[\d-]*\d/g) || []).forEach(function(t){
+      if (/^0\d{1,2}-\d{3,4}-\d{4}$/.test(t)) return;
+      var n = t.replace(/-/g, '');
+      if (n.length < 9 || n.length > 14) return;
+      if (out.indexOf(n) < 0) out.push(n);
+    });
+    return out;
+  }
+  // 넣은 송장 개수와 상자 수를 견주어 알려 준다 (다르면 주황색 — 저장은 막지 않는다)
+  function countNote(box, n, q){
+    box.className = 'cnt' + (n && n !== q ? ' warn' : n === q ? ' good' : '');
+    box.textContent = !n ? q + '상자 · 송장 아직 없음'
+      : n === q ? n + '개 넣음 · ' + q + '상자와 맞음 ✓'
+      : n < q ? n + '개 넣음 · ' + q + '상자인데 ' + (q - n) + '개 모자람 (한 송장에 묶어 보냈으면 괜찮습니다)'
+      : n + '개 넣음 · ' + q + '상자보다 ' + (n - q) + '개 많음';
+  }
+  function setTrack(o, k, v, btn){
+    btn.disabled = true;
+    rpc('kimjang_desk_set_track', { p_pass: pass, p_id: o.id, p_item: k, p_nums: v })
+      .then(function(r){
+        if (r.error) throw { msg: r.error };
+        o['track_' + k] = r.nums || null; o.track_at = new Date().toISOString();
+        render();
+        alertBar('#' + o.id + ' ' + o.orderer_name + ' · ' + P[k].name + ' 송장번호 ' + (r.nums ? r.nums.split(',').join(', ') + ' 저장했습니다.' : '지웠습니다.'));
+      })
+      .catch(function(err){ btn.disabled = false; alertBar((err && err.msg) || '저장하지 못했습니다. 다시 눌러 주세요.'); });
   }
 
   /* ── 주문자 이름 고치기 (오타) ── */
@@ -710,7 +826,8 @@ td.z{color:#C9C1B4}
     var head = ['주문번호','주문시각','상태','받는방법','주문자','주문자전화','받는분','받는분전화','우편번호','주소','상세주소',
                 '절임배추','절임배추발송일','절임배추변경발송일','김치속','김치속발송일','김치속변경발송일','김장밀키트','밀키트발송일','밀키트변경발송일',
                 '금액','현금영수증','현금영수증번호','요청사항','변경받는방법','변경우편번호','변경주소','변경상세주소','입금일','입금자명(주문자와 다를 때)',
-                '절임배추변경수량','김치속변경수량','밀키트변경수량','변경금액','차액(변경금액-금액)','처음 적은 주문자명(고친 경우)','처음 적은 받는분(고친 경우)'];
+                '절임배추변경수량','김치속변경수량','밀키트변경수량','변경금액','차액(변경금액-금액)','처음 적은 주문자명(고친 경우)','처음 적은 받는분(고친 경우)',
+                '절임배추송장','김치속송장','밀키트송장'];
     var rows = visible().slice().sort(function(a,b){ return a.id - b.id; }).map(function(o){
       var st0 = storeIn(o.address), chgCols = o.chg_address
         ? [storeOf(o) ? storeOf(o) + ' 수령' : '택배', o.chg_zipcode || '', storeOf(o) ? '' : o.chg_address, o.chg_address_detail || '']
@@ -723,7 +840,8 @@ td.z{color:#C9C1B4}
         o.total_amount].concat(rcOf(o), chgCols, [o.paid && o.paid_date ? o.paid_date : '', o.paid && o.payer_name ? o.payer_name : ''],
         ['baechu','sok','kit'].map(function(k){ return o['chg_qty_' + k] != null ? o['chg_qty_' + k] : ''; }),
         o.chg_total_amount != null ? [o.chg_total_amount, o.chg_total_amount - o.total_amount] : ['', ''],
-        [o.orig_orderer_name || '', o.orig_recipient_name || '']);
+        [o.orig_orderer_name || '', o.orig_recipient_name || ''],
+        ['baechu','sok','kit'].map(function(k){ return tracks(o, k).join(' '); }));
     });
     var csv = [head].concat(rows).map(function(r){
       return r.map(function(v){ v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(',');
