@@ -67,7 +67,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
 <div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="wrap">
   <h1>김장밀키트 이벤트 신청 · 추첨</h1>
-  <p class="sub">담당자 전용 · 신청 페이지 <a href="./" target="_blank">jjcoop.co.kr/2026이벤트</a> · 진주엔 × 진주텃밭 이벤트 · 50가구 추첨</p>
+  <p class="sub">담당자 전용 · 신청 페이지 <a href="./" target="_blank">jjcoop.co.kr/2026이벤트</a> · 진주엔 × 진주텃밭 이벤트 · 40가구 추첨</p>
   <div class="preview" id="previewNote" hidden>미리보기입니다 — 보이는 자료는 시험용 가짜이고, 눌러도 서버에 저장되지 않습니다.</div>
 
   <form class="login" id="login" autocomplete="on">
@@ -92,7 +92,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
       <input type="search" id="q" placeholder="이름·전화 뒷자리·인스타 아이디·주소 찾기">
     </div>
     <div class="tools">
-      <button type="button" class="pri" id="draw">🎲 50가구 무작위 추첨</button>
+      <button type="button" class="pri" id="draw">🎲 40가구 무작위 추첨</button>
       <button type="button" id="dlWin">당첨자 엑셀</button>
       <button type="button" id="dlShip">📦 발송할 것 엑셀</button>
       <button type="button" id="dlAll">전체 엑셀</button>
@@ -108,7 +108,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
   var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
   var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
   var KEY = 'event2026_desk_pw';
-  var GOAL = 50;
+  var GOAL = 40;
   var PREVIEW = !/jjcoop\.co\.kr$/.test(location.hostname);
   var pass = '', rows = [], isOpen = true, tab = 'all';
 
@@ -259,7 +259,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
   }
   var stamp = function(){ return today().replace(/-/g,''); };
 
-  /* ── 무작위 추첨: 당첨이 아닌 신청자 가운데서 50가구가 될 때까지 뽑는다 ── */
+  /* ── 무작위 추첨: 당첨이 아닌 신청자 가운데서 40가구가 될 때까지 뽑는다 ── */
   $('draw').addEventListener('click', function(){
     var live = rows.filter(function(o){ return !o.canceled; });
     var have = live.filter(function(o){ return o.picked; }).length;
