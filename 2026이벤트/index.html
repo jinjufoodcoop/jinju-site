@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>김장밀키트 당첨 배송지 · 진주텃밭</title>
+<meta name="description" content="진주엔 × 진주텃밭 이벤트 — 김장밀키트 당첨을 축하드립니다. 받으실 주소를 적어 주세요.">
+<meta name="robots" content="noindex">
+<meta property="og:site_name" content="진주텃밭협동조합">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="🎉 김장밀키트 당첨을 축하드립니다 · 배송지를 적어 주세요">
+<meta property="og:description" content="진주엔 × 진주텃밭 이벤트 | 진주 농가 절임배추 + 김치양념">
+<meta property="og:url" content="https://jjcoop.co.kr/2026이벤트/">
+<meta property="og:image" content="https://jjcoop.co.kr/img/logo.png">
+<link rel="icon" href="../img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 절임배추·단감 주문 페이지와 같은 틀. 휴대폰으로 보는 것을 기준으로 글씨를 크게 */
+:root{
+  --red:#E83028; --red-deep:#C0221B;
+  --orange:#F0A800; --green:#A8B048; --green-deep:#4F5722;
+  --teal:#00A8A8; --teal-deep:#00706F;
+  --ink:#2B2721; --muted:#6B6358;
+  --bg:#FBF7EF; --panel:#FFFFFF; --soft:#F4EDDF; --leaf:#EEF2DC;
+  --line:rgba(43,39,33,.14);
+  --serif:'Gowun Batang','Nanum Myeongjo',serif;
+  --sans:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--sans);word-break:keep-all}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:600px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px)) 40px}
+.stripe{display:flex;height:6px}.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:var(--orange)}
+.stripe i:nth-child(3){background:var(--green)}.stripe i:nth-child(4){background:var(--teal)}
+.top{padding-top:18px}
+.cobrand{display:flex;align-items:center;justify-content:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.cobrand img{height:44px;width:auto;object-fit:contain}
+.cobrand .lg-je{height:52px}
+.cobrand .x{font-size:22px;color:var(--muted);font-weight:600}
+.hero{margin:14px 0 0;border-radius:18px;overflow:hidden;background:var(--soft);aspect-ratio:4/3}
+.hero img{width:100%;height:100%;object-fit:cover}
+.kicker{display:inline-block;margin-top:16px;background:var(--red);color:#fff;font-weight:700;font-size:14px;border-radius:999px;padding:3px 12px}
+h1{font:700 clamp(27px,7.6vw,38px)/1.3 var(--serif);margin:8px 0 6px;text-wrap:balance}
+.lead{margin:0;color:var(--muted)}
+section{margin-top:26px}
+h2{font:700 21px/1.35 var(--serif);margin:0 0 12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.gift{background:var(--leaf);border-radius:14px;padding:14px 16px}
+.gift ul{margin:0;padding-left:20px;display:grid;gap:4px}
+input[type=text],input[type=tel],textarea{width:100%;font:500 17px var(--sans);color:var(--ink);background:var(--panel);
+  border:1.5px solid var(--line);border-radius:12px;padding:12px;min-height:48px}
+textarea{min-height:76px;resize:vertical}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.need{border-color:var(--red)!important}
+.hint{font-size:14px;color:var(--muted)}
+.field{display:grid;gap:6px;margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+label.l{font-weight:600}
+label.l i{color:var(--red);font-style:normal}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.btn2{border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);font:600 16px var(--sans);border-radius:12px;padding:0 14px;min-height:48px;cursor:pointer;white-space:nowrap}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:500;cursor:pointer}
+.check input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:var(--teal-deep)}
+.terms{font-size:14px;color:var(--muted);background:var(--soft);border-radius:10px;padding:10px 12px;margin:0 0 10px}
+.go{width:100%;border:0;background:var(--green-deep);color:#fff;font:700 19px var(--sans);border-radius:14px;min-height:58px;cursor:pointer;margin-top:18px}
+.go:disabled{background:#8C857B;cursor:default}
+.msg{margin-top:12px;font-weight:600;color:var(--red-deep);min-height:1em}
+.done{text-align:center;padding-top:30px}
+.done .ok{width:64px;height:64px;border-radius:50%;background:var(--teal-deep);color:#fff;font-size:34px;line-height:64px;margin:0 auto 12px}
+.done table{width:100%;border-collapse:collapse;margin:14px 0;text-align:left}
+.done td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.done td:first-child{color:var(--muted);width:30%}
+.closed{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<div class="wrap">
+  <header class="top" id="head">
+    <div class="cobrand">
+      <img src="../img/logo.png" alt="진주텃밭협동조합" class="lg-tb">
+      <span class="x" aria-hidden="true">×</span>
+      <img src="../img/jinjuen-logo.png" alt="진주엔" class="lg-je" onerror="this.previousElementSibling.hidden=true;this.hidden=true">
+    </div>
+    <span class="kicker">진주엔 × 진주텃밭 이벤트</span>
+    <h1>🎉 김장밀키트<br>당첨을 축하드립니다!</h1>
+    <p class="lead">받으실 주소를 아래에 적어 주세요.<br>적어 주신 곳으로 김장밀키트를 보내드립니다.</p>
+  </header>
+
+  <section id="giftBox">
+    <div class="gift">
+      <b>보내드리는 것</b>
+      <ul>
+        <li>진주 농가 절임배추 1포기(2쪽)</li>
+        <li>김치양념</li>
+        <li>작은 아이스박스에 담아 택배로 보냅니다</li>
+      </ul>
+    </div>
+  </section>
+
+  <div id="closed" class="closed" hidden>
+    <h2>배송지 받기를 마감했습니다</h2>
+    <p>문의는 진주텃밭 사무국 <b>055-763-1243</b>으로 주세요.</p>
+  </div>
+
+  <form id="form" novalidate>
+    <section>
+      <h2>받으시는 분</h2>
+      <div class="card">
+        <div class="field">
+          <label class="l" for="name">이름 <i>*</i></label>
+          <input type="text" id="name" autocomplete="name" maxlength="20">
+        </div>
+        <div class="field">
+          <label class="l" for="phone">휴대폰 번호 <i>*</i></label>
+          <input type="tel" id="phone" autocomplete="tel" inputmode="numeric" placeholder="010-0000-0000" maxlength="13">
+          <div class="hint">택배 기사님이 연락드릴 번호입니다.</div>
+        </div>
+        <div class="field">
+          <label class="l" for="sns">이벤트에 참여하신 아이디 <i>*</i></label>
+          <input type="text" id="sns" maxlength="50" placeholder="예) 인스타 @jinju_kimchi / 카페 닉네임">
+          <div class="hint">당첨자가 맞는지 확인하는 데만 씁니다.</div>
+        </div>
+        <div class="field">
+          <label class="l" for="addr">받는 주소 <i>*</i> <span class="hint">(진주시 주소만 받습니다)</span></label>
+          <div class="row">
+            <input type="text" id="zip" placeholder="우편번호" readonly aria-label="우편번호">
+            <button type="button" class="btn2" id="findAddr">주소 찾기</button>
+          </div>
+          <input type="text" id="addr" placeholder="주소 찾기를 누르거나 직접 적어 주세요" maxlength="200">
+          <input type="text" id="addr2" placeholder="나머지 주소 (동·호수)" maxlength="100" aria-label="나머지 주소">
+        </div>
+        <div class="field">
+          <label class="l" for="memo">배송 요청사항</label>
+          <textarea id="memo" maxlength="250" placeholder="예) 문 앞에 두어 주세요"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>개인정보 동의</h2>
+      <div class="card">
+        <div class="terms">모으는 것: 이름, 휴대폰 번호, 이벤트 참여 아이디, 주소<br>
+        쓰는 곳: 당첨자 확인, 경품(김장밀키트) 택배 발송<br>
+        보관 기간: 경품 발송을 마친 뒤 지체 없이 파기</div>
+        <label class="check"><input type="checkbox" id="agree"> 위 내용에 동의합니다 <span style="color:var(--red)">*</span></label>
+      </div>
+      <button type="button" class="go" id="go">배송지 보내기</button>
+      <p class="msg" id="msg" role="alert"></p>
+    </section>
+  </form>
+
+  <div id="done" class="done" hidden>
+    <div class="ok" aria-hidden="true">✓</div>
+    <h2>잘 받았습니다!</h2>
+    <p>접수번호 <b id="dNo"></b></p>
+    <table id="dTable"></table>
+    <p>적어 주신 곳으로 김장밀키트를 보내드립니다.<br>진주 농가의 배추로 맛있는 김장 하세요. 🥬</p>
+    <p class="hint">잘못 적으셨으면 사무국 055-763-1243으로 알려 주세요.</p>
+  </div>
+
+  <footer>진주우리먹거리협동조합 진주텃밭 · 경남 진주시 금산면 금산순환로 61 · 사무국 055-763-1243</footer>
+</div>
+
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async></script>
+<script>
+(function(){
+  'use strict';
+  var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+  var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+  // 홈페이지(jjcoop.co.kr)가 아닌 곳에서 열면 미리보기 — 서버로 보내지 않는다
+  var PREVIEW = !/jjcoop\.co\.kr$/.test(location.hostname);
+
+  function $(id){ return document.getElementById(id); }
+  function say(t){ $('msg').textContent = t; }
+  function closeNow(){ $('form').hidden = true; $('giftBox').hidden = true; $('closed').hidden = false; }
+
+  if (!PREVIEW) {
+    fetch(SB_URL + '/rpc/event2026_status', { method:'POST', headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' }, body:'{}' })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if (j && j.open === false) closeNow(); })
+      .catch(function(){});
+  }
+
+  function fmtPhone(v){
+    var d = v.replace(/\D/g,'').slice(0,11);
+    if (d.indexOf('02') === 0) return d.replace(/^(02)(\d{0,4})(\d{0,4}).*/, function(_,a,b,c){ return [a,b,c].filter(Boolean).join('-'); });
+    return d.replace(/^(\d{0,3})(\d{0,4})(\d{0,4}).*/, function(_,a,b,c){ return [a,b,c].filter(Boolean).join('-'); });
+  }
+  $('phone').addEventListener('input', function(){ this.value = fmtPhone(this.value); });
+  function phoneOk(v){ return /^0\d{8,10}$/.test(v.replace(/\D/g,'')); }
+
+  $('findAddr').addEventListener('click', function(){
+    if (!window.daum || !daum.Postcode) { say('주소 찾기를 불러오지 못했습니다. 주소를 직접 적어 주세요.'); $('addr').focus(); return; }
+    new daum.Postcode({ oncomplete: function(r){
+      $('zip').value = r.zonecode; $('addr').value = r.roadAddress || r.jibunAddress;
+      $('addr').classList.remove('need'); say(''); $('addr2').focus();
+    }}).open();
+  });
+
+  function need(el, text){ el.classList.add('need'); el.scrollIntoView({behavior:'smooth', block:'center'}); try{ el.focus({preventScroll:true}); }catch(e){} say(text); return false; }
+  document.querySelectorAll('input,textarea').forEach(function(el){ el.addEventListener('input', function(){ el.classList.remove('need'); }); });
+
+  function check(){
+    if (!$('name').value.trim()) return need($('name'), '이름을 적어 주세요.');
+    if (!phoneOk($('phone').value)) return need($('phone'), '휴대폰 번호를 확인해 주세요.');
+    if (!$('sns').value.trim()) return need($('sns'), '이벤트에 참여하신 아이디를 적어 주세요.');
+    var a = $('addr').value.trim();
+    if (a.length < 5) return need($('addr'), '받는 주소를 적어 주세요.');
+    if (a.indexOf('진주') < 0) return need($('addr'), '이번 이벤트는 진주시 주소로만 보내드립니다. 주소를 확인해 주세요.');
+    if (!$('agree').checked) return need($('agree'), '개인정보 동의에 체크해 주세요.');
+    return true;
+  }
+
+  var sending = false;
+  $('go').addEventListener('click', function(){
+    if (sending) return;
+    say('');
+    if (!check()) return;
+    var body = {
+      p_name: $('name').value.trim(),
+      p_phone: $('phone').value.trim(),
+      p_sns_id: $('sns').value.trim(),
+      p_zipcode: $('zip').value.trim(),
+      p_address: $('addr').value.trim(),
+      p_address_detail: $('addr2').value.trim(),
+      p_memo: $('memo').value.trim()
+    };
+    if (PREVIEW) { showDone({ no:'미리보기' }, body); return; }
+
+    sending = true; $('go').disabled = true; $('go').textContent = '보내는 중…';
+    fetch(SB_URL + '/rpc/place_event2026', {
+      method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(function(res){ return res.json().catch(function(){ return {}; }).then(function(j){ if (!res.ok) throw new Error((j && j.message) || ''); return j; }); })
+      .then(function(r){ showDone(r, body); })
+      .catch(function(err){
+        var m = String(err && err.message || '');
+        say(/[가-힣]/.test(m) ? m : '보내지 못했습니다. 통신 상태를 확인하고 다시 눌러 주세요. (적으신 내용은 그대로 있습니다)');
+        if (/마감|모두 찼/.test(m)) closeNow();
+      })
+      .then(function(){ sending = false; $('go').disabled = false; $('go').textContent = '배송지 보내기'; });
+  });
+
+  function showDone(r, b){
+    $('dNo').textContent = r.no;
+    var t = $('dTable'); t.innerHTML = '';
+    function addRow(a, c){ var tr = t.insertRow(); tr.insertCell().textContent = a; tr.insertCell().textContent = c; }
+    addRow('받는 분', b.p_name + ' · ' + b.p_phone);
+    addRow('받는 곳', ((b.p_zipcode ? '(' + b.p_zipcode + ') ' : '') + b.p_address + ' ' + b.p_address_detail).trim());
+    $('form').hidden = true; $('giftBox').hidden = true; $('head').hidden = true;
+    $('done').hidden = false;
+    window.scrollTo(0, 0);
+  }
+})();
+</script>
+</body>
+</html>

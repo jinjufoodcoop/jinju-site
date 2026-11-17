@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>김장밀키트 당첨자 취합 · 담당자</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E83028; --red-deep:#C0221B; --orange:#F0A800; --green:#A8B048; --green-deep:#4F5722; --teal:#00A8A8; --teal-deep:#00706F;
+  --ink:#2B2721; --muted:#6B6358; --bg:#FBF7EF; --panel:#FFFFFF; --soft:#F4EDDF; --leaf:#EEF2DC; --line:rgba(43,39,33,.14);
+  --sans:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);word-break:keep-all}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px 40px}
+.stripe{display:flex;height:6px}.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:var(--orange)}
+.stripe i:nth-child(3){background:var(--green)}.stripe i:nth-child(4){background:var(--teal)}
+h1{font-size:22px;margin:18px 0 4px}
+.sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+.sub a{color:var(--teal-deep)}
+button{font:600 15px var(--sans);border-radius:10px;border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);padding:0 14px;min-height:40px;cursor:pointer}
+button.pri{background:var(--green-deep);border-color:var(--green-deep);color:#fff}
+button.on{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff}
+button.warn{border-color:var(--red-deep);color:var(--red-deep)}
+input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;min-height:40px;background:var(--panel);color:var(--ink)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.login{max-width:360px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:20px;display:grid;gap:10px}
+.err{color:var(--red-deep);font-weight:600;min-height:1em}
+.state{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat small{display:block;color:var(--muted);font-size:13px}
+.stat b{font-size:22px;font-variant-numeric:tabular-nums}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{min-height:36px;font-size:14px;border-color:var(--line)}
+.tabs button.cur{background:var(--ink);border-color:var(--ink);color:#fff}
+.tools input[type=search]{flex:1;min-width:180px}
+.list{display:grid;gap:10px}
+.o{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--orange);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.o.shipped{border-left-color:var(--green);background:#FAFBF4}
+.o.canceled{border-left-color:#999;opacity:.6}
+.o .hd{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.o .no{font-weight:700}
+.o .when{color:var(--muted);font-size:13px}
+.tag{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;color:#fff}
+.tag.u{background:var(--orange);color:var(--ink)}.tag.s{background:var(--green-deep)}.tag.c{background:#777}
+.o .who{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 16px;font-size:15px}
+.o .who small{color:var(--muted)}
+.o .memo{background:var(--soft);border-radius:8px;padding:6px 10px;font-size:14px}
+.o .acts{display:flex;flex-wrap:wrap;gap:6px}
+.o .acts button{min-height:36px;font-size:14px}
+.empty{color:var(--muted);text-align:center;padding:30px}
+.preview{background:#FFF4D6;border:1.5px solid var(--orange);border-radius:10px;padding:8px 12px;font-weight:600;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="wrap">
+  <h1>김장밀키트 당첨자 배송지 취합</h1>
+  <p class="sub">담당자 전용 · 당첨자 페이지 <a href="./" target="_blank">jjcoop.co.kr/2026이벤트</a> · 진주엔 × 진주텃밭 이벤트 50가구</p>
+  <div class="preview" id="previewNote" hidden>미리보기입니다 — 보이는 자료는 시험용 가짜이고, 눌러도 서버에 저장되지 않습니다.</div>
+
+  <form class="login" id="login" autocomplete="on">
+    <label for="pw"><b>비밀번호</b> <small style="color:var(--muted)">(절임배추 담당자 화면과 같음)</small></label>
+    <input type="password" id="pw" autocomplete="current-password">
+    <button type="submit" class="pri">들어가기</button>
+    <div class="err" id="loginErr" role="alert"></div>
+  </form>
+
+  <div id="main" hidden>
+    <div class="state">
+      <div id="openText"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" id="toggleOpen"></button>
+        <button type="button" id="reload">새로 불러오기</button>
+        <button type="button" id="logout">나가기</button>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="tools">
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <input type="search" id="q" placeholder="이름·전화 뒷자리·아이디·주소 찾기">
+    </div>
+    <div class="tools">
+      <button type="button" id="dlShip">📦 발송할 것 엑셀</button>
+      <button type="button" id="dlAll">전체 엑셀</button>
+      <span class="err" id="msg" role="alert"></span>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var SB_URL = 'https://kshhijgecxnngzslpvwe.supabase.co/rest/v1';
+  var SB_KEY = 'sb_publishable_0zmergZcuO4TDW8cXHGzDA_lEy93OL8';
+  var KEY = 'event2026_desk_pw';
+  var GOAL = 50;
+  var PREVIEW = !/jjcoop\.co\.kr$/.test(location.hostname);
+  var pass = '', rows = [], isOpen = true, tab = 'all';
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function today(){ return new Date(Date.now() + 9*36e5).toISOString().slice(0,10); }
+  function fmtTime(t){ var d = new Date(t); return (d.getMonth()+1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
+
+  var FAKE = [
+    {id:2,created_at:new Date().toISOString(),name:'시험당첨둘',phone:'010-0000-0002',sns_id:'@test_two',zipcode:'52700',address:'경남 진주시 시험로 1',address_detail:null,memo:'문 앞에 두어 주세요',shipped:false,canceled:false,staff_note:null},
+    {id:1,created_at:new Date(Date.now()-36e5).toISOString(),name:'시험당첨하나',phone:'010-0000-0001',sns_id:'카페 시험닉',zipcode:'52800',address:'경남 진주시 금산면 금산순환로 61',address_detail:'사무국',memo:null,shipped:true,canceled:false,staff_note:'12/1 발송'}
+  ];
+
+  function rpc(name, body){
+    if (PREVIEW) {
+      if (name === 'event2026_desk_list') return Promise.resolve({ open:isOpen, rows: rows.length ? rows : FAKE.map(function(o){ return Object.assign({}, o); }) });
+      if (name === 'event2026_desk_set_open') return Promise.resolve({ ok:true, open: body.p_open });
+      if (name === 'event2026_desk_mark') {
+        var o = rows.filter(function(x){ return x.id === body.p_id; })[0];
+        if (body.p_field === 'note') o.staff_note = body.p_text || null; else o[body.p_field] = body.p_value;
+        return Promise.resolve({ ok:true });
+      }
+    }
+    return fetch(SB_URL + '/rpc/' + name, {
+      method:'POST', headers:{ apikey:SB_KEY, Authorization:'Bearer ' + SB_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    }).then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error((j && j.message) || '서버 오류'); return j; }); });
+  }
+
+  $('login').addEventListener('submit', function(e){ e.preventDefault(); pass = $('pw').value; $('loginErr').textContent = ''; load(true); });
+  $('logout').addEventListener('click', function(){
+    try { sessionStorage.removeItem(KEY); } catch(err){}
+    pass = ''; rows = []; $('pw').value = ''; $('main').hidden = true; $('login').hidden = false;
+  });
+  $('reload').addEventListener('click', function(){ load(false); });
+
+  function load(first){
+    $('msg').textContent = '';
+    rpc('event2026_desk_list', { p_pass: pass }).then(function(j){
+      if (j.error) { if (first) $('loginErr').textContent = j.error; else $('msg').textContent = j.error; return; }
+      try { sessionStorage.setItem(KEY, pass); } catch(err){}
+      rows = j.rows || []; isOpen = j.open !== false;
+      $('login').hidden = true; $('main').hidden = false;
+      render();
+    }).catch(function(err){
+      var m = '불러오지 못했습니다. ' + (err && err.message || '');
+      if (first) $('loginErr').textContent = m; else $('msg').textContent = m;
+    });
+  }
+
+  $('toggleOpen').addEventListener('click', function(){
+    var next = !isOpen;
+    if (!confirm(next ? '배송지를 다시 받을까요?' : '배송지 받기를 멈출까요?\n당첨자 페이지에 「마감했습니다」가 뜹니다.')) return;
+    rpc('event2026_desk_set_open', { p_pass: pass, p_open: next }).then(function(j){
+      if (j.error) { $('msg').textContent = j.error; return; }
+      isOpen = j.open; render();
+    }).catch(function(err){ $('msg').textContent = '바꾸지 못했습니다. ' + (err && err.message || ''); });
+  });
+
+  var TABS = [
+    ['all','전체', function(o){ return !o.canceled; }],
+    ['toship','발송할 것', function(o){ return !o.canceled && !o.shipped; }],
+    ['shipped','발송함', function(o){ return !o.canceled && o.shipped; }],
+    ['canceled','취소', function(o){ return o.canceled; }]
+  ];
+  function tabFn(k){ return TABS.filter(function(t){ return t[0] === k; })[0][2]; }
+  $('q').addEventListener('input', renderList);
+
+  function render(){
+    $('openText').innerHTML = isOpen
+      ? '<span class="dot" style="background:var(--teal)"></span><b>지금 배송지 받는 중</b>'
+      : '<span class="dot" style="background:var(--red)"></span><b>받기 멈춤</b> <small style="color:var(--muted)">(당첨자 페이지에 마감 안내가 뜸)</small>';
+    $('toggleOpen').textContent = isOpen ? '받기 멈추기' : '다시 받기';
+    $('toggleOpen').className = isOpen ? 'warn' : 'pri';
+    var live = rows.filter(function(o){ return !o.canceled; });
+    var shipped = live.filter(function(o){ return o.shipped; });
+    function st(label, n, extra){ return '<div class="stat"><small>' + label + '</small><b>' + n + '</b>' + (extra || '') + '</div>'; }
+    $('stats').innerHTML =
+      st('접수 (취소 빼고)', live.length + ' / ' + GOAL) +
+      st('아직 안 적은 가구', Math.max(0, GOAL - live.length)) +
+      st('발송할 것', live.length - shipped.length) +
+      st('발송함', shipped.length);
+    $('tabs').innerHTML = TABS.map(function(t){
+      return '<button type="button" role="tab" data-k="' + t[0] + '" class="' + (t[0] === tab ? 'cur' : '') + '" aria-selected="' + (t[0] === tab) + '">' + t[1] + ' ' + rows.filter(t[2]).length + '</button>';
+    }).join('');
+    $('tabs').querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){ tab = b.getAttribute('data-k'); render(); }); });
+    renderList();
+  }
+
+  function renderList(){
+    var q = $('q').value.trim().toLowerCase().replace(/-/g,'');
+    var list = rows.filter(tabFn(tab)).filter(function(o){
+      if (!q) return true;
+      return [o.id, o.name, o.phone, o.sns_id, o.address, o.address_detail, o.memo, o.staff_note].join(' ').toLowerCase().replace(/-/g,'').indexOf(q) >= 0;
+    });
+    if (!list.length) { $('list').innerHTML = '<div class="empty">아직 없습니다.</div>'; return; }
+    $('list').innerHTML = list.map(card).join('');
+    $('list').querySelectorAll('[data-act]').forEach(function(b){ b.addEventListener('click', act); });
+  }
+
+  function card(o){
+    var cls = o.canceled ? 'canceled' : o.shipped ? 'shipped' : '';
+    var tag = o.canceled ? '<span class="tag c">취소</span>' : o.shipped ? '<span class="tag s">발송함</span>' : '<span class="tag u">발송 전</span>';
+    return '<div class="o ' + cls + '">' +
+      '<div class="hd"><span class="no">#' + o.id + '</span><span class="when">' + fmtTime(o.created_at) + '</span>' + tag + '</div>' +
+      '<div class="who">' +
+        '<div><small>받는 분</small> <b>' + esc(o.name) + '</b> ' + esc(o.phone) + '</div>' +
+        '<div><small>참여 아이디</small> <b>' + esc(o.sns_id) + '</b></div>' +
+        '<div style="grid-column:1/-1"><small>주소</small> ' + (o.zipcode ? '(' + esc(o.zipcode) + ') ' : '') + esc(o.address) + ' ' + esc(o.address_detail || '') + '</div>' +
+      '</div>' +
+      (o.memo ? '<div class="memo">요청: ' + esc(o.memo) + '</div>' : '') +
+      (o.staff_note ? '<div class="memo" style="background:var(--leaf)">직원 메모: ' + esc(o.staff_note) + '</div>' : '') +
+      '<div class="acts">' +
+        (o.canceled ? '' : (o.shipped ? '<button type="button" data-act="unship" data-id="' + o.id + '">발송 표시 풀기</button>'
+                                      : '<button type="button" class="on" data-act="ship" data-id="' + o.id + '">발송함 표시</button>')) +
+        '<button type="button" data-act="note" data-id="' + o.id + '">메모</button>' +
+        (o.canceled ? '<button type="button" data-act="uncancel" data-id="' + o.id + '">취소 풀기</button>'
+                    : '<button type="button" class="warn" data-act="cancel" data-id="' + o.id + '">취소 (당첨자 아님 등)</button>') +
+      '</div></div>';
+  }
+
+  function mark(id, field, value, text){
+    $('msg').textContent = '';
+    return rpc('event2026_desk_mark', { p_pass: pass, p_id: id, p_field: field, p_value: value, p_text: text == null ? null : text })
+      .then(function(j){ if (j.error) { $('msg').textContent = j.error; return; } load(false); })
+      .catch(function(err){ $('msg').textContent = '저장하지 못했습니다. ' + (err && err.message || ''); });
+  }
+  function act(){
+    var id = Number(this.getAttribute('data-id')), a = this.getAttribute('data-act');
+    var o = rows.filter(function(x){ return x.id === id; })[0];
+    if (a === 'ship') return mark(id, 'shipped', true);
+    if (a === 'unship') return mark(id, 'shipped', false);
+    if (a === 'cancel') { if (confirm('#' + id + ' ' + o.name + ' 님을 취소로 표시할까요?')) mark(id, 'canceled', true); return; }
+    if (a === 'uncancel') return mark(id, 'canceled', false);
+    if (a === 'note') { var t = prompt('직원 메모 (비우면 지움)', o.staff_note || ''); if (t !== null) mark(id, 'note', false, t); }
+  }
+
+  function csv(r){ return '﻿' + r.map(function(x){ return x.map(function(v){ v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }).join(','); }).join('\r\n'); }
+  function save(name, text){
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type:'text/csv;charset=utf-8' }));
+    a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  }
+  var stamp = function(){ return today().replace(/-/g,''); };
+  $('dlShip').addEventListener('click', function(){
+    var list = rows.filter(function(o){ return !o.canceled && !o.shipped; }).slice().reverse();
+    if (!list.length) { $('msg').textContent = '발송할 것이 없습니다.'; return; }
+    var r = [['접수번호','받는분','받는분전화','우편번호','주소','상세주소','품목','배송요청']];
+    list.forEach(function(o){ r.push([o.id, o.name, o.phone, o.zipcode, o.address, o.address_detail, '김장밀키트(이벤트)', o.memo]); });
+    save('김장밀키트이벤트_발송할것_' + stamp() + '.csv', csv(r));
+  });
+  $('dlAll').addEventListener('click', function(){
+    var r = [['접수번호','접수일시','이름','전화','참여아이디','우편번호','주소','상세주소','배송요청','발송','취소','직원메모']];
+    rows.slice().reverse().forEach(function(o){
+      r.push([o.id, new Date(o.created_at).toLocaleString('ko-KR'), o.name, o.phone, o.sns_id, o.zipcode, o.address, o.address_detail, o.memo, o.shipped ? 'O' : '', o.canceled ? 'O' : '', o.staff_note]);
+    });
+    save('김장밀키트이벤트_전체_' + stamp() + '.csv', csv(r));
+  });
+
+  if (PREVIEW) { $('previewNote').hidden = false; $('pw').value = '미리보기'; }
+  try { var saved = sessionStorage.getItem(KEY); if (saved && !PREVIEW) { $('pw').value = saved; pass = saved; load(true); } } catch(err){}
+})();
+</script>
+</body>
+</html>
