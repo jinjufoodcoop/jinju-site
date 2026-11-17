@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>김장밀키트 당첨자 취합 · 담당자</title>
+<title>김장밀키트 이벤트 신청·추첨 · 담당자</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="../img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,13 +46,14 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
 .tools input[type=search]{flex:1;min-width:180px}
 .list{display:grid;gap:10px}
 .o{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--orange);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.o.picked{border-left-color:var(--red)}
 .o.shipped{border-left-color:var(--green);background:#FAFBF4}
 .o.canceled{border-left-color:#999;opacity:.6}
 .o .hd{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
 .o .no{font-weight:700}
 .o .when{color:var(--muted);font-size:13px}
 .tag{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;color:#fff}
-.tag.u{background:var(--orange);color:var(--ink)}.tag.s{background:var(--green-deep)}.tag.c{background:#777}
+.tag.u{background:var(--orange);color:var(--ink)}.tag.w{background:var(--red)}.tag.n{background:var(--soft);color:var(--muted)}.tag.s{background:var(--green-deep)}.tag.c{background:#777}
 .o .who{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 16px;font-size:15px}
 .o .who small{color:var(--muted)}
 .o .memo{background:var(--soft);border-radius:8px;padding:6px 10px;font-size:14px}
@@ -65,8 +66,8 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
 <body>
 <div class="stripe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="wrap">
-  <h1>김장밀키트 당첨자 배송지 취합</h1>
-  <p class="sub">담당자 전용 · 당첨자 페이지 <a href="./" target="_blank">jjcoop.co.kr/2026이벤트</a> · 진주엔 × 진주텃밭 이벤트 50가구</p>
+  <h1>김장밀키트 이벤트 신청 · 추첨</h1>
+  <p class="sub">담당자 전용 · 신청 페이지 <a href="./" target="_blank">jjcoop.co.kr/2026이벤트</a> · 진주엔 × 진주텃밭 이벤트 · 50가구 추첨</p>
   <div class="preview" id="previewNote" hidden>미리보기입니다 — 보이는 자료는 시험용 가짜이고, 눌러도 서버에 저장되지 않습니다.</div>
 
   <form class="login" id="login" autocomplete="on">
@@ -88,9 +89,11 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
     <div class="stats" id="stats"></div>
     <div class="tools">
       <div class="tabs" id="tabs" role="tablist"></div>
-      <input type="search" id="q" placeholder="이름·전화 뒷자리·아이디·주소 찾기">
+      <input type="search" id="q" placeholder="이름·전화 뒷자리·인스타 아이디·주소 찾기">
     </div>
     <div class="tools">
+      <button type="button" class="pri" id="draw">🎲 50가구 무작위 추첨</button>
+      <button type="button" id="dlWin">당첨자 엑셀</button>
       <button type="button" id="dlShip">📦 발송할 것 엑셀</button>
       <button type="button" id="dlAll">전체 엑셀</button>
       <span class="err" id="msg" role="alert"></span>
@@ -115,8 +118,8 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
   function fmtTime(t){ var d = new Date(t); return (d.getMonth()+1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
 
   var FAKE = [
-    {id:2,created_at:new Date().toISOString(),name:'시험당첨둘',phone:'010-0000-0002',sns_id:'@test_two',zipcode:'52700',address:'경남 진주시 시험로 1',address_detail:null,memo:'문 앞에 두어 주세요',shipped:false,canceled:false,staff_note:null},
-    {id:1,created_at:new Date(Date.now()-36e5).toISOString(),name:'시험당첨하나',phone:'010-0000-0001',sns_id:'카페 시험닉',zipcode:'52800',address:'경남 진주시 금산면 금산순환로 61',address_detail:'사무국',memo:null,shipped:true,canceled:false,staff_note:'12/1 발송'}
+    {id:2,created_at:new Date().toISOString(),name:'시험당첨둘',phone:'010-0000-0002',sns_id:'@test_two',zipcode:'52700',address:'경남 진주시 시험로 1',address_detail:null,memo:'문 앞에 두어 주세요',agree_review:true,picked:false,shipped:false,canceled:false,staff_note:null},
+    {id:1,created_at:new Date(Date.now()-36e5).toISOString(),name:'시험당첨하나',phone:'010-0000-0001',sns_id:'카페 시험닉',zipcode:'52800',address:'경남 진주시 금산면 금산순환로 61',address_detail:'사무국',memo:null,agree_review:true,picked:true,shipped:true,canceled:false,staff_note:'12/1 발송'}
   ];
 
   function rpc(name, body){
@@ -144,7 +147,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
 
   function load(first){
     $('msg').textContent = '';
-    rpc('event2026_desk_list', { p_pass: pass }).then(function(j){
+    return rpc('event2026_desk_list', { p_pass: pass }).then(function(j){
       if (j.error) { if (first) $('loginErr').textContent = j.error; else $('msg').textContent = j.error; return; }
       try { sessionStorage.setItem(KEY, pass); } catch(err){}
       rows = j.rows || []; isOpen = j.open !== false;
@@ -158,7 +161,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
 
   $('toggleOpen').addEventListener('click', function(){
     var next = !isOpen;
-    if (!confirm(next ? '배송지를 다시 받을까요?' : '배송지 받기를 멈출까요?\n당첨자 페이지에 「마감했습니다」가 뜹니다.')) return;
+    if (!confirm(next ? '신청을 다시 받을까요?' : '신청을 마감할까요?\n신청 페이지에 「마감했습니다」가 뜹니다.')) return;
     rpc('event2026_desk_set_open', { p_pass: pass, p_open: next }).then(function(j){
       if (j.error) { $('msg').textContent = j.error; return; }
       isOpen = j.open; render();
@@ -166,8 +169,9 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
   });
 
   var TABS = [
-    ['all','전체', function(o){ return !o.canceled; }],
-    ['toship','발송할 것', function(o){ return !o.canceled && !o.shipped; }],
+    ['all','신청 전체', function(o){ return !o.canceled; }],
+    ['picked','당첨', function(o){ return !o.canceled && o.picked; }],
+    ['toship','발송할 것', function(o){ return !o.canceled && o.picked && !o.shipped; }],
     ['shipped','발송함', function(o){ return !o.canceled && o.shipped; }],
     ['canceled','취소', function(o){ return o.canceled; }]
   ];
@@ -176,17 +180,18 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
 
   function render(){
     $('openText').innerHTML = isOpen
-      ? '<span class="dot" style="background:var(--teal)"></span><b>지금 배송지 받는 중</b>'
-      : '<span class="dot" style="background:var(--red)"></span><b>받기 멈춤</b> <small style="color:var(--muted)">(당첨자 페이지에 마감 안내가 뜸)</small>';
-    $('toggleOpen').textContent = isOpen ? '받기 멈추기' : '다시 받기';
+      ? '<span class="dot" style="background:var(--teal)"></span><b>지금 신청 받는 중</b>'
+      : '<span class="dot" style="background:var(--red)"></span><b>신청 마감</b> <small style="color:var(--muted)">(신청 페이지에 마감 안내가 뜸)</small>';
+    $('toggleOpen').textContent = isOpen ? '신청 마감하기' : '신청 다시 받기';
     $('toggleOpen').className = isOpen ? 'warn' : 'pri';
     var live = rows.filter(function(o){ return !o.canceled; });
-    var shipped = live.filter(function(o){ return o.shipped; });
+    var picked = live.filter(function(o){ return o.picked; });
+    var shipped = picked.filter(function(o){ return o.shipped; });
     function st(label, n, extra){ return '<div class="stat"><small>' + label + '</small><b>' + n + '</b>' + (extra || '') + '</div>'; }
     $('stats').innerHTML =
-      st('접수 (취소 빼고)', live.length + ' / ' + GOAL) +
-      st('아직 안 적은 가구', Math.max(0, GOAL - live.length)) +
-      st('발송할 것', live.length - shipped.length) +
+      st('신청 (취소 빼고)', live.length) +
+      st('당첨', picked.length + ' / ' + GOAL) +
+      st('발송할 것 (당첨)', picked.length - shipped.length) +
       st('발송함', shipped.length);
     $('tabs').innerHTML = TABS.map(function(t){
       return '<button type="button" role="tab" data-k="' + t[0] + '" class="' + (t[0] === tab ? 'cur' : '') + '" aria-selected="' + (t[0] === tab) + '">' + t[1] + ' ' + rows.filter(t[2]).length + '</button>';
@@ -207,23 +212,24 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
   }
 
   function card(o){
-    var cls = o.canceled ? 'canceled' : o.shipped ? 'shipped' : '';
-    var tag = o.canceled ? '<span class="tag c">취소</span>' : o.shipped ? '<span class="tag s">발송함</span>' : '<span class="tag u">발송 전</span>';
+    var cls = o.canceled ? 'canceled' : o.shipped ? 'shipped' : o.picked ? 'picked' : '';
+    var tag = o.canceled ? '<span class="tag c">취소</span>' : !o.picked ? '<span class="tag n">신청</span>' : o.shipped ? '<span class="tag w">당첨</span> <span class="tag s">발송함</span>' : '<span class="tag w">당첨</span> <span class="tag u">발송 전</span>';
     return '<div class="o ' + cls + '">' +
       '<div class="hd"><span class="no">#' + o.id + '</span><span class="when">' + fmtTime(o.created_at) + '</span>' + tag + '</div>' +
       '<div class="who">' +
-        '<div><small>받는 분</small> <b>' + esc(o.name) + '</b> ' + esc(o.phone) + '</div>' +
-        '<div><small>참여 아이디</small> <b>' + esc(o.sns_id) + '</b></div>' +
+        '<div><small>신청자</small> <b>' + esc(o.name) + '</b> ' + esc(o.phone) + '</div>' +
+        '<div><small>인스타</small> <b>' + esc(o.sns_id) + '</b>' + (o.agree_review ? ' <small>· 후기 약속 O</small>' : '') + '</div>' +
         '<div style="grid-column:1/-1"><small>주소</small> ' + (o.zipcode ? '(' + esc(o.zipcode) + ') ' : '') + esc(o.address) + ' ' + esc(o.address_detail || '') + '</div>' +
       '</div>' +
       (o.memo ? '<div class="memo">요청: ' + esc(o.memo) + '</div>' : '') +
       (o.staff_note ? '<div class="memo" style="background:var(--leaf)">직원 메모: ' + esc(o.staff_note) + '</div>' : '') +
       '<div class="acts">' +
-        (o.canceled ? '' : (o.shipped ? '<button type="button" data-act="unship" data-id="' + o.id + '">발송 표시 풀기</button>'
+        (o.canceled ? '' : (o.picked ? '<button type="button" data-act="unpick" data-id="' + o.id + '">당첨 풀기</button>' : '<button type="button" class="pri" data-act="pick" data-id="' + o.id + '">당첨 표시</button>')) +
+        (o.canceled || !o.picked ? '' : (o.shipped ? '<button type="button" data-act="unship" data-id="' + o.id + '">발송 표시 풀기</button>'
                                       : '<button type="button" class="on" data-act="ship" data-id="' + o.id + '">발송함 표시</button>')) +
         '<button type="button" data-act="note" data-id="' + o.id + '">메모</button>' +
         (o.canceled ? '<button type="button" data-act="uncancel" data-id="' + o.id + '">취소 풀기</button>'
-                    : '<button type="button" class="warn" data-act="cancel" data-id="' + o.id + '">취소 (당첨자 아님 등)</button>') +
+                    : '<button type="button" class="warn" data-act="cancel" data-id="' + o.id + '">취소 (조건 안 맞음 등)</button>') +
       '</div></div>';
   }
 
@@ -236,6 +242,8 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
   function act(){
     var id = Number(this.getAttribute('data-id')), a = this.getAttribute('data-act');
     var o = rows.filter(function(x){ return x.id === id; })[0];
+    if (a === 'pick') return mark(id, 'picked', true);
+    if (a === 'unpick') { if (confirm('#' + id + ' ' + o.name + ' 님 당첨을 풀까요?')) mark(id, 'picked', false); return; }
     if (a === 'ship') return mark(id, 'shipped', true);
     if (a === 'unship') return mark(id, 'shipped', false);
     if (a === 'cancel') { if (confirm('#' + id + ' ' + o.name + ' 님을 취소로 표시할까요?')) mark(id, 'canceled', true); return; }
@@ -250,19 +258,54 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
     a.download = name; document.body.appendChild(a); a.click(); a.remove();
   }
   var stamp = function(){ return today().replace(/-/g,''); };
+
+  /* ── 무작위 추첨: 당첨이 아닌 신청자 가운데서 50가구가 될 때까지 뽑는다 ── */
+  $('draw').addEventListener('click', function(){
+    var live = rows.filter(function(o){ return !o.canceled; });
+    var have = live.filter(function(o){ return o.picked; }).length;
+    var need = GOAL - have;
+    var pool = live.filter(function(o){ return !o.picked; });
+    if (need <= 0) { $('msg').textContent = '이미 ' + have + '가구가 당첨으로 표시되어 있습니다.'; return; }
+    if (!pool.length) { $('msg').textContent = '뽑을 신청자가 없습니다.'; return; }
+    var n = Math.min(need, pool.length);
+    if (!confirm('당첨이 아닌 신청자 ' + pool.length + '명 가운데 ' + n + '가구를 무작위로 뽑아 「당첨」으로 표시할까요?\n(조건이 안 맞는 신청자는 먼저 「취소」로 빼 두세요)')) return;
+    for (var i = pool.length - 1; i > 0; i--) {   // 골고루 섞기
+      var r = new Uint32Array(1); crypto.getRandomValues(r);
+      var j = r[0] % (i + 1); var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    var chosen = pool.slice(0, n), done = 0;
+    $('draw').disabled = true; $('msg').textContent = '뽑는 중… 0 / ' + n;
+    (function next(k){
+      if (k >= chosen.length) { $('draw').disabled = false; tab = 'picked'; load(false).then(function(){ $('msg').textContent = n + '가구를 뽑았습니다. 「당첨」 탭에서 확인하세요.'; }); return; }
+      rpc('event2026_desk_mark', { p_pass: pass, p_id: chosen[k].id, p_field: 'picked', p_value: true, p_text: null })
+        .then(function(j){
+          if (j.error) throw new Error(j.error);
+          chosen[k].picked = true; done++; $('msg').textContent = '뽑는 중… ' + done + ' / ' + n; next(k + 1);
+        })
+        .catch(function(err){ $('draw').disabled = false; $('msg').textContent = done + '가구까지 표시하고 멈췄습니다. ' + (err && err.message || ''); load(false); });
+    })(0);
+  });
+
+  $('dlWin').addEventListener('click', function(){
+    var list = rows.filter(function(o){ return !o.canceled && o.picked; }).slice().reverse();
+    if (!list.length) { $('msg').textContent = '당첨자가 아직 없습니다.'; return; }
+    var r = [['신청번호','이름','전화','인스타아이디','우편번호','주소','상세주소','배송요청','발송']];
+    list.forEach(function(o){ r.push([o.id, o.name, o.phone, o.sns_id, o.zipcode, o.address, o.address_detail, o.memo, o.shipped ? 'O' : '']); });
+    save('김장밀키트이벤트_당첨자_' + stamp() + '.csv', csv(r));
+  });
   $('dlShip').addEventListener('click', function(){
-    var list = rows.filter(function(o){ return !o.canceled && !o.shipped; }).slice().reverse();
+    var list = rows.filter(function(o){ return !o.canceled && o.picked && !o.shipped; }).slice().reverse();
     if (!list.length) { $('msg').textContent = '발송할 것이 없습니다.'; return; }
-    var r = [['접수번호','받는분','받는분전화','우편번호','주소','상세주소','품목','배송요청']];
+    var r = [['신청번호','받는분','받는분전화','우편번호','주소','상세주소','품목','배송요청']];
     list.forEach(function(o){ r.push([o.id, o.name, o.phone, o.zipcode, o.address, o.address_detail, '김장밀키트(이벤트)', o.memo]); });
     save('김장밀키트이벤트_발송할것_' + stamp() + '.csv', csv(r));
   });
   $('dlAll').addEventListener('click', function(){
-    var r = [['접수번호','접수일시','이름','전화','참여아이디','우편번호','주소','상세주소','배송요청','발송','취소','직원메모']];
+    var r = [['신청번호','신청일시','이름','전화','인스타아이디','우편번호','주소','상세주소','배송요청','후기약속','당첨','발송','취소','직원메모']];
     rows.slice().reverse().forEach(function(o){
-      r.push([o.id, new Date(o.created_at).toLocaleString('ko-KR'), o.name, o.phone, o.sns_id, o.zipcode, o.address, o.address_detail, o.memo, o.shipped ? 'O' : '', o.canceled ? 'O' : '', o.staff_note]);
+      r.push([o.id, new Date(o.created_at).toLocaleString('ko-KR'), o.name, o.phone, o.sns_id, o.zipcode, o.address, o.address_detail, o.memo, o.agree_review ? 'O' : '', o.picked ? 'O' : '', o.shipped ? 'O' : '', o.canceled ? 'O' : '', o.staff_note]);
     });
-    save('김장밀키트이벤트_전체_' + stamp() + '.csv', csv(r));
+    save('김장밀키트이벤트_신청전체_' + stamp() + '.csv', csv(r));
   });
 
   if (PREVIEW) { $('previewNote').hidden = false; $('pw').value = '미리보기'; }

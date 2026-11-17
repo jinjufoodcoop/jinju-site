@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>김장밀키트 당첨 배송지 · 진주텃밭</title>
-<meta name="description" content="진주엔 × 진주텃밭 이벤트 — 김장밀키트 당첨을 축하드립니다. 받으실 주소를 적어 주세요.">
+<title>김장밀키트 이벤트 신청 · 진주텃밭</title>
+<meta name="description" content="진주엔 × 진주텃밭 이벤트 — 진주시민 50가구에 김장밀키트를 보내드립니다. 신청해 주세요.">
 <meta name="robots" content="noindex">
 <meta property="og:site_name" content="진주텃밭협동조합">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:title" content="🎉 김장밀키트 당첨을 축하드립니다 · 배송지를 적어 주세요">
+<meta property="og:title" content="🎁 진주시민 50가구에 김장밀키트를 보내드려요 · 이벤트 신청">
 <meta property="og:description" content="진주엔 × 진주텃밭 이벤트 | 진주 농가 절임배추 + 김치양념">
 <meta property="og:url" content="https://jjcoop.co.kr/2026이벤트/">
 <meta property="og:image" content="https://jjcoop.co.kr/img/logo.png">
@@ -77,6 +77,10 @@ label.l i{color:var(--red);font-style:normal}
 .done td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top}
 .done td:first-child{color:var(--muted);width:30%}
 .closed{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.steps{margin-top:12px;background:var(--panel);border:1.5px solid var(--green-deep);border-radius:14px;padding:14px 16px}
+.steps ol{margin:6px 0 0;padding-left:22px;display:grid;gap:6px}
+.steps small{color:var(--muted)}
+.steps .small{margin:10px 0 0;font-size:14px;color:var(--muted)}
 footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
 </style>
 </head>
@@ -91,29 +95,39 @@ footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border
       <img src="../img/jinjuen-logo.png" alt="진주엔" class="lg-je" onerror="this.previousElementSibling.hidden=true;this.hidden=true">
     </div>
     <span class="kicker">진주엔 × 진주텃밭 이벤트</span>
-    <h1>🎉 김장밀키트<br>당첨을 축하드립니다!</h1>
-    <p class="lead">받으실 주소를 아래에 적어 주세요.<br>적어 주신 곳으로 김장밀키트를 보내드립니다.</p>
+    <h1>🎁 진주시민 50가구에<br>김장밀키트를 보내드려요</h1>
+    <p class="lead">진주 농가가 키운 배추로 올겨울 김장을 맛보세요.<br>신청하신 분 가운데 50가구를 뽑아 보내드립니다.</p>
   </header>
 
   <section id="giftBox">
     <div class="gift">
-      <b>보내드리는 것</b>
+      <b>보내드리는 것 (15,000원 상당)</b>
       <ul>
         <li>진주 농가 절임배추 1포기(2쪽)</li>
         <li>김치양념</li>
         <li>작은 아이스박스에 담아 택배로 보냅니다</li>
       </ul>
     </div>
+    <div class="steps">
+      <b>참여 방법</b>
+      <ol>
+        <li><b>@jinju_coop</b>(진주텃밭) 팔로우</li>
+        <li><b>진주엔</b> 팔로우</li>
+        <li>이 페이지에서 <b>신청</b></li>
+        <li>진주엔 이벤트 글에 <b>진주 농가 응원 댓글</b> 남기기<br><small>예) 올해도 진주 배추로 김장해요! 농부님들 힘내세요 🥬</small></li>
+      </ol>
+      <p class="small">진주시에 사시는 분이면 누구나 신청하실 수 있습니다. 한 가구에 한 번만 신청해 주세요.</p>
+    </div>
   </section>
 
   <div id="closed" class="closed" hidden>
-    <h2>배송지 받기를 마감했습니다</h2>
-    <p>문의는 진주텃밭 사무국 <b>055-763-1243</b>으로 주세요.</p>
+    <h2>이벤트 신청을 마감했습니다</h2>
+    <p>함께해 주셔서 고맙습니다.<br>문의는 진주텃밭 사무국 <b>055-763-1243</b>으로 주세요.</p>
   </div>
 
   <form id="form" novalidate>
     <section>
-      <h2>받으시는 분</h2>
+      <h2>신청하시는 분</h2>
       <div class="card">
         <div class="field">
           <label class="l" for="name">이름 <i>*</i></label>
@@ -122,15 +136,15 @@ footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border
         <div class="field">
           <label class="l" for="phone">휴대폰 번호 <i>*</i></label>
           <input type="tel" id="phone" autocomplete="tel" inputmode="numeric" placeholder="010-0000-0000" maxlength="13">
-          <div class="hint">택배 기사님이 연락드릴 번호입니다.</div>
+          <div class="hint">당첨 안내와 택배 연락에 씁니다.</div>
         </div>
         <div class="field">
-          <label class="l" for="sns">이벤트에 참여하신 아이디 <i>*</i></label>
-          <input type="text" id="sns" maxlength="50" placeholder="예) 인스타 @jinju_kimchi / 카페 닉네임">
-          <div class="hint">당첨자가 맞는지 확인하는 데만 씁니다.</div>
+          <label class="l" for="sns">인스타그램 아이디 <i>*</i></label>
+          <input type="text" id="sns" maxlength="50" placeholder="예) @jinju_kimchi" autocapitalize="off" autocorrect="off" spellcheck="false">
+          <div class="hint">팔로우·댓글을 확인하는 데 씁니다.</div>
         </div>
         <div class="field">
-          <label class="l" for="addr">받는 주소 <i>*</i> <span class="hint">(진주시 주소만 받습니다)</span></label>
+          <label class="l" for="addr">받으실 주소 <i>*</i> <span class="hint">(진주시 주소만 받습니다)</span></label>
           <div class="row">
             <input type="text" id="zip" placeholder="우편번호" readonly aria-label="우편번호">
             <button type="button" class="btn2" id="findAddr">주소 찾기</button>
@@ -146,25 +160,42 @@ footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border
     </section>
 
     <section>
+      <h2>당첨되시면 약속해 주세요</h2>
+      <div class="card">
+        <div class="terms">김장밀키트를 받으신 뒤 인스타그램에 <b>후기</b>를 올려 주세요.<br>
+        · 후기에 <b>@jinju_coop</b> 을 꼭 태그해 주세요.<br>
+        · 「진주텃밭에서 제품을 받아 쓴 후기입니다」처럼 <b>제공받았다는 것을 밝혀</b> 주세요.</div>
+        <label class="check"><input type="checkbox" id="review"> 당첨되면 위와 같이 후기를 올리겠습니다 <span style="color:var(--red)">*</span></label>
+      </div>
+    </section>
+
+    <section>
       <h2>개인정보 동의</h2>
       <div class="card">
-        <div class="terms">모으는 것: 이름, 휴대폰 번호, 이벤트 참여 아이디, 주소<br>
-        쓰는 곳: 당첨자 확인, 경품(김장밀키트) 택배 발송<br>
-        보관 기간: 경품 발송을 마친 뒤 지체 없이 파기</div>
+        <div class="terms">모으는 것: 이름, 휴대폰 번호, 인스타그램 아이디, 주소<br>
+        쓰는 곳: 당첨자 추첨·안내, 경품(김장밀키트) 택배 발송, 후기 확인<br>
+        보관 기간: 당첨되지 않은 분은 추첨이 끝나면, 당첨된 분은 경품 발송을 마치면 지체 없이 파기</div>
         <label class="check"><input type="checkbox" id="agree"> 위 내용에 동의합니다 <span style="color:var(--red)">*</span></label>
       </div>
-      <button type="button" class="go" id="go">배송지 보내기</button>
+      <button type="button" class="go" id="go">이벤트 신청하기</button>
       <p class="msg" id="msg" role="alert"></p>
     </section>
   </form>
 
   <div id="done" class="done" hidden>
     <div class="ok" aria-hidden="true">✓</div>
-    <h2>잘 받았습니다!</h2>
-    <p>접수번호 <b id="dNo"></b></p>
+    <h2>신청이 끝났습니다!</h2>
+    <p>신청번호 <b id="dNo"></b></p>
     <table id="dTable"></table>
-    <p>적어 주신 곳으로 김장밀키트를 보내드립니다.<br>진주 농가의 배추로 맛있는 김장 하세요. 🥬</p>
-    <p class="hint">잘못 적으셨으면 사무국 055-763-1243으로 알려 주세요.</p>
+    <div class="steps" style="text-align:left">
+      <b>잊지 마세요!</b>
+      <ol>
+        <li><b>@jinju_coop</b>과 <b>진주엔</b> 팔로우</li>
+        <li>진주엔 이벤트 글에 <b>진주 농가 응원 댓글</b></li>
+      </ol>
+      <p class="small">당첨되신 분께는 적어 주신 번호로 연락드립니다.</p>
+    </div>
+    <p class="hint" style="margin-top:14px">잘못 적으셨으면 사무국 055-763-1243으로 알려 주세요.</p>
   </div>
 
   <footer>진주우리먹거리협동조합 진주텃밭 · 경남 진주시 금산면 금산순환로 61 · 사무국 055-763-1243</footer>
@@ -212,10 +243,11 @@ footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border
   function check(){
     if (!$('name').value.trim()) return need($('name'), '이름을 적어 주세요.');
     if (!phoneOk($('phone').value)) return need($('phone'), '휴대폰 번호를 확인해 주세요.');
-    if (!$('sns').value.trim()) return need($('sns'), '이벤트에 참여하신 아이디를 적어 주세요.');
+    if (!$('sns').value.trim()) return need($('sns'), '인스타그램 아이디를 적어 주세요.');
     var a = $('addr').value.trim();
-    if (a.length < 5) return need($('addr'), '받는 주소를 적어 주세요.');
-    if (a.indexOf('진주') < 0) return need($('addr'), '이번 이벤트는 진주시 주소로만 보내드립니다. 주소를 확인해 주세요.');
+    if (a.length < 5) return need($('addr'), '받으실 주소를 적어 주세요.');
+    if (a.indexOf('진주') < 0) return need($('addr'), '이번 이벤트는 진주시에 사시는 분만 신청하실 수 있습니다. 주소를 확인해 주세요.');
+    if (!$('review').checked) return need($('review'), '후기 약속에 체크해 주세요.');
     if (!$('agree').checked) return need($('agree'), '개인정보 동의에 체크해 주세요.');
     return true;
   }
@@ -232,7 +264,8 @@ footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border
       p_zipcode: $('zip').value.trim(),
       p_address: $('addr').value.trim(),
       p_address_detail: $('addr2').value.trim(),
-      p_memo: $('memo').value.trim()
+      p_memo: $('memo').value.trim(),
+      p_agree_review: $('review').checked
     };
     if (PREVIEW) { showDone({ no:'미리보기' }, body); return; }
 
@@ -249,14 +282,15 @@ footer{margin-top:34px;padding-top:18px;color:var(--muted);font-size:14px;border
         say(/[가-힣]/.test(m) ? m : '보내지 못했습니다. 통신 상태를 확인하고 다시 눌러 주세요. (적으신 내용은 그대로 있습니다)');
         if (/마감|모두 찼/.test(m)) closeNow();
       })
-      .then(function(){ sending = false; $('go').disabled = false; $('go').textContent = '배송지 보내기'; });
+      .then(function(){ sending = false; $('go').disabled = false; $('go').textContent = '이벤트 신청하기'; });
   });
 
   function showDone(r, b){
     $('dNo').textContent = r.no;
     var t = $('dTable'); t.innerHTML = '';
     function addRow(a, c){ var tr = t.insertRow(); tr.insertCell().textContent = a; tr.insertCell().textContent = c; }
-    addRow('받는 분', b.p_name + ' · ' + b.p_phone);
+    addRow('신청하신 분', b.p_name + ' · ' + b.p_phone);
+    addRow('인스타그램', b.p_sns_id);
     addRow('받는 곳', ((b.p_zipcode ? '(' + b.p_zipcode + ') ' : '') + b.p_address + ' ' + b.p_address_detail).trim());
     $('form').hidden = true; $('giftBox').hidden = true; $('head').hidden = true;
     $('done').hidden = false;
