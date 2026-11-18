@@ -162,6 +162,96 @@ h2::after{content:""; flex:1; height:1px; background:var(--line)}
 .foot a{font-weight:700; color:var(--accent); text-decoration:none; font-size:1.1rem}
 .foot .home{display:inline-block; margin-top:8px; font-size:.86rem; color:var(--ink-faint); font-weight:400}
 
+/* 직매장 */
+.store-note{font-size:.85rem; color:var(--ink-soft); text-align:center; margin:12px 0 0}
+.store-note a{color:var(--sage); font-weight:700}
+.stores{margin-top:6px}
+.store{
+  background:var(--surface); border-radius:var(--r); box-shadow:var(--shadow-sm);
+  padding:12px 16px; margin-bottom:10px; font-size:.92rem; line-height:1.6;
+}
+.store h3{margin:0 0 2px; font-size:1.05rem}
+.store h3 small{font-size:.75rem; color:var(--sage); font-weight:600; margin-left:4px}
+.store p{margin:0; color:var(--ink-soft)}
+.store a{display:inline-block; margin-top:4px; color:var(--accent); font-weight:700; text-decoration:none}
+
+/* 영상 */
+.vid figure{margin:0; text-align:center}
+.vid video{
+  display:block; width:100%; max-width:340px; aspect-ratio:406/720; margin:0 auto;
+  border-radius:var(--r); box-shadow:var(--shadow); background:#000; object-fit:cover;
+}
+.vid figcaption{font-size:.88rem; color:var(--ink-soft); margin-top:8px}
+
+/* 사진 이야기 */
+.story{margin-top:44px}
+.s-head{text-align:center; margin-bottom:18px}
+.s-h{display:block; font-family:"Gowun Batang",serif; font-size:1.6rem; line-height:1.35; margin:.2rem 0 .5rem}
+.s-h::after{display:none}
+.s-head p{margin:0; color:var(--ink-soft); font-size:.95rem}
+.tl{list-style:none; margin:0; padding:0 0 0 22px; position:relative}
+.tl::before{content:""; position:absolute; left:7px; top:8px; bottom:8px; width:2px; background:var(--line)}
+.tl li{position:relative; margin:0 0 22px}
+.tl li::before{
+  content:""; position:absolute; left:-21px; top:6px; width:12px; height:12px; border-radius:50%;
+  background:var(--dream); box-shadow:0 0 0 3px var(--ground);
+}
+.tl li.end::before{background:var(--accent)}
+.tl figure{margin:0 0 8px; border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm); background:var(--surface)}
+.tl figure img{width:100%; aspect-ratio:4/3; object-fit:cover}
+.tl figure.two{display:grid; grid-template-columns:1fr 1fr; gap:3px}
+.tl figure.two img{aspect-ratio:3/4}
+.tl .when{font-weight:700; color:var(--dream); font-size:.95rem}
+.tl li.end .when{color:var(--accent)}
+.tl p{margin:.1rem 0 0; font-size:.98rem; color:var(--ink)}
+
+/* 농부편지 */
+.farmer{
+  margin-top:40px; background:#FAF8F2; color:#2B2721; border-radius:var(--r);
+  box-shadow:var(--shadow); overflow:hidden; border:1px solid #E6DFC9;
+}
+.f-hero{position:relative}
+.f-hero img{width:100%; aspect-ratio:16/8; object-fit:cover; object-position:center 45%;
+  -webkit-mask-image:linear-gradient(#000 70%,transparent); mask-image:linear-gradient(#000 70%,transparent)}
+.stamp{
+  position:absolute; top:12px; right:12px; background:#FAF8F2; color:#2E5A2A; font-weight:700;
+  font-size:.82rem; padding:4px 12px; border-radius:8px; border:2px solid #C9A85C;
+}
+.f-body{padding:4px 20px 26px; font-size:1rem; line-height:1.85}
+.f-title{text-align:center; margin-bottom:14px}
+.f-title .year{color:#3E6B2F; font-weight:700; font-size:1.05rem}
+.f-h{display:block; margin:.15rem 0 .4rem; font-family:"Gowun Batang",serif; font-size:1.55rem; line-height:1.35; color:#1F3554}
+.f-h::after{display:none}
+.rule{display:flex; align-items:center; justify-content:center; gap:10px; color:#C9A85C}
+.rule span{width:70px; height:1px; background:#C9A85C}
+.rule i{font-style:normal}
+.farmer p{margin:0 0 .9rem}
+.farmer .hello{font-weight:700; color:#1F3554; font-size:1.08rem; margin-bottom:.3rem}
+.farmer b{color:#3E6B2F}
+.poem{
+  border-left:4px solid #6E9A55; padding:4px 0 4px 14px; margin:1.1rem 0;
+  color:#3E6B2F; font-weight:600; line-height:1.9;
+}
+.poem .last{color:#1F3554; font-weight:700}
+.photos{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:0 0 1.2rem}
+.photos figure{margin:0; background:#fff; padding:5px 5px 6px; box-shadow:0 2px 8px rgba(0,0,0,.12); border-radius:3px}
+.photos figure:nth-child(1){transform:rotate(-2deg)}
+.photos figure:nth-child(3){transform:rotate(2deg)}
+.photos img{width:100%; aspect-ratio:1/1; object-fit:cover}
+.photos figcaption{font-size:.72rem; text-align:center; line-height:1.35; margin-top:4px; font-weight:600; color:#2B2721}
+.key{text-align:center; margin:1.4rem 0 .5rem}
+.key span{
+  font-family:"Gowun Batang",serif; font-weight:700; font-size:1.18rem; color:#1F3554; line-height:1.6;
+  background:linear-gradient(transparent 60%, #F3DFB0 60%);
+}
+.wish{text-align:center; color:#3E6B2F; font-weight:700}
+.sign{text-align:right; margin-top:1.4rem; font-weight:700; color:#2B2721; line-height:1.5}
+.sign .who{font-size:1.15rem; color:#1F3554}
+.last-call{margin-top:26px; text-align:center}
+.lc-t{font-family:"Gowun Batang",serif; font-size:1.2rem; line-height:1.6; margin:0}
+.lc-t b{color:var(--accent)}
+.last-call .order{margin-top:14px}
+
 @media (max-width:380px){
   .compare{grid-template-columns:1fr}
   .item{grid-template-columns:80px 1fr}
@@ -191,6 +281,18 @@ h2::after{content:""; flex:1; height:1px; background:var(--line)}
     <p>여기에 모든 재료가 <b>국내산 100%</b>인 김장양념까지!</p>
     <p>좋은 재료로 정성껏 준비한 진주텃밭 절임배추와 양념으로 우리 가족이 1년 내내 든든하게 먹을 김치를 담가보세요.</p>
     <p>올해 김장도 믿을 수 있는 우리 농산물로, 진주텃밭과 함께하세요!</p>
+  </section>
+
+  <!-- 절임배추 홍보영상 (바탕화면 2026 절임배추\절임배추홍보영상.mp4, 27초 세로) -->
+  <section class="vid">
+    <h2>영상으로 보기</h2>
+    <figure>
+      <video controls preload="none" playsinline poster="../img/video-kimjang.jpg" aria-label="진주텃밭 절임배추 홍보영상">
+        <source src="../video/kimjang.mp4" type="video/mp4">
+        <a href="../video/kimjang.mp4">영상 보기</a>
+      </video>
+      <figcaption>김장 한 쪽 1분 컷?! · 진주텃밭 절임배추 (27초)</figcaption>
+    </figure>
   </section>
 
   <h2>상품과 가격</h2>
@@ -297,7 +399,122 @@ h2::after{content:""; flex:1; height:1px; background:var(--line)}
       <span class="s">택배비 무료 · 4상자 이상 · 단체 주문</span>
     </a>
   </div>
+  <p class="store-note">🏪 온라인 주문이 어려우신 분들은 <a href="#stores">직매장</a>에 방문하여 주문하실 수 있습니다.</p>
   <p class="note">※ 할인 혜택 및 적용 조건은 온라인몰에 따라 다르며,<br>예산 소진 시 조기 종료될 수 있습니다.</p>
+
+  <!-- 사진 이야기: 바탕화면 2026 절임배추\07_사진·참고그림 의 사진을 찍은 날짜 순서로 (2026-11-18) -->
+  <section class="story">
+    <div class="s-head">
+      <div class="kicker">2026 진주텃밭 배추밭 이야기</div>
+      <h2 class="s-h">절임배추 한 상자가<br>오기까지</h2>
+      <p>9월 모종부터 11월 출고까지,<br>농부들이 보낸 시간을 사진으로 전합니다.</p>
+    </div>
+    <ol class="tl">
+      <li><figure><img src="../img/story-01.jpg" alt="" loading="lazy"></figure>
+        <div class="when">9월 초 · 모종 준비</div><p>밭으로 나갈 불암플러스 모종이 줄지어 기다립니다.</p></li>
+      <li><figure><img src="../img/story-02.jpg" alt="" loading="lazy"></figure>
+        <div class="when">9월 8일 · 밭 만들기</div><p>흙을 갈고 고랑을 내어 배추가 자랄 자리를 만듭니다.</p></li>
+      <li><figure class="two"><img src="../img/story-03.jpg" alt="" loading="lazy"><img src="../img/story-04.jpg" alt="" loading="lazy"></figure>
+        <div class="when">9월 12~13일 · 아주심기</div><p>농부들이 모종을 한 포기씩 밭에 옮겨 심었습니다.</p></li>
+      <li><figure><img src="../img/story-05.jpg" alt="" loading="lazy"></figure>
+        <div class="when">9월 16일 · 물 주기</div><p>어린 배추가 뿌리를 잘 내리도록 물을 줍니다.</p></li>
+      <li><figure><img src="../img/story-06.jpg" alt="" loading="lazy"></figure>
+        <div class="when">9월 23일 · 김매기</div><p>제초제 없이, 밭을 오가며 고랑의 풀을 잡습니다.</p></li>
+      <li><figure><img src="../img/story-07.jpg" alt="" loading="lazy"></figure>
+        <div class="when">9월 29일 · 쑥쑥</div><p>심은 지 보름 남짓, 잎이 활짝 펼쳐졌습니다.</p></li>
+      <li><figure><img src="../img/story-08.jpg" alt="" loading="lazy"></figure>
+        <div class="when">10월 19일 · 속이 차오르다</div><p>잦은 가을비를 견디며 배추 속이 단단하게 차오릅니다.</p></li>
+      <li><figure><img src="../img/story-09.jpg" alt="" loading="lazy"></figure>
+        <div class="when">10월 27일 · 배추 농가 모임</div><p>배추 농가들이 한자리에 모여 올해 절임배추를 함께 준비했습니다.</p></li>
+      <li><figure><img src="../img/story-11.jpg" alt="" loading="lazy"></figure>
+        <div class="when">11월 17일 · 수확을 앞둔 밭</div><p>속이 꽉 찬 배추가 절임을 기다립니다.</p></li>
+      <li><figure><img src="../img/story-10.jpg" alt="" loading="lazy"></figure>
+        <div class="when">11월 17일 · 출고 시작</div><p>여러분 댁으로 갈 절임배추 상자가 차곡차곡 쌓였습니다.</p></li>
+      <li class="end"><figure><img src="../img/story-12.jpg" alt="" loading="lazy"></figure>
+        <div class="when">그리고, 여러분의 김장 밥상으로</div><p>진주텃밭 절임배추와 양념으로 담근 올해 김치입니다.</p></li>
+    </ol>
+  </section>
+
+  <!-- 농부편지 앞면 (바탕화면 2026 절임배추\04_홍보물_작업폴더\2026절임배추_농부편지_20261104 의 글 그대로) -->
+  <section class="farmer">
+    <div class="f-hero">
+      <img src="../img/letter-field.jpg" alt="진주텃밭 배추밭" loading="lazy">
+      <span class="stamp">진주텃밭 배추밭에서</span>
+    </div>
+    <div class="f-body">
+      <div class="f-title">
+        <div class="year">2026년 겨울,</div>
+        <h2 class="f-h">배추밭에서 보내는<br>농부의 편지</h2>
+        <div class="rule"><span></span><i>❦</i><span></span></div>
+      </div>
+      <p class="hello">안녕하세요.</p>
+      <p>올겨울 여러분의 김장 밥상에 오를 배추를 키운 농부입니다.<br>
+      농사를 지으며 가장 힘든 일이 무엇이냐고 묻는다면, 저는 농산물을 판매하는 일과 풀을 매는 일이라고 말하고 싶습니다.
+      우리는 농산물을 제값 받고 안정적으로 판매하는 어려움을 함께 풀어가기 위해 진주텃밭협동조합에 모였습니다.</p>
+      <p>그리고 풀을 쉽게 없애는 <b>제초제를 사용하지 않기로</b> 했습니다. 풀을 죽이는 일은 어쩌면 쉽지만, 그 과정에서 땅속에 살아 숨 쉬는 작은 생명들까지 함께 사라지기 때문입니다.
+      조금 더 힘들더라도 땅이 건강하게 살아 있는 농사를 짓고 싶었습니다.</p>
+      <p>배추 종자는 농민들이 함께 고민하고 <b>‘불암플러스’</b>로 정했습니다. 농사짓기는 조금 까다롭지만, 맛이 좋고 김치를 담근 뒤에도 오랫동안 무르지 않아 농민들 사이에서 이미 검증된 품종입니다.</p>
+      <p>올가을은 잦은 비 때문에 배추를 키우는 일이 더욱 쉽지 않았습니다. 병이 들지는 않을까, 잘 자랄 수 있을까 애태우며 특허받은 <b>온새미로 천연약재</b>를 활용해 더욱 건강하고 단단하게 키웠습니다.</p>
+
+      <div class="poem">
+        파릇파릇 새잎이 돋아나고,<br>
+        하루하루 쑥쑥 자라 속이 차오르는 모습을 바라보는 즐거움.<br>
+        혹시 병이 들지는 않을까 노심초사했던 마음.<br>
+        수없이 밭을 오가며 배추와 함께 보낸 시간.<br>
+        <span class="last">그 모든 마음을 배추 한 포기 한 포기에 담았습니다.</span>
+      </div>
+      <div class="photos">
+        <figure><img src="../img/letter-farmers.jpg" style="object-position:center 40%" alt="" loading="lazy"><figcaption>올해 배추를<br>키운 농부들</figcaption></figure>
+        <figure><img src="../img/letter-care.jpg" style="object-position:center 55%" alt="" loading="lazy"><figcaption>밭을 오가며<br>돌본 시간</figcaption></figure>
+        <figure><img src="../img/letter-cabbage.jpg" alt="" loading="lazy"><figcaption>속이 차오르는<br>불암플러스</figcaption></figure>
+      </div>
+
+      <p>이제 잘 자란 배추를 정성껏 절여 여러분께 보냅니다.<br>
+      한 해 동안 가족이 먹을 김치를 준비하는 소비자의 마음과, 좋은 먹거리를 전하고 싶은 농민의 마음이 서로 닿기를 바랍니다.
+      우리가 키운 배추가 여러분의 겨울 식탁에서 맛있는 김치가 되고, 가족이 함께 둘러앉는 따뜻한 밥상의 기쁨이 되었으면 좋겠습니다.</p>
+
+      <div class="key"><span>농민의 땀으로 키우고,<br>농민의 마음으로 보냅니다.</span></div>
+      <div class="wish">올겨울도 건강하고 맛있는 김장 하세요.</div>
+      <div class="sign">2026년 겨울<br><span class="who">배추밭에서, 농부 드림</span></div>
+    </div>
+  </section>
+
+  <section class="last-call">
+    <p class="lc-t">농부의 마음을 담은 절임배추,<br><b>우리 집 김장 밥상</b>에 올려 주세요.</p>
+    <div class="order">
+      <a class="btn gn" href="/gnmall/">
+        <span class="t">e경남몰에서 주문하기 →</span>
+        <span class="s">10% 할인 · 1~3상자 주문 · 친환경 절임배추</span>
+      </a>
+      <a class="btn dream" href="/dream/">
+        <span class="t">진주드림몰에서 주문하기 →</span>
+        <span class="s">택배비 무료 · 4상자 이상 · 단체 주문</span>
+      </a>
+    </div>
+    <p class="store-note">🏪 온라인 주문이 어려우신 분들은 <a href="#stores">직매장</a>에 방문하여 주문하실 수 있습니다.</p>
+  </section>
+
+  <section class="stores" id="stores">
+    <h2>진주텃밭 직매장</h2>
+    <div class="store">
+      <h3>금산점 <small>본점</small></h3>
+      <p>경남 진주시 금산면 금산순환로 61</p>
+      <p>월~토 09:00~20:00 · 일요일 휴무</p>
+      <a href="tel:055-762-1242">☎ 055-762-1242</a>
+    </div>
+    <div class="store">
+      <h3>초전점</h3>
+      <p>경남 진주시 초전북로 61번길 9, 1층</p>
+      <p>월~토 09:00~20:00 · 일요일 휴무</p>
+      <a href="tel:055-755-5888">☎ 055-755-5888</a>
+    </div>
+    <div class="store">
+      <h3>진양호점</h3>
+      <p>경남 진주시 진양호로 44번길 6, 1·2층</p>
+      <p>매일 09:00~20:00 (동절기 11~2월)<br>3~10월은 09:00~21:00</p>
+      <a href="tel:055-746-1240">☎ 055-746-1240</a>
+    </div>
+  </section>
 
   <footer class="foot">
     주문 문의 · 진주텃밭 사무국<br>
