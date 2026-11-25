@@ -294,3 +294,60 @@ notify pgrst, 'reload schema';
 
 -- 확인: 아래 한 줄을 실행해 {"open" : true, "count" : 0, "mine" : [], "rows" : []} 가 나오면 정상입니다.
 --   select public.cday2026_board();
+
+
+-- ══════════════════════════════════════════════════════════════
+--  11. 선물 추첨 (2026-11-25 더함) — 담당자 화면 「무작위 추첨」
+--      당첨 표시(picked)를 더하고, 목록·표시 함수가 알게 한다. 두 번 실행해도 안전.
+-- ══════════════════════════════════════════════════════════════
+alter table public.cday2026_cheers add column if not exists picked boolean not null default false;
+
+create or replace function public.cday2026_desk_list(p_pass text)
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare err text;
+begin
+  err := public.kimjang_desk_check(p_pass);
+  if err is not null then return json_build_object('error', err); end if;
+  return json_build_object(
+    'open', coalesce((select open from public.cday2026_setting where id = 1), true),
+    'rows', coalesce((
+      select json_agg(c order by c.id desc) from (
+        select id, created_at, name, phone, stores, topic, message, likes, hidden, picked, staff_note
+        from public.cday2026_cheers) c), '[]'::json));
+end
+$$;
+revoke all on function public.cday2026_desk_list(text) from public;
+grant execute on function public.cday2026_desk_list(text) to anon;
+
+create or replace function public.cday2026_desk_mark(
+  p_pass text, p_id bigint, p_field text, p_value boolean, p_text text default null)
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare err text;
+begin
+  err := public.kimjang_desk_check(p_pass);
+  if err is not null then return json_build_object('error', err); end if;
+  if p_field = 'hidden' then
+    update public.cday2026_cheers set hidden = coalesce(p_value,false) where id = p_id;
+  elsif p_field = 'picked' then
+    update public.cday2026_cheers set picked = coalesce(p_value,false) where id = p_id;
+  elsif p_field = 'note' then
+    update public.cday2026_cheers set staff_note = nullif(left(btrim(coalesce(p_text,'')),300),'') where id = p_id;
+  else
+    return json_build_object('error', '바꿀 수 없는 칸입니다.');
+  end if;
+  if not found then return json_build_object('error', '그 줄을 찾지 못했습니다.'); end if;
+  return json_build_object('ok', true);
+end
+$$;
+revoke all on function public.cday2026_desk_mark(text,bigint,text,boolean,text) from public;
+grant execute on function public.cday2026_desk_mark(text,bigint,text,boolean,text) to anon;
+
+notify pgrst, 'reload schema';
