@@ -32,7 +32,7 @@ create table if not exists public.cday2026_cheers (
   name         text        not null,
   phone        text        not null,
   phone_digits text        not null,
-  stores       text[]      not null,     -- 금산점 / 초전점 / 진양호점 (여럿 고를 수 있음)
+  stores       text[]      not null,     -- 당첨 시 선물 받을 매장 1곳: 금산점 / 초전점 / 진양호점
   topic        text        not null,     -- 어떤 이야기인지 (아래 3가지 중 하나)
   message      text        not null,
   likes        int         not null default 0,
@@ -137,8 +137,8 @@ begin
   select array_agg(distinct s order by s) into st
   from unnest(coalesce(p_stores, '{}'::text[])) s
   where s in ('금산점','초전점','진양호점');
-  if st is null or cardinality(st) = 0 then
-    raise exception '이용하시는 매장을 골라 주세요.' using errcode = '23514';
+  if st is null or cardinality(st) <> 1 then   -- 당첨 시 선물 받을 매장 1곳 (2026-11-25 은미님 요청으로 「이용 매장 여럿」에서 바꿈)
+    raise exception '당첨되시면 선물 받으실 매장을 1곳 골라 주세요.' using errcode = '23514';
   end if;
 
   if coalesce(p_topic,'') not in ('가치소비를 느낀 순간','진주텃밭을 이용하는 이유','나의 가치소비 응원 한마디') then

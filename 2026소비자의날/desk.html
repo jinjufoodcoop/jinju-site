@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* TV용 그림에 쓰는 제목 글씨 (응원판과 같은 것) */
+@font-face{font-family:'ONE Mobile Title';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff') format('woff');font-weight:400 900;font-display:swap}
 :root{
   --red:#E83028; --red-deep:#C0221B; --orange:#F0A800; --green:#A8B048; --green-deep:#4F5722; --teal:#00A8A8; --teal-deep:#00706F;
   --ink:#2B2721; --muted:#6B6358; --bg:#FBF7EF; --panel:#FFFFFF; --soft:#F4EDDF; --leaf:#EEF2DC; --line:rgba(43,39,33,.14);
@@ -59,6 +61,12 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
 .o .acts{display:flex;flex-wrap:wrap;gap:6px}
 .o .acts button{min-height:36px;font-size:14px}
 .empty{color:var(--muted);text-align:center;padding:30px}
+.tvbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 14px}
+.tvhelp{margin:0 0 10px;font-size:15px;line-height:1.7}
+.tvhelp small{color:var(--muted)}
+.tvbox img{width:100%;height:auto;border-radius:8px;border:1px solid var(--line);display:block;background:#BBE9F4;min-height:60px}
+.btnlink{display:inline-flex;align-items:center;font:600 15px var(--sans);border-radius:10px;padding:0 16px;min-height:40px;text-decoration:none;cursor:pointer}
+.btnlink.pri{background:var(--green-deep);color:#fff}
 .preview{background:#FFF4D6;border:1.5px solid var(--orange);border-radius:10px;padding:8px 12px;font-weight:600;margin-top:12px}
 </style>
 </head>
@@ -91,8 +99,20 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
       <input type="search" id="q" placeholder="이름·전화 뒷자리·글 내용 찾기">
     </div>
     <div class="tools">
+      <button type="button" class="pri" id="tvMake">📺 매장 TV용 그림 만들기</button>
       <button type="button" id="dlAll">전체 엑셀</button>
       <span class="err" id="msg" role="alert"></span>
+    </div>
+    <div class="tvbox" id="tvBox" hidden>
+      <p class="tvhelp"><b>톡톡톡플레이에 넣는 법</b><br>
+      ① 아래 「그림 내려받기」를 누릅니다. <small>(휴대폰에서는 그림을 <b>길게 눌러 「사진에 저장」</b>해도 됩니다)</small><br>
+      ② 톡톡톡플레이 앱에서 화면의 사진을 이 그림으로 바꿉니다.<br>
+      <small>좋아요 TOP 3 + 최신 응원 3개가 들어갑니다. 숨긴 글은 빠지고, 이름은 가운데를 가립니다. 하루 한두 번 새로 만들어 바꿔 주세요.</small></p>
+      <img id="tvImg" alt="매장 TV용 응원판 그림 미리보기">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <a class="btnlink pri" id="tvDl" download>⬇ 그림 내려받기</a>
+        <button type="button" id="tvClose">닫기</button>
+      </div>
     </div>
     <div class="list" id="list"></div>
   </div>
@@ -188,7 +208,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
       st('응원 글 (숨김 빼고)', live.length) +
       st('참여한 사람', Object.keys(people).length) +
       st('좋아요 합계', likes) +
-      st('금산점', byStore['금산점']) + st('초전점', byStore['초전점']) + st('진양호점', byStore['진양호점']);
+      st('선물 수령 · 금산점', byStore['금산점']) + st('선물 수령 · 초전점', byStore['초전점']) + st('선물 수령 · 진양호점', byStore['진양호점']);
 
     $('tabs').innerHTML = TABS.map(function(t){
       return '<button type="button" role="tab" data-k="' + t[0] + '" class="' + (t[0] === tab ? 'cur' : '') + '" aria-selected="' + (t[0] === tab) + '">' + t[1] + ' ' + rows.filter(t[2]).length + '</button>';
@@ -215,7 +235,7 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
         '<span class="tag">' + esc(o.topic) + '</span><span class="tag l">♥ ' + o.likes + '</span>' +
         (o.hidden ? '<span class="tag h">숨김</span>' : '') + '</div>' +
       '<div class="msgtx">' + esc(o.message) + '</div>' +
-      '<div class="who"><small>쓴 분</small> <b>' + esc(o.name) + '</b> ' + esc(o.phone) + ' · <small>매장</small> ' + esc((o.stores || []).join('·')) + '</div>' +
+      '<div class="who"><small>쓴 분</small> <b>' + esc(o.name) + '</b> ' + esc(o.phone) + ' · <small>선물 수령 매장</small> ' + esc((o.stores || []).join('·')) + '</div>' +
       (o.staff_note ? '<div class="memo">직원 메모: ' + esc(o.staff_note) + '</div>' : '') +
       '<div class="acts">' +
         (o.hidden ? '<button type="button" class="pri" data-act="show" data-id="' + o.id + '">다시 보이기</button>'
@@ -245,15 +265,158 @@ input[type=password],input[type=search]{font:500 15px var(--sans);border:1.5px s
     a.download = name; document.body.appendChild(a); a.click(); a.remove();
   }
   $('dlAll').addEventListener('click', function(){
-    var r = [['번호','남긴 때','이름','연락처','금산점','초전점','진양호점','이야기','응원 글','좋아요','숨김','직원메모']];
+    var r = [['번호','남긴 때','이름','연락처','선물 수령 매장','이야기','응원 글','좋아요','숨김','직원메모']];
     rows.slice().reverse().forEach(function(o){
       var s = o.stores || [];
       r.push([o.id, new Date(o.created_at).toLocaleString('ko-KR'), o.name, o.phone,
-        s.indexOf('금산점') >= 0 ? 'O' : '', s.indexOf('초전점') >= 0 ? 'O' : '', s.indexOf('진양호점') >= 0 ? 'O' : '',
+        s.join(', '),
         o.topic, o.message, o.likes, o.hidden ? 'O' : '', o.staff_note]);
     });
     save('소비자의날응원판_전체_' + today().replace(/-/g,'') + '.csv', csv(r));
   });
+
+  /* ══ 매장 TV용 그림 (톡톡톡플레이에 사진으로 넣는다) — 1920×1080 ══ */
+  var TV_EXAMPLES = [   // 응원이 6개가 안 되면 응원판과 같은 예시로 채운다 (「예시」 표시)
+    { topic:'가치소비를 느낀 순간',     message:'포장 없이 담아 가는 곡물통 앞에서요. 비닐 하나 덜 쓰는 게 이렇게 쉬운 일이었구나 싶었어요.' },
+    { topic:'진주텃밭을 이용하는 이유', message:'누가 키웠는지 알 수 있어서요. 아이 먹거리는 여기서 삽니다!' },
+    { topic:'진주텃밭을 이용하는 이유', message:'협동기금이 다시 지역으로 돌아간다는 게 좋아요.' },
+    { topic:'가치소비를 느낀 순간',     message:'생산자 다모임에서 농부님 얼굴을 직접 뵀을 때.' },
+    { topic:'진주텃밭을 이용하는 이유', message:'제철 채소 맛이 확실히 달라요.' }
+  ];
+  var NOTE_BG = { '가치소비를 느낀 순간':'#FFF4C9', '진주텃밭을 이용하는 이유':'#E6F4DA', '나의 가치소비 응원 한마디':'#FFE4DA' };
+  var NOTE_IC = { '가치소비를 느낀 순간':'🌱', '진주텃밭을 이용하는 이유':'🧺', '나의 가치소비 응원 한마디':'📣' };
+  function maskName(n){ var L = Array.from(String(n || '').trim()); if (L.length <= 1) return L.join(''); if (L.length === 2) return L[0] + '*'; return L[0] + '*'.repeat(L.length - 2) + L[L.length - 1]; }
+  function loadImg(src){ return new Promise(function(ok){ var i = new Image(); i.onload = function(){ ok(i); }; i.onerror = function(){ ok(null); }; i.src = src; }); }
+  function rr(c, x, y, w, h, r){ c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function wrapLines(c, text, maxW){
+    var out = [];
+    String(text).split(/\n/).forEach(function(par){
+      var line = '';
+      par.split(' ').forEach(function(word){
+        var t = line ? line + ' ' + word : word;
+        if (c.measureText(t).width <= maxW) { line = t; return; }
+        if (line) out.push(line);
+        line = '';
+        Array.from(word).forEach(function(ch){   // 한 낱말이 너무 길면 글자 단위로
+          if (c.measureText(line + ch).width > maxW && line) { out.push(line); line = ch; } else line += ch;
+        });
+      });
+      out.push(line);
+    });
+    return out;
+  }
+  function pill(c, text, x, y, bg, fg, font){
+    c.font = font; var w = c.measureText(text).width + 36;
+    c.fillStyle = bg; rr(c, x, y, w, 50, 25); c.fill();
+    c.fillStyle = fg; c.textBaseline = 'middle'; c.fillText(text, x + 18, y + 26); c.textBaseline = 'alphabetic';
+    return w;
+  }
+
+  function makeTV(){
+    var W = 1920, H = 1080;
+    var live = rows.filter(function(o){ return !o.hidden; });
+    var top = live.filter(function(o){ return o.likes > 0; }).sort(function(a,b){ return b.likes - a.likes || a.id - b.id; }).slice(0, 3);
+    var topIds = {}; top.forEach(function(o){ topIds[o.id] = 1; });
+    var picks = top.map(function(o, i){ return { o:o, rank:i + 1 }; })
+      .concat(live.filter(function(o){ return !topIds[o.id]; }).sort(function(a,b){ return b.id - a.id; }).map(function(o){ return { o:o }; }))
+      .slice(0, 6);
+    for (var k = 0; picks.length < 6 && k < TV_EXAMPLES.length; k++) picks.push({ o:TV_EXAMPLES[k], ex:true });
+
+    var faces = ['wonder','sing','heart','smile','thumb','tongue'];
+    return Promise.all([
+      document.fonts.load("70px 'ONE Mobile Title'"), document.fonts.load("700 30px 'IBM Plex Sans KR'"), document.fonts.load("500 30px 'IBM Plex Sans KR'")
+    ]).catch(function(){}).then(function(){
+      return Promise.all([loadImg('../img/logo.png'), loadImg('../img/cday/qr-cheer.png'), loadImg('../img/cday/char-sing.webp')]
+        .concat(faces.map(function(f){ return loadImg('../img/cday/face-' + f + '.webp'); })));
+    }).then(function(im){
+      var logo = im[0], qr = im[1], sing = im[2], fimg = im.slice(3);
+      var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      var c = cv.getContext('2d');
+      var T = "'ONE Mobile Title','IBM Plex Sans KR',sans-serif", S = "'IBM Plex Sans KR','Malgun Gothic',sans-serif";
+
+      // 바탕 하늘 + 아래 잔디
+      c.fillStyle = '#BBE9F4'; c.fillRect(0, 0, W, H);
+      c.fillStyle = '#5DAE3B'; c.fillRect(0, 968, W, 12);
+      c.fillStyle = '#8CCB5E'; c.fillRect(0, 980, W, H - 980);
+
+      // 머리: 로고 · 날짜 · 제목
+      if (logo) { c.fillStyle = '#fff'; rr(c, 72, 52, 206, 82, 14); c.fill(); c.drawImage(logo, 86, 63, 178, 56); }
+      pill(c, '12월 3일 소비자의날', 300, 68, '#FF7757', '#fff', '700 28px ' + S);
+      c.font = '400 78px ' + T; c.fillStyle = '#2B2B2B';
+      var t1 = '나의 소비가 ', t2 = '가치', t3 = '가 되는 곳';
+      var x = 76; c.fillText(t1, x, 232); x += c.measureText(t1).width;
+      c.fillStyle = '#35A35A'; c.fillText(t2, x, 232); x += c.measureText(t2).width;
+      c.fillStyle = '#2B2B2B'; c.fillText(t3, x, 232);
+      c.font = '400 34px ' + T; c.fillStyle = '#5F4A33';
+      c.fillText('진주텃밭 조합원이 남긴 가치소비 응원 한마디', 78, 288);
+      var now = new Date();
+      c.font = '500 22px ' + S; c.fillStyle = 'rgba(43,43,43,.65)';
+      c.fillText((now.getMonth() + 1) + '월 ' + now.getDate() + '일 ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ' 기준 · 응원 ' + live.length + '개', 1100, 288);
+
+      // 응원 카드 3×2
+      var gx = 76, gy = 320, cw = 438, ch = 280, gap = 22;   // 카드 아래 끝 902 — 얼쑤(920~)와 안 겹치게
+      picks.forEach(function(p, i){
+        var cx = gx + (i % 3) * (cw + gap), cy = gy + Math.floor(i / 3) * (ch + gap), o = p.o;
+        c.save();
+        c.shadowColor = 'rgba(30,77,43,.18)'; c.shadowBlur = 14; c.shadowOffsetY = 5;
+        c.fillStyle = p.rank ? '#FFFFFF' : (NOTE_BG[o.topic] || '#FFF4C9'); rr(c, cx, cy, cw, ch, 22); c.fill();
+        c.restore();
+        if (p.rank) { c.lineWidth = 5; c.strokeStyle = ['#FFD45C','#BFE0A8','#FFC9B8'][p.rank - 1]; rr(c, cx + 2.5, cy + 2.5, cw - 5, ch - 5, 20); c.stroke(); }
+        if (p.ex) { c.save(); c.setLineDash([10, 8]); c.lineWidth = 2.5; c.strokeStyle = 'rgba(43,43,43,.25)'; rr(c, cx + 8, cy + 8, cw - 16, ch - 16, 16); c.stroke(); c.restore(); }
+        var ty = cy + 30;
+        if (p.rank) { pill(c, p.rank + '위 · ♥ ' + o.likes, cx + 22, cy + 20, ['#FF7757','#35A35A','#0071C8'][p.rank - 1], '#fff', '700 22px ' + S); ty = cy + 92; }
+        else ty = cy + 50;
+        c.font = '600 20px ' + S; c.fillStyle = 'rgba(43,43,43,.6)';
+        c.fillText((NOTE_IC[o.topic] || '') + ' ' + o.topic + (p.ex ? '  · 예시' : ''), cx + 26, ty);
+        var fsz = p.rank === 1 ? 32 : 29, lh = Math.round(fsz * 1.45);
+        c.font = (p.rank ? '400 ' + fsz + 'px ' + T : '600 ' + fsz + 'px ' + S); c.fillStyle = '#2B2B2B';
+        var maxLines = Math.floor((cy + ch - 64 - (ty + 14)) / lh);
+        var lines = wrapLines(c, o.message, cw - 52);
+        if (lines.length > maxLines) { lines = lines.slice(0, maxLines); var last = lines[maxLines - 1]; while (last && c.measureText(last + '…').width > cw - 52) last = last.slice(0, -1); lines[maxLines - 1] = last + '…'; }
+        lines.forEach(function(L, j){ c.fillText(L, cx + 26, ty + 18 + lh * (j + 1) - Math.round(lh * 0.25)); });
+        if (!p.ex) {
+          c.font = '700 22px ' + S; c.fillStyle = 'rgba(43,43,43,.75)';
+          c.fillText(maskName(o.name), cx + 26, cy + ch - 26);
+          if (!p.rank) { c.font = '700 22px ' + S; c.fillStyle = '#E83028'; var hv = '♥ ' + o.likes; c.fillText(hv, cx + cw - 26 - c.measureText(hv).width, cy + ch - 26); }
+        }
+      });
+
+      // 오른쪽: QR 카드 + 얼쑤
+      var qx = 1478, qy = 320, qw = 366, qh = 400;
+      c.save(); c.shadowColor = 'rgba(30,77,43,.18)'; c.shadowBlur = 14; c.shadowOffsetY = 5;
+      c.fillStyle = '#fff'; rr(c, qx, qy, qw, qh, 26); c.fill(); c.restore();
+      if (qr) c.drawImage(qr, qx + 53, qy + 28, 260, 260);
+      c.textAlign = 'center';
+      c.font = '400 34px ' + T; c.fillStyle = '#2B2B2B'; c.fillText('찍고 응원 남기기!', qx + qw / 2, qy + 334);
+      c.font = '700 24px ' + S; c.fillStyle = '#0071C8'; c.fillText('jjcoop.co.kr/cheer', qx + qw / 2, qy + 372);
+      c.textAlign = 'left';
+      if (sing) c.drawImage(sing, qx + 70, 742, 226, 192);
+
+      // 잔디 위 얼쑤 모임 + 이름
+      var hs = [56, 68, 80, 72, 64, 54], fx = 80;
+      fimg.forEach(function(f, i){ if (!f) return; var h = hs[i], w = f.width * h / f.height; c.drawImage(f, fx, 1000 - h, w, h); fx += w - 4; });
+      c.font = '700 30px ' + S; c.fillStyle = '#1E4D2B'; c.textAlign = 'right';
+      c.fillText('진주우리먹거리협동조합 진주텃밭', W - 76, 1040);
+      c.textAlign = 'left';
+
+      return new Promise(function(ok){ cv.toBlob(ok, 'image/png'); });
+    });
+  }
+
+  var tvUrl = null;
+  $('tvMake').addEventListener('click', function(){
+    var b = this; b.disabled = true; b.textContent = '그림 만드는 중…'; $('msg').textContent = '';
+    makeTV().then(function(blob){
+      if (tvUrl) URL.revokeObjectURL(tvUrl);
+      tvUrl = URL.createObjectURL(blob);
+      var d = new Date(Date.now() + 9*36e5).toISOString();
+      $('tvImg').src = tvUrl; $('tvDl').href = tvUrl;
+      $('tvDl').download = '소비자의날응원판_TV_' + d.slice(0,10).replace(/-/g,'') + '_' + d.slice(11,16).replace(':','') + '.png';
+      $('tvBox').hidden = false; $('tvBox').scrollIntoView({ behavior:'smooth', block:'start' });
+    }).catch(function(err){ $('msg').textContent = '그림을 만들지 못했습니다. ' + (err && err.message || ''); })
+      .then(function(){ b.disabled = false; b.textContent = '📺 매장 TV용 그림 만들기'; });
+  });
+  $('tvClose').addEventListener('click', function(){ $('tvBox').hidden = true; });
 
   if (PREVIEW) { $('previewNote').hidden = false; $('pw').value = '미리보기'; }
   try { var saved = sessionStorage.getItem(KEY); if (saved && !PREVIEW) { $('pw').value = saved; pass = saved; load(true); } } catch(err){}
