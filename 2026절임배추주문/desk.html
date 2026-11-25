@@ -172,6 +172,10 @@ td.z{color:#C9C1B4}
               '2026-12-01','2026-12-02','2026-12-03','2026-12-04','2026-12-08','2026-12-09','2026-12-10','2026-12-11',
               '2026-12-15','2026-12-16','2026-12-17','2026-12-18'];
   var SHIP_KIT = SHIP.filter(function(d){ return d >= '2026-12-15'; });
+  // 주문 마감된 발송일 (하루 생산 물량 초과 — 2026-11-25 매장 안내). 절임배추·김장밀키트(절임배추 들어감)에 적용.
+  // 이 날짜로 바꾸거나 수량을 늘리려 하면 한 번 더 묻는다. 날짜가 늘면 여기에 더하면 된다.
+  var CLOSED = ['2026-12-03','2026-12-10','2026-12-11','2026-12-18'];
+  function isClosed(k, d){ return k !== 'sok' && CLOSED.indexOf(d) >= 0; }
   // 실제로 보낼 날 — 바꾼 날짜가 있으면 그것, 없으면 주문하신 분이 고른 날짜
   function eff(o, k){ return o['chg_date_' + k] || o['date_' + k]; }
   // 실제로 보낼 수량 — 바꾼 수량이 있으면 그것, 없으면 주문하신 수량
@@ -679,7 +683,7 @@ td.z{color:#C9C1B4}
       var op0 = document.createElement('option'); op0.value = ''; op0.textContent = '발송일 고르기'; sel.appendChild(op0);
       (k === 'kit' ? SHIP_KIT : SHIP).forEach(function(d){
         var op = document.createElement('option'); op.value = d;
-        op.textContent = md(d) + ' 발송 → ' + arrive(d) + ' 수령' + (d === d0 ? ' (주문한 날)' : '');
+        op.textContent = md(d) + ' 발송 → ' + arrive(d) + ' 수령' + (d === d0 ? ' (주문한 날)' : '') + (isClosed(k, d) ? ' ⛔ 마감' : '');
         if (d === eff(o, k)) op.selected = true;
         sel.appendChild(op);
       });
@@ -690,6 +694,17 @@ td.z{color:#C9C1B4}
       save.addEventListener('click', function(){
         var nq = +qs.value;
         if (nq > 0 && !sel.value) { alertBar(P[k].name + ' 발송일을 골라 주세요.'); sel.focus(); return; }
+        // 마감된 날로 옮기거나, 마감된 날의 수량을 늘리면 한 번 더 묻는다 (줄이거나 빼는 것은 묻지 않음)
+        if (nq > 0 && isClosed(k, sel.value) && (sel.value !== eff(o, k) || nq > qn(o, k))) {
+          var moving = sel.value !== eff(o, k);
+          var msg = '⛔ ' + md(sel.value) + ' 발송은 주문이 마감된 날짜입니다.\n' +
+                    '(하루 생산 가능 물량 초과 — 추가 주문·날짜 변경 불가 안내 중)\n\n' +
+                    '#' + o.id + ' ' + o.orderer_name + ' · ' + P[k].name + '\n' +
+                    (moving ? (qn(o, k) ? md(eff(o, k)) + ' 발송 → ' : '') + md(sel.value) + ' 발송 ' + nq + '상자로 변경'
+                            : qn(o, k) + '상자 → ' + nq + '상자로 추가 (' + (nq - qn(o, k)) + '상자 늘어남)') +
+                    '\n\n그래도 ' + (moving ? '변경' : '추가') + '하시겠습니까?';
+          if (!window.confirm(msg)) { alertBar('#' + o.id + ' ' + P[k].name + ' · 마감 날짜라서 저장하지 않았습니다.'); return; }
+        }
         setItem(o, k, nq, nq > 0 ? sel.value : null, save);
       });
       row.appendChild(save);
